@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: emerald --default, forest --prefersdark;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+@source "../**/*.blade.php";
+@source "../**/*.js";
+
+/* Custom background grid pattern utilities */
+@utility bg-grid-light {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+}
+
+@utility bg-grid-dark {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    transform: scale(1) translate(0px, 0px);
+  }
+  33% {
+    transform: scale(1.1) translate(30px, -50px);
+  }
+  66% {
+    transform: scale(0.95) translate(-20px, 20px);
+  }
+}
+
+@utility animate-blob {
+  animation: pulse-slow 15s infinite alternate ease-in-out;
+}
+
+/* Sleek Interface Theme Specific Styling Classes */
+@layer base {
+  body {
+    @apply text-base text-base-content/80 antialiased bg-[#F8FAFC];
+  }
+  h1, h2, h3, h4, h5 {
+    @apply font-display font-bold tracking-tight leading-tight text-slate-900;
+  }
+}
+
+:root {
+  --rounded-btn: 1rem;
+  --rounded-box: 1rem;
+}
+
+@utility bg-ambient {
+  background-image: radial-gradient(#cbd5e1 0.6px, transparent 0.6px);
+  background-size: 24px 24px;
+}
+
+@utility pricely-card {
+  @apply bg-white/70 shadow-sm border border-slate-200/60 rounded-2xl;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@utility text-gradient {
+  @apply bg-gradient-to-r from-emerald-600 to-teal-400 bg-clip-text text-transparent;
+}
+
+@utility btn-pricely-primary {
+  @apply bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-emerald-200 transition-all cursor-pointer;
+}
