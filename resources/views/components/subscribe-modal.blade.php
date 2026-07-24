@@ -25,23 +25,17 @@ $availableCrops = $crops->filter(function ($crop) use ($availableCropIds) {
         <!-- Phone Number -->
         <div class="mb-4">
             <x-input-label for="phone_number_{{ $shop->id }}" :value="__('Phone Number')" />
-            <div class="flex items-stretch mt-1 shadow-sm rounded-md">
-                <span class="inline-flex items-center px-4 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 font-medium sm:text-sm">
-                    +63
-                </span>
+            <div class="mt-1">
                 <x-text-input
                     id="phone_number_{{ $shop->id }}"
-                    class="block w-full rounded-l-none"
-                    type="tel"
-                    name="phone_number"
-                    pattern="^9[0-9]{9}$"
-                    placeholder="9XXXXXXXXX"
-                    title="Must be a valid 10-digit number starting with 9"
-                    required
-                    autofocus
+                    class="block w-full bg-slate-50 text-slate-500 cursor-not-allowed"
+                    type="text"
+                    value="{{ auth()->user()->phone }}"
+                    readonly
                 />
+                <p class="text-xs text-slate-500 mt-1">Your phone number must be verified before proceeding.</p>
+                <p class="text-xs text-slate-500 mt-1">Note: You will receive SMS notifications when the shop updates their prices.</p>
             </div>
-            <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
         </div>
 
         <!-- Crops Selection -->

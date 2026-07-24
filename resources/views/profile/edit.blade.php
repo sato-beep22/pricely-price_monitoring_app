@@ -1,29 +1,342 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
+@extends('layouts.app')
+
+@section('header')
+    <div class="flex items-center justify-between">
+        <h2 class="font-display font-bold text-2xl text-slate-900 leading-tight tracking-tight">
+            My Profile
         </h2>
-    </x-slot>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
+            {{ $user->isAdmin() ? 'bg-purple-100 text-purple-700' : ($user->isBuyer() ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700') }}">
+            <span class="w-1.5 h-1.5 rounded-full inline-block
+                {{ $user->isAdmin() ? 'bg-purple-500' : ($user->isBuyer() ? 'bg-blue-500' : 'bg-emerald-500') }}"></span>
+            {{ ucfirst($user->role) }}
+        </span>
+    </div>
+@endsection
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+@section('content')
+<div class="max-w-2xl mx-auto space-y-6">
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
-
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
+    {{-- ── Profile Avatar Card ────────────────────────────────────────────── --}}
+    <div class="pricely-card p-6 flex items-center gap-5">
+        @php
+            $initials = collect(explode(' ', $user->name))
+                ->map(fn($n) => substr($n, 0, 1))
+                ->take(2)
+                ->join('');
+        @endphp
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-sm
+            {{ $user->isAdmin() ? 'bg-purple-100' : ($user->isBuyer() ? 'bg-blue-100' : 'bg-emerald-100') }}">
+            <span class="font-bold text-xl
+                {{ $user->isAdmin() ? 'text-purple-700' : ($user->isBuyer() ? 'text-blue-700' : 'text-emerald-700') }}">
+                {{ strtoupper($initials) }}
+            </span>
+        </div>
+        <div>
+            <p class="text-lg font-bold text-slate-800 leading-tight">{{ $user->name }}</p>
+            <p class="text-sm text-slate-500 mt-0.5">{{ $user->email }}</p>
+            @if($user->phone)
+                <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                    <i data-lucide="phone" class="w-3 h-3"></i> {{ $user->phone }}
+                </p>
+            @endif
         </div>
     </div>
-</x-app-layout>
+
+    {{-- ── Account Information ─────────────────────────────────────────────── --}}
+    <div class="pricely-card p-6">
+        <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+            <div class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <i data-lucide="user" class="w-4 h-4 text-emerald-600"></i>
+            </div>
+            <div>
+                <p class="font-bold text-slate-800 text-sm">Account Information</p>
+                <p class="text-xs text-slate-400">Update your name, email, and phone number.</p>
+            </div>
+        </div>
+
+        <form method="post" action="{{ route('profile.update') }}" class="space-y-4">
+            @csrf
+            @method('patch')
+
+            {{-- Name --}}
+            <div class="form-control w-full">
+                <label class="label pb-1"><span class="label-text font-semibold text-slate-700">Full Name</span></label>
+                <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    class="input input-bordered w-full @error('name') input-error @enderror"
+                    value="{{ old('name', $user->name) }}"
+                    required
+                    autofocus
+                    autocomplete="name"
+                />
+                @error('name')
+                    <span class="text-error text-xs mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Email --}}
+            <div class="form-control w-full">
+                <label class="label pb-1"><span class="label-text font-semibold text-slate-700">Email Address</span></label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    class="input input-bordered w-full @error('email') input-error @enderror"
+                    value="{{ old('email', $user->email) }}"
+                    required
+                    autocomplete="username"
+                />
+                @error('email')
+                    <span class="text-error text-xs mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Phone --}}
+            <div class="form-control w-full">
+                <label class="label pb-1">
+                    <span class="label-text font-semibold text-slate-700">Phone Number</span>
+                    <span class="label-text-alt text-slate-400">Optional — used for SMS alerts</span>
+                </label>
+                <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    class="input input-bordered w-full @error('phone') input-error @enderror"
+                    value="{{ old('phone', $user->phone) }}"
+                    placeholder="e.g. 09171234567"
+                    autocomplete="tel"
+                />
+                @error('phone')
+                    <span class="text-error text-xs mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+                <button type="submit" class="btn btn-primary btn-sm px-6">
+                    Save Changes
+                </button>
+                @if (session('status') === 'profile-updated')
+                    <p
+                        x-data="{ show: true }"
+                        x-show="show"
+                        x-transition
+                        x-init="setTimeout(() => show = false, 3000)"
+                        class="text-sm text-emerald-600 font-semibold flex items-center gap-1"
+                    >
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> Saved!
+                    </p>
+                @endif
+            </div>
+        </form>
+    </div>
+
+    {{-- ── Phone Verification (Farmers Only) ────────────────────────────────── --}}
+    @if($user->isFarmer())
+    <div class="pricely-card p-6">
+        <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+            <div class="w-8 h-8 bg-indigo-100 rounded-xl flex items-center justify-center">
+                <i data-lucide="smartphone" class="w-4 h-4 text-indigo-600"></i>
+            </div>
+            <div>
+                <p class="font-bold text-slate-800 text-sm">Phone Verification</p>
+                <p class="text-xs text-slate-400">Required to receive SMS alerts for price updates.</p>
+            </div>
+        </div>
+
+        @if($user->phoneVerified())
+            <div class="flex items-center gap-2 text-emerald-600 bg-emerald-50 px-4 py-3 rounded-lg border border-emerald-100">
+                <i data-lucide="check-circle" class="w-5 h-5"></i>
+                <span class="text-sm font-semibold">Your phone number ({{ $user->phone }}) is verified.</span>
+            </div>
+        @elseif($user->phone_verification_code && $user->phone_verification_expires_at && now()->lessThanOrEqualTo($user->phone_verification_expires_at))
+            {{-- Enter Verification Code Form --}}
+            <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 mb-4">
+                <p class="text-sm text-indigo-800 mb-2">
+                    A 5-digit verification code has been sent to <strong>{{ $user->phone }}</strong>.<br>
+                    It will expire in {{ now()->diffInMinutes($user->phone_verification_expires_at) }} minutes.
+                </p>
+                <form method="post" action="{{ route('phone.verification.verify') }}" class="flex gap-2 items-start mt-3">
+                    @csrf
+                    <div class="form-control flex-1">
+                        <input
+                            type="text"
+                            name="code"
+                            class="input input-bordered w-full @error('code') input-error @enderror"
+                            placeholder="Enter 5-digit code"
+                            maxlength="5"
+                            required
+                        >
+                        @error('code')
+                            <span class="text-error text-xs mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <button type="submit" class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 border-none text-white">Verify Code</button>
+                </form>
+            </div>
+        @else
+            {{-- Send Verification Code Form --}}
+            <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 mb-4">
+                <p class="text-sm text-slate-600 mb-3">
+                    Please enter your mobile number to receive a verification code.
+                </p>
+                <form method="post" action="{{ route('phone.verification.send') }}" class="flex gap-2 items-start">
+                    @csrf
+                    <div class="form-control flex-1">
+                        <input
+                            type="tel"
+                            name="phone"
+                            class="input input-bordered w-full @error('phone') input-error @enderror"
+                            value="{{ old('phone', $user->phone) }}"
+                            placeholder="e.g. 09171234567"
+                            required
+                        >
+                        @error('phone')
+                            <span class="text-error text-xs mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <button type="submit" class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 border-none text-white">Send Code</button>
+                </form>
+            </div>
+        @endif
+        
+        @if(session('error'))
+            <div class="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                {{ session('error') }}
+            </div>
+        @endif
+    </div>
+    @endif
+
+    {{-- ── Change Password ──────────────────────────────────────────────────── --}}
+    <div class="pricely-card p-6">
+        <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+            <div class="w-8 h-8 bg-amber-100 rounded-xl flex items-center justify-center">
+                <i data-lucide="lock" class="w-4 h-4 text-amber-600"></i>
+            </div>
+            <div>
+                <p class="font-bold text-slate-800 text-sm">Change Password</p>
+                <p class="text-xs text-slate-400">Use a long, random password to stay secure.</p>
+            </div>
+        </div>
+
+        <form method="post" action="{{ route('password.update') }}" class="space-y-4">
+            @csrf
+            @method('put')
+
+            <div class="form-control w-full">
+                <label class="label pb-1"><span class="label-text font-semibold text-slate-700">Current Password</span></label>
+                <input
+                    id="update_password_current_password"
+                    name="current_password"
+                    type="password"
+                    class="input input-bordered w-full @error('current_password', 'updatePassword') input-error @enderror"
+                    autocomplete="current-password"
+                />
+                @error('current_password', 'updatePassword')
+                    <span class="text-error text-xs mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-control w-full">
+                <label class="label pb-1"><span class="label-text font-semibold text-slate-700">New Password</span></label>
+                <input
+                    id="update_password_password"
+                    name="password"
+                    type="password"
+                    class="input input-bordered w-full @error('password', 'updatePassword') input-error @enderror"
+                    autocomplete="new-password"
+                />
+                @error('password', 'updatePassword')
+                    <span class="text-error text-xs mt-1">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-control w-full">
+                <label class="label pb-1"><span class="label-text font-semibold text-slate-700">Confirm New Password</span></label>
+                <input
+                    id="update_password_password_confirmation"
+                    name="password_confirmation"
+                    type="password"
+                    class="input input-bordered w-full"
+                    autocomplete="new-password"
+                />
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+                <button type="submit" class="btn btn-warning btn-sm px-6 text-white">
+                    Update Password
+                </button>
+                @if (session('status') === 'password-updated')
+                    <p
+                        x-data="{ show: true }"
+                        x-show="show"
+                        x-transition
+                        x-init="setTimeout(() => show = false, 3000)"
+                        class="text-sm text-emerald-600 font-semibold flex items-center gap-1"
+                    >
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i> Password updated!
+                    </p>
+                @endif
+            </div>
+        </form>
+    </div>
+
+    {{-- ── Buyer: Shop Summary ──────────────────────────────────────────────── --}}
+    @if($user->isBuyer())
+    <div class="pricely-card p-6">
+        <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+            <div class="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+                <i data-lucide="store" class="w-4 h-4 text-blue-600"></i>
+            </div>
+            <div>
+                <p class="font-bold text-slate-800 text-sm">My Shop</p>
+                <p class="text-xs text-slate-400">Your shop's information as shown on the map.</p>
+            </div>
+        </div>
+
+        @if($user->shop)
+            <div class="space-y-3">
+                <div class="flex items-start gap-3">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider w-20 flex-shrink-0 pt-0.5">Name</span>
+                    <span class="text-sm font-semibold text-slate-800">{{ $user->shop->name }}</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider w-20 flex-shrink-0 pt-0.5">Address</span>
+                    <span class="text-sm text-slate-700">{{ $user->shop->address }}</span>
+                </div>
+                <div class="flex items-start gap-3">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider w-20 flex-shrink-0 pt-0.5">Status</span>
+                    <span class="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full
+                        {{ $user->shop->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500' }}">
+                        <span class="w-1.5 h-1.5 rounded-full inline-block {{ $user->shop->is_active ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
+                        {{ $user->shop->is_active ? 'Active' : 'Inactive' }}
+                    </span>
+                </div>
+            </div>
+            <div class="pt-4 mt-4 border-t border-slate-100">
+                <a href="{{ route('shops.edit') }}" class="btn btn-sm btn-outline border-blue-200 text-blue-600 hover:bg-blue-50 gap-2">
+                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                    Edit Shop Profile
+                </a>
+            </div>
+        @else
+            <div class="text-center py-6">
+                <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="store" class="w-6 h-6 text-slate-400"></i>
+                </div>
+                <p class="text-sm text-slate-500 mb-3">You haven't set up your shop yet.</p>
+                <a href="{{ route('shops.edit') }}" class="btn btn-sm btn-primary gap-2">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    Set Up Shop
+                </a>
+            </div>
+        @endif
+    </div>
+    @endif
+
+</div>
+@endsection

@@ -23,12 +23,113 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let markers = [];
     let shopsData = [];
+    let userLatLng = null;
     const cropFilter = document.getElementById('crop-filter');
     const shopSearch = document.getElementById('shop-search');
     const searchResults = document.getElementById('shop-search-results');
 
     // Store markers in a map for easy access
     const markerMap = new Map();
+
+    // ─── Shop Info Panel ────────────────────────────────────────────────────────
+    const panel = document.getElementById('shop-info-panel');
+    const panelClose = document.getElementById('shop-info-close');
+
+    if (panelClose) {
+        panelClose.addEventListener('click', () => {
+            panel.classList.add('translate-x-full', 'opacity-0');
+            panel.classList.remove('translate-x-0', 'opacity-100');
+        });
+    }
+
+    function haversineDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // km
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos((lat1 * Math.PI) / 180) *
+                Math.cos((lat2 * Math.PI) / 180) *
+                Math.sin(dLon / 2) *
+                Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    // Try to get user location
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                userLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                console.log('📍 User location acquired:', userLatLng);
+            },
+            () => {
+                console.warn('⚠️ Geolocation denied or unavailable');
+            }
+        );
+    }
+
+    function openShopPanel(shop) {
+        if (!panel) return;
+
+        // Distance
+        let distanceHtml = '';
+        if (userLatLng) {
+            const dist = haversineDistance(userLatLng.lat, userLatLng.lng, shop.latitude, shop.longitude);
+            distanceHtml = `
+                <div class="shop-info-row">
+                    <span class="shop-info-label"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Distance</span>
+                    <span class="shop-info-value">${dist.toFixed(2)} km away</span>
+                </div>`;
+        } else {
+            distanceHtml = `
+                <div class="shop-info-row">
+                    <span class="shop-info-label"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Distance</span>
+                    <span class="shop-info-value shop-info-muted">Location not available</span>
+                </div>`;
+        }
+
+        // Crops list
+        let cropsHtml = '';
+        if (shop.prices && shop.prices.length > 0) {
+            cropsHtml = shop.prices.map(p => `
+                <div class="shop-crop-row">
+                    <span class="shop-crop-name">${p.crop_name}</span>
+                    <span class="shop-crop-price">₱${parseFloat(p.price).toFixed(2)}<span class="shop-crop-unit">/kg</span></span>
+                </div>
+            `).join('');
+        } else {
+            cropsHtml = '<p class="shop-no-crops">No crops listed yet.</p>';
+        }
+
+        document.getElementById('panel-shop-name').textContent = shop.name;
+        document.getElementById('panel-shop-body').innerHTML = `
+            <div class="shop-info-section">
+                <p class="shop-section-label">Shop Details</p>
+                <div class="shop-info-rows">
+                    <div class="shop-info-row">
+                        <span class="shop-info-label"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Owner</span>
+                        <span class="shop-info-value">${shop.owner}</span>
+                    </div>
+                    <div class="shop-info-row">
+                        <span class="shop-info-label"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Location</span>
+                        <span class="shop-info-value">${shop.address}</span>
+                    </div>
+                    ${distanceHtml}
+                </div>
+            </div>
+            <div class="shop-info-section">
+                <p class="shop-section-label">Crops & Prices</p>
+                <div class="shop-crops-list">
+                    ${cropsHtml}
+                </div>
+            </div>
+        `;
+
+        // Slide in
+        panel.classList.remove('translate-x-full', 'opacity-0');
+        panel.classList.add('translate-x-0', 'opacity-100');
+    }
 
     // Fetch shop data
     fetch('/api/shops')
@@ -165,14 +266,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="mt-3 text-xs flex justify-between items-center text-base-content/60">
                         <span>Owner: ${shop.owner}</span>
                     </div>
-                    <button class="btn btn-primary btn-sm w-full mt-3" data-subscribe-shop="${shop.id}" data-shop-name="${shop.name}" type="button">
-                        Subscribe
+                    <button class="btn btn-primary btn-sm w-full mt-3" data-view-shop="${shop.id}" type="button">
+                        View Shop Info
+                    </button>
+                    <button class="btn btn-sm w-full mt-2 bg-red-100 hover:bg-red-200 text-red-600 border-0" data-close-popup type="button">
+                        Close
                     </button>
                 </div>
             `;
 
             const marker = L.marker([shop.latitude, shop.longitude], { icon: customIcon })
-                .bindPopup(popupContent, { maxWidth: 300, className: 'custom-popup' })
+                .bindPopup(popupContent, { maxWidth: 300, className: 'custom-popup', closeButton: false })
                 .on('popupopen', function() {
                     console.log('📂 Popup opened for:', shop.name);
 
@@ -189,31 +293,26 @@ document.addEventListener('DOMContentLoaded', function() {
                             return;
                         }
 
-                        const subscribeBtn = popupEl.querySelector('[data-subscribe-shop]');
-                        console.log('🔍 Looking for button, found:', !!subscribeBtn);
+                        const viewBtn = popupEl.querySelector('[data-view-shop]');
+                        console.log('🔍 Looking for button, found:', !!viewBtn);
 
-                        if (subscribeBtn) {
-                            console.log('✅ Button found for shop:', subscribeBtn.dataset.subscribeShop);
-
-                            subscribeBtn.onclick = (e) => {
-                                console.log('🖱️  Button clicked!');
+                        if (viewBtn) {
+                            viewBtn.onclick = (e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-
-                                const shopId = subscribeBtn.dataset.subscribeShop;
-                                const modalName = `subscribe-${shopId}`;
-                                console.log('🎯 Triggering modal:', modalName);
-
-                                // Dispatch event
-                                const event = new CustomEvent('open-modal', { detail: modalName });
-                                window.dispatchEvent(event);
-                                console.log('✅ Event dispatched!');
-
-                                return false;
+                                openShopPanel(shop);
                             };
                         } else {
-                            console.error('❌ Subscribe button NOT found in popup');
-                            console.log('Popup HTML:', popupEl.innerHTML);
+                            console.error('❌ View Shop Info button NOT found in popup');
+                        }
+
+                        const closeBtn = popupEl.querySelector('[data-close-popup]');
+                        if (closeBtn) {
+                            closeBtn.onclick = (e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                marker.closePopup();
+                            };
                         }
                     }, 50);
                 })

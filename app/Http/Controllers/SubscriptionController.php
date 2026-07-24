@@ -38,17 +38,14 @@ class SubscriptionController extends Controller
     {
         $request->validate([
             'buyer_id' => 'required|exists:users,id',
-            'phone_number' => ['required', 'string', 'regex:/^9\d{9}$/'],
             'crop_ids' => 'required|array|min:1',
             'crop_ids.*' => 'exists:crops,id',
-        ], [
-            'phone_number.regex' => 'The phone number must be a valid 10-digit number starting with 9 (e.g. 9123456789).',
         ]);
 
         Subscription::create([
             'farmer_id' => Auth::id(),
             'buyer_id' => $request->buyer_id,
-            'phone_number' => '+63' . $request->phone_number,
+            'phone_number' => '+63'.$request->phone_number,
             'crop_ids' => $request->crop_ids,
             'is_active' => true,
         ]);

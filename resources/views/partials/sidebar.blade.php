@@ -97,18 +97,19 @@
     <!-- Footer Profile -->
     <div class="p-4 border-t border-slate-100 bg-slate-50/50 mt-auto">
         @if(auth()->check())
-            <div class="bg-white border border-slate-200 rounded-2xl p-3 mb-3 flex items-center gap-3 shadow-sm">
+            <a href="{{ route('profile.edit') }}" class="bg-white border border-slate-200 rounded-2xl p-3 mb-3 flex items-center gap-3 shadow-sm hover:border-emerald-300 hover:shadow-md transition-all group">
                 @php
                     $initials = collect(explode(' ', auth()->user()->name))->map(fn($n) => substr($n, 0, 1))->take(2)->join('');
                 @endphp
                 <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
                     <span class="text-emerald-700 font-bold text-sm">{{ strtoupper($initials) }}</span>
                 </div>
-                <div class="flex flex-col min-w-0 overflow-hidden">
+                <div class="flex flex-col min-w-0 overflow-hidden flex-1">
                     <span class="text-sm font-bold text-slate-800 truncate">{{ auth()->user()->name }}</span>
                     <span class="text-xs text-slate-400 truncate">{{ auth()->user()->email }}</span>
                 </div>
-            </div>
+                <i data-lucide="pencil" class="w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-colors flex-shrink-0"></i>
+            </a>
 
             <form method="POST" action="{{ route('logout') }}">
                 @csrf

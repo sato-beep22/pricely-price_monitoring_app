@@ -48,7 +48,17 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'phone_verified_at' => 'datetime',
+            'phone_verification_expires_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Check if the user's phone is verified.
+     */
+    public function phoneVerified(): bool
+    {
+        return $this->phone_verified_at !== null;
     }
 
     /**
