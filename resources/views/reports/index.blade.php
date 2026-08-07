@@ -7,7 +7,7 @@
 
     <div class="card bg-base-100 shadow-sm border border-base-300 animate-fade-in-up mb-6">
         <div class="card-body">
-            <form method="GET" action="{{ route('reports.index') }}" class="flex flex-wrap gap-4 items-end">
+            <form method="GET" action="{{ route('admin.reports.index') }}" class="flex flex-wrap gap-4 items-end">
                 <div class="form-control">
                     <label class="label"><span class="label-text">Select Crop</span></label>
                     <select name="crop_id" class="select select-bordered min-w-[200px]">
@@ -53,7 +53,7 @@
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Generate Report</button>
-                <a href="{{ route('reports.export', ['crop_id' => $selectedCrop, 'shop_id' => $selectedShop, 'variety' => $selectedVariety, 'period' => $period]) }}" class="btn btn-outline btn-success">
+                <a href="{{ route('admin.reports.export', ['crop_id' => $selectedCrop, 'shop_id' => $selectedShop, 'variety' => $selectedVariety, 'period' => $period]) }}" class="btn btn-outline btn-success">
                     <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export as CSV
                 </a>
             </form>

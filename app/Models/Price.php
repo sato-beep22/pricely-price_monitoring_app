@@ -22,6 +22,7 @@ class Price extends Model
         'specification',
         'price_per_kg',
         'recorded_at',
+        'source',
     ];
 
     /**

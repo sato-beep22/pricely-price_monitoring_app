@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\PriceImportController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\CeilingPriceController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\MapController;
@@ -24,6 +26,9 @@ Route::middleware('auth')->group(function () {
     // Shared Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Pricely AI Chatbot
+    Route::post('/chatbot', [ChatbotController::class, 'chat'])->name('chatbot.chat');
+
     // Shared Profile (from Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -31,10 +36,6 @@ Route::middleware('auth')->group(function () {
 
     // Forecasting (Farmers & Admins usually, but available to all auth users)
     Route::get('/forecast', [ForecastController::class, 'index'])->name('forecast.index');
-
-    // Reports (Available to all auth users, mostly used by Farmers & Admins)
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::get('/reports/export', [ReportController::class, 'export'])->name('reports.export');
 
     // --- FARMER ROUTES ---
     Route::middleware('role:farmer')->group(function () {
@@ -60,10 +61,17 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
         Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
 
         Route::get('/ceiling-prices', [CeilingPriceController::class, 'index'])->name('ceiling-prices.index');
         Route::post('/ceiling-prices', [CeilingPriceController::class, 'store'])->name('ceiling-prices.store');
 
+        Route::get('/price-import', [PriceImportController::class, 'index'])->name('price-import.index');
+        Route::post('/price-import', [PriceImportController::class, 'store'])->name('price-import.store');
+
+        // Reports (Now restricted to Admins)
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/export', [ReportController::class, 'export'])->name('reports.export');
     });
 });
 

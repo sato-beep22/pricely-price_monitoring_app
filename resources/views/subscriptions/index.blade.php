@@ -35,11 +35,27 @@
                                         @endif
                                     </div>
 
-                                    <form method="POST" action="{{ route('subscriptions.destroy', $sub) }}">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-error btn-sm btn-outline hover:btn-active">Unsubscribe</button>
-                                    </form>
+                                    <button type="button" @click="$dispatch('open-modal', 'unsubscribe-{{ $sub->id }}')" class="btn btn-error btn-sm btn-outline hover:btn-active">Unsubscribe</button>
+
+                                    <!-- Unsubscribe Confirmation Modal -->
+                                    <x-modal name="unsubscribe-{{ $sub->id }}" maxWidth="md">
+                                        <div class="p-6 text-center">
+                                            <div class="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4 ring-8 ring-red-50">
+                                                <i data-lucide="bell-off" class="w-8 h-8"></i>
+                                            </div>
+                                            <h3 class="text-lg font-bold text-slate-800 mb-2">Unsubscribe Alert</h3>
+                                            <p class="text-sm text-slate-600 mb-6">Are you sure you want to stop receiving price alert notifications from <strong class="text-slate-900">{{ $sub->buyer->shop->name ?? $sub->buyer->name }}</strong>?</p>
+                                            
+                                            <div class="flex justify-center gap-3">
+                                                <button type="button" @click="$dispatch('close')" class="btn btn-ghost">Cancel</button>
+                                                <form method="POST" action="{{ route('subscriptions.destroy', $sub) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-error text-white">Unsubscribe</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </x-modal>
                                 </li>
                             @endforeach
                         </ul>

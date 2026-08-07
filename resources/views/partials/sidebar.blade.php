@@ -37,13 +37,6 @@
         <div>
             <h3 class="px-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Farmer Logbooks</h3>
             <div class="space-y-1">
-                <a href="{{ route('reports.index') }}" class="flex items-center justify-between px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('reports.*') ? 'bg-emerald-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-50 font-medium' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="file-text" class="w-5 h-5 {{ request()->routeIs('reports.*') ? 'text-white' : 'text-slate-500' }}"></i>
-                        Reports
-                    </div>
-                    <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold">New</span>
-                </a>
                 <a href="{{ route('subscriptions.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('subscriptions.index') ? 'bg-emerald-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-50 font-medium' }}">
                     <i data-lucide="smartphone" class="w-5 h-5 text-slate-500"></i>
                     SMS Alerts 
@@ -77,8 +70,8 @@
         <div>
             <h3 class="px-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Admin Tools</h3>
             <div class="space-y-1">
-                <a href="{{ route('reports.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('reports.*') ? 'bg-emerald-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-50 font-medium' }}">
-                    <i data-lucide="file-bar-chart-2" class="w-5 h-5 {{ request()->routeIs('reports.*') ? 'text-white' : 'text-slate-500' }}"></i>
+                <a href="{{ route('admin.reports.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.reports.*') ? 'bg-emerald-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-50 font-medium' }}">
+                    <i data-lucide="file-bar-chart-2" class="w-5 h-5 {{ request()->routeIs('admin.reports.*') ? 'text-white' : 'text-slate-500' }}"></i>
                     Reports
                 </a>
                 <a href="{{ route('admin.ceiling-prices.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.ceiling-prices.*') ? 'bg-emerald-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-50 font-medium' }}">
@@ -88,6 +81,10 @@
                 <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-emerald-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-50 font-medium' }}">
                     <i data-lucide="user-round-cog" class="w-5 h-5 {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-slate-500' }}"></i>
                     Manage User Roles
+                </a>
+                <a href="{{ route('admin.price-import.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.price-import.*') ? 'bg-emerald-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-50 font-medium' }}">
+                    <i data-lucide="upload-cloud" class="w-5 h-5 {{ request()->routeIs('admin.price-import.*') ? 'text-white' : 'text-slate-500' }}"></i>
+                    Import Prices
                 </a>
             </div>
         </div>

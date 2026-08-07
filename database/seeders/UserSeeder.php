@@ -26,15 +26,15 @@ class UserSeeder extends Seeder
         $buyerShops = [
             [
                 'user' => ['name' => 'Juan Dela Cruz', 'email' => 'buyer1@pricely.test', 'phone' => '09181234567'],
-                'shop' => ['name' => 'Dela Cruz Rice Trading', 'address' => 'Cabanatuan City, Nueva Ecija', 'latitude' => 15.4868, 'longitude' => 120.9734, 'description' => 'Wholesale rice and corn buyer since 2010.'],
+                'shop' => ['name' => 'Dela Cruz Rice Trading', 'address' => 'Cabanatuan City, Nueva Ecija', 'latitude' => 15.4868, 'longitude' => 120.9734, 'description' => 'Wholesale rice and corn buyer since 2010.', 'classification' => 'wholesaler'],
             ],
             [
                 'user' => ['name' => 'Maria Santos', 'email' => 'buyer2@pricely.test', 'phone' => '09191234567'],
-                'shop' => ['name' => 'Santos Agri-Products', 'address' => 'San Jose City, Nueva Ecija', 'latitude' => 15.7889, 'longitude' => 120.9909, 'description' => 'Premium quality crops at fair prices.'],
+                'shop' => ['name' => 'Santos Agri-Products', 'address' => 'San Jose City, Nueva Ecija', 'latitude' => 15.7889, 'longitude' => 120.9909, 'description' => 'Premium quality crops at fair prices.', 'classification' => 'miller'],
             ],
             [
                 'user' => ['name' => 'Pedro Reyes', 'email' => 'buyer3@pricely.test', 'phone' => '09201234567'],
-                'shop' => ['name' => 'Reyes Grain Center', 'address' => 'Muñoz, Nueva Ecija', 'latitude' => 15.7148, 'longitude' => 120.9028, 'description' => 'Government-accredited grain buyer.'],
+                'shop' => ['name' => 'Reyes Grain Center', 'address' => 'Muñoz, Nueva Ecija', 'latitude' => 15.7148, 'longitude' => 120.9028, 'description' => 'Government-accredited grain buyer.', 'classification' => 'government'],
             ],
         ];
 

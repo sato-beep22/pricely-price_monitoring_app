@@ -15,9 +15,7 @@
 
         <!-- Nav links -->
         <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-650">
-            <a href="{{ route('map.index') }}" class="hover:text-emerald-600 transition-colors cursor-pointer flex items-center gap-1">
-                Markets
-            </a>
+
             @auth
                 <a href="{{ route('dashboard') }}" class="hover:text-emerald-600 transition-colors cursor-pointer flex items-center gap-1">
                     Dashboard
@@ -28,9 +26,7 @@
                     </a>
                 @endif
             @endauth
-            <a href="{{ route('forecast.index') }}" class="hover:text-emerald-600 transition-colors cursor-pointer flex items-center gap-1">
-                Forecasting
-            </a>
+
         </nav>
 
         <!-- Right Action buttons -->

@@ -20,12 +20,15 @@ class ShopFactory extends Factory
     {
         return [
             'user_id' => User::factory()->buyer(),
-            'name' => fake()->company() . ' Agri-Trade',
+            'name' => fake()->company().' Agri-Trade',
             'address' => fake()->address(),
             'latitude' => fake()->latitude(14.3, 14.8),
             'longitude' => fake()->longitude(120.8, 121.2),
             'description' => fake()->sentence(),
             'is_active' => true,
+            'classification' => fake()->randomElement([
+                'trader', 'miller', 'wholesaler', 'retailer', 'government', 'cooperative', 'exporter',
+            ]),
         ];
     }
 

@@ -18,7 +18,7 @@ class PriceController extends Controller
     {
         $shop = Auth::user()->shop;
 
-        if (!$shop) {
+        if (! $shop) {
             return redirect()->route('shops.edit')->with('error', 'Please set up your shop profile first.');
         }
 
@@ -47,7 +47,7 @@ class PriceController extends Controller
     {
         $shop = Auth::user()->shop;
 
-        if (!$shop) {
+        if (! $shop) {
             return redirect()->route('shops.edit')->with('error', 'Please set up your shop profile first.');
         }
 
@@ -70,6 +70,7 @@ class PriceController extends Controller
                 'specification' => $specification,
                 'price_per_kg' => $entry['price_per_kg'],
                 'recorded_at' => Carbon::now(),
+                'source' => 'buyer',
             ]);
 
             // Dispatch event to trigger SMS notifications

@@ -30,12 +30,18 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'string', 'in:farmer,buyer'],
-        ]);
+        ];
+
+        if ($request->role === 'buyer') {
+            $rules['buyer_classification'] = ['required', 'string', 'in:trader,miller,wholesaler,retailer,government,cooperative,exporter'];
+        }
+
+        $request->validate($rules);
 
         $user = User::create([
             'name' => $request->name,
@@ -43,6 +49,19 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
+
+        // Pre-create a stub shop with the chosen classification so it is
+        // immediately available on the map once the buyer fills in their details.
+        if ($request->role === 'buyer' && $request->buyer_classification) {
+            $user->shop()->create([
+                'name' => $user->name."'s Shop",
+                'address' => '',
+                'latitude' => 0,
+                'longitude' => 0,
+                'classification' => $request->buyer_classification,
+                'is_active' => false,
+            ]);
+        }
 
         event(new Registered($user));
 

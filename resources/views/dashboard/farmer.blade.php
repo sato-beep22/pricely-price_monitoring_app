@@ -43,7 +43,29 @@
             </div>
             <div class="stat-title">SMS Settings</div>
             <div class="stat-value text-md whitespace-normal break-all">{{ Auth::user()->phone ?? 'Not set' }}</div>
-            <div class="stat-desc"><a href="{{ route('profile.edit') }}" class="link">Update phone</a></div>
+            <div class="stat-desc flex flex-col gap-1 mt-1">
+                @if(Auth::user()->phone)
+                    @if(Auth::user()->phoneVerified())
+                        <span class="inline-flex items-center gap-1 text-success font-semibold text-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Verified
+                        </span>
+                    @else
+                        <span class="inline-flex items-center gap-1 text-error font-semibold text-xs">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                            </svg>
+                            Not Verified
+                        </span>
+                        <span class="text-warning text-xs">Please verify your number to receive SMS alerts.</span>
+                    @endif
+                @else
+                    <span class="text-base-content/50 text-xs">No phone number set.</span>
+                @endif
+                <a href="{{ route('profile.edit') }}" class="link text-xs mt-0.5">Update phone</a>
+            </div>
         </div>
 
         <!-- DA Ceiling Prices -->

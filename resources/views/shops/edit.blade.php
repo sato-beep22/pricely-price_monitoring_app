@@ -54,6 +54,27 @@
                 <textarea name="description" class="textarea textarea-bordered h-24">{{ old('description', $shop->description) }}</textarea>
             </div>
 
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text font-semibold">Buyer Classification</span></label>
+                <select name="classification" class="select select-bordered w-full" required>
+                    <option value="" disabled {{ old('classification', $shop->classification) ? '' : 'selected' }}>Select your classification...</option>
+                    @foreach([
+                        'trader'      => 'Trader / Dealer — Private commercial buyer',
+                        'miller'      => 'Miller — Rice / corn mill operator',
+                        'wholesaler'  => 'Wholesaler — Bulk buyer / reseller',
+                        'retailer'    => 'Retailer — Direct-to-consumer seller',
+                        'government'  => 'Government-Accredited — NFA / DA-accredited buyer',
+                        'cooperative' => 'Cooperative — Farmer coop / consolidator',
+                        'exporter'    => 'Exporter — International market buyer',
+                    ] as $value => $label)
+                        <option value="{{ $value }}" {{ old('classification', $shop->classification) === $value ? 'selected' : '' }}>
+                            {{ $label }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('classification') <span class="text-error text-sm mt-1">{{ $message }}</span> @enderror
+            </div>
+
             <div class="flex justify-end pt-4 border-t border-base-200">
                 <button type="submit" class="btn btn-primary">Save Shop Profile</button>
             </div>
@@ -63,24 +84,24 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Simple map initialization for coordinate picking
             setTimeout(() => {
-                if(typeof L !== 'undefined') {
+                if (typeof L !== 'undefined') {
                     const latInput = document.getElementById('lat-input');
                     const lngInput = document.getElementById('lng-input');
                     
-                    // Default to Metro Manila if empty
                     const startLat = latInput.value ? parseFloat(latInput.value) : 14.5995;
                     const startLng = lngInput.value ? parseFloat(lngInput.value) : 120.9842;
                     
                     const map = L.map('location-picker-map').setView([startLat, startLng], 10);
                     
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors'
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                        maxZoom: 19,
+                        subdomains: 'abcd',
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
                     }).addTo(map);
 
                     let marker;
-                    if(latInput.value && lngInput.value) {
+                    if (latInput.value && lngInput.value) {
                         marker = L.marker([startLat, startLng]).addTo(map);
                     }
 
@@ -142,7 +163,7 @@
                         });
                     }
                 }
-            }, 500); // slight delay to ensure L is loaded
+            }, 300);
         });
     </script>
     @endpush

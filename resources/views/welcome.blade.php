@@ -2,10 +2,10 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section class="max-w-5xl mx-auto px-6 md:px-8 pt-16 md:pt-24 pb-20 text-center flex flex-col items-center">
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-24 md:pt-28 pb-12 sm:pb-16 md:pb-20 text-center flex flex-col items-center">
         
         <!-- Dynamic Badge -->
-        <div class="gsap-hero-badge reveal-stagger-item inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border border-emerald-100 shadow-xs">
+        <div class="gsap-hero-badge reveal-stagger-item inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 sm:px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-4 sm:mb-6 border border-emerald-100 shadow-xs">
             <span class="relative flex h-2 w-2">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
@@ -14,7 +14,7 @@
         </div>
 
         <!-- Heading Statement -->
-        <h1 class="gsap-hero-title reveal-stagger-item text-5xl sm:text-6xl md:text-7xl leading-[0.95] max-w-4xl z-10 relative">
+        <h1 class="gsap-hero-title reveal-stagger-item text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] sm:leading-[0.95] max-w-4xl z-10 relative">
             Patas na Presyo,<br />
             <span class="text-gradient">
                 Sapat na Kita.
@@ -22,20 +22,20 @@
         </h1>
 
         <!-- Subhead Subtitle -->
-        <p class="gsap-hero-subtitle reveal-stagger-item text-lg mt-8 max-w-2xl leading-relaxed z-10 relative">
+        <p class="gsap-hero-subtitle reveal-stagger-item text-sm sm:text-base md:text-lg mt-5 sm:mt-8 max-w-2xl leading-relaxed z-10 relative px-2 sm:px-0">
             I monitor ang pagtaas at pagbaba ng presyo ng ating mga ani mula sa mga kalapit na merkado sa pamamagitan ng app na ito.
         </p>
 
         <!-- Action Buttons row -->
-        <div class="gsap-hero-cta reveal-stagger-item flex flex-wrap items-center justify-center gap-4 mt-10 z-10 relative">
-            <a href="{{ route('map.index') }}" class="btn-pricely-primary flex items-center gap-2">
+        <div class="gsap-hero-cta reveal-stagger-item flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 z-10 relative w-full sm:w-auto px-4 sm:px-0">
+            <a href="{{ route('map.index') }}" class="btn-pricely-primary flex items-center justify-center gap-2 w-full sm:w-auto">
                 Tignan ang Map
                 <i data-lucide="arrow-right" class="w-5 h-5"></i>
             </a>
-            
+
             @guest
-            <a href="{{ route('register') }}" class="bg-white hover:bg-slate-50 active:scale-[0.98] text-slate-900 px-6 py-3 rounded-2xl font-bold border border-slate-200 shadow-sm transition-all cursor-pointer flex items-center h-full">
-                Mag Register 
+            <a href="{{ route('register') }}" class="bg-white hover:bg-slate-50 active:scale-[0.98] text-slate-900 px-6 py-3 rounded-2xl font-bold border border-slate-200 shadow-sm transition-all cursor-pointer flex items-center justify-center w-full sm:w-auto">
+                Mag Register
             </a>
             @endguest
         </div>
@@ -43,11 +43,11 @@
     </section>
 
     <!-- Bottom feature cards layout -->
-    <section class="max-w-7xl mx-auto px-6 md:px-8 pb-20 z-10 relative" x-data="{ modal: null }">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-12 sm:pb-16 md:pb-20 z-10 relative" x-data="{ modal: null }">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <!-- Feature 1 Card: Interactive Map -->
-            <button @click="modal = 'map'" class="pricely-card reveal-card text-left p-6 flex flex-col gap-6 group cursor-pointer focus:outline-none focus:ring-0 min-h-[220px] w-full">
+            <button @click="modal = 'map'" class="pricely-card reveal-card text-left p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 group cursor-pointer focus:outline-none focus:ring-0 min-h-[180px] sm:min-h-[220px] w-full">
                 <div class="icon-bg w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mb-1">
                     <i data-lucide="compass" class="w-5 h-5 text-emerald-600"></i>
                 </div>
@@ -65,7 +65,7 @@
             </button>
 
             <!-- Feature 2 Card: Instant SMS Alerts -->
-            <button @click="modal = 'sms'" class="pricely-card reveal-card text-left p-6 flex flex-col gap-6 group cursor-pointer focus:outline-none focus:ring-0 min-h-[220px] w-full">
+            <button @click="modal = 'sms'" class="pricely-card reveal-card text-left p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 group cursor-pointer focus:outline-none focus:ring-0 min-h-[180px] sm:min-h-[220px] w-full">
                 <div class="icon-bg w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mb-1">
                     <i data-lucide="smartphone" class="w-5 h-5 text-blue-600"></i>
                 </div>
@@ -83,7 +83,7 @@
             </button>
 
             <!-- Feature 3 Card: Price Forecasting -->
-            <button @click="modal = 'forecast'" class="pricely-card reveal-card text-left p-6 flex flex-col gap-6 group cursor-pointer focus:outline-none focus:ring-0 min-h-[220px] w-full">
+            <button @click="modal = 'forecast'" class="pricely-card reveal-card text-left p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 group cursor-pointer focus:outline-none focus:ring-0 min-h-[180px] sm:min-h-[220px] w-full">
                 <div class="icon-bg w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center mb-1">
                     <i data-lucide="trending-up" class="w-5 h-5 text-amber-600"></i>
                 </div>

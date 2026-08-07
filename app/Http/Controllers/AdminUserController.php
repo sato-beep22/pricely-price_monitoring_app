@@ -13,7 +13,7 @@ class AdminUserController extends Controller
     public function index()
     {
         $users = User::with('shop')->latest()->paginate(15);
-        
+
         return view('admin.users.index', compact('users'));
     }
 
@@ -31,5 +31,20 @@ class AdminUserController extends Controller
         ]);
 
         return redirect()->route('admin.users.index')->with('status', "User {$user->name} role updated to {$request->role}.");
+    }
+
+    /**
+     * Delete a user.
+     */
+    public function destroy(Request $request, User $user)
+    {
+        if ($request->user()->id === $user->id) {
+            return redirect()->route('admin.users.index')->with('error', 'You cannot delete your own account from the admin panel.');
+        }
+
+        $userName = $user->name;
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('status', "User {$userName} deleted successfully.");
     }
 }

@@ -12,27 +12,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="bg-base-100 relative">
-    <!-- Global Toast Notifications -->
-    <div class="toast toast-top toast-center z-[100] mt-4" style="pointer-events: none;">
-        @if (session('status'))
-            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition.duration.500ms class="alert alert-success shadow-lg" style="pointer-events: auto;">
-                <i data-lucide="check-circle-2" class="w-6 h-6 shrink-0"></i>
-                <span>{{ session('status') }}</span>
-            </div>
-        @endif
-        @if (session('success'))
-            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition.duration.500ms class="alert alert-success shadow-lg" style="pointer-events: auto;">
-                <i data-lucide="check-circle-2" class="w-6 h-6 shrink-0"></i>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
-        @if (session('error'))
-            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)" x-transition.duration.500ms class="alert alert-error shadow-lg text-white" style="pointer-events: auto;">
-                <i data-lucide="alert-circle" class="w-6 h-6 shrink-0"></i>
-                <span>{{ session('error') }}</span>
-            </div>
-        @endif
-    </div>
+    <!-- Global Notification Modal -->
+    <x-notification-modal />
     <!-- Ambient Background Layer -->
     <div class="bg-ambient absolute inset-0 z-0 opacity-40 pointer-events-none"></div>
     <!-- Decorative Gradient Orbs -->
@@ -113,5 +94,8 @@
         });
     </script>
     @stack('scripts')
+
+    {{-- Pricely AI Chatbot --}}
+    <x-chatbot />
 </body>
 </html>

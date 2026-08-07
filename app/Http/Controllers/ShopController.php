@@ -14,9 +14,10 @@ class ShopController extends Controller
     public function show()
     {
         $shop = Auth::user()->shop;
-        if (!$shop) {
+        if (! $shop) {
             return redirect()->route('shops.edit')->with('status', 'Please set up your shop profile first.');
         }
+
         return view('shops.show', compact('shop'));
     }
 
@@ -25,7 +26,8 @@ class ShopController extends Controller
      */
     public function edit()
     {
-        $shop = Auth::user()->shop ?? new Shop();
+        $shop = Auth::user()->shop ?? new Shop;
+
         return view('shops.edit', compact('shop'));
     }
 
@@ -40,10 +42,11 @@ class ShopController extends Controller
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'description' => 'nullable|string',
+            'classification' => 'nullable|string|in:trader,miller,wholesaler,retailer,government,cooperative,exporter',
         ]);
 
         $user = Auth::user();
-        
+
         if ($user->shop) {
             $user->shop->update($validated);
         } else {

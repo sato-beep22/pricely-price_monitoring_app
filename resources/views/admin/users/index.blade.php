@@ -44,17 +44,44 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <!-- Role Update Form -->
-                                    <form method="POST" action="{{ route('admin.users.update', $user) }}" class="flex items-center gap-2">
-                                        @csrf
-                                        @method('PUT')
-                                        <select name="role" class="select select-bordered select-xs w-24">
-                                            <option value="farmer" {{ $user->role === 'farmer' ? 'selected' : '' }}>Farmer</option>
-                                            <option value="buyer" {{ $user->role === 'buyer' ? 'selected' : '' }}>Buyer</option>
-                                            <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-xs btn-primary btn-outline">Update</button>
-                                    </form>
+                                    <div class="flex items-center gap-2">
+                                        <!-- Role Update Form -->
+                                        <form method="POST" action="{{ route('admin.users.update', $user) }}" class="flex items-center gap-2">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="role" class="select select-bordered select-xs w-24">
+                                                <option value="farmer" {{ $user->role === 'farmer' ? 'selected' : '' }}>Farmer</option>
+                                                <option value="buyer" {{ $user->role === 'buyer' ? 'selected' : '' }}>Buyer</option>
+                                                <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-xs btn-primary btn-outline">Update</button>
+                                        </form>
+
+                                        <!-- Delete User Action Button -->
+                                        @if(auth()->id() !== $user->id)
+                                            <button type="button" @click="$dispatch('open-modal', 'delete-user-{{ $user->id }}')" class="btn btn-xs btn-error btn-outline">Delete</button>
+
+                                            <!-- Delete User Confirmation Modal -->
+                                            <x-modal name="delete-user-{{ $user->id }}" maxWidth="md">
+                                                <div class="p-6 text-center">
+                                                    <div class="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4 ring-8 ring-red-50">
+                                                        <i data-lucide="triangle-alert" class="w-8 h-8"></i>
+                                                    </div>
+                                                    <h3 class="text-lg font-bold text-slate-800 mb-2">Delete User</h3>
+                                                    <p class="text-sm text-slate-600 mb-6">Are you sure you want to delete <strong class="text-slate-900">{{ $user->name }}</strong>? This action cannot be undone.</p>
+                                                    
+                                                    <div class="flex justify-center gap-3">
+                                                        <button type="button" @click="$dispatch('close')" class="btn btn-ghost">Cancel</button>
+                                                        <form method="POST" action="{{ route('admin.users.destroy', $user) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-error text-white">Yes, Delete User</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </x-modal>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

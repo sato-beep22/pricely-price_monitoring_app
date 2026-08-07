@@ -25,6 +25,8 @@ class Shop extends Model
         'longitude',
         'description',
         'is_active',
+        'classification',
+        'views',
     ];
 
     /**
