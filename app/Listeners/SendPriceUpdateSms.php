@@ -39,7 +39,7 @@ class SendPriceUpdateSms implements ShouldQueue
         }
 
         $message = sprintf(
-            "Pricely Update: %s updated their price for %s to P%s/kg. Visit the map for details.",
+            'Pricely Update: %s updated their price for %s to P%s/kg. Visit the map for details.',
             $shop->name,
             $crop->name,
             number_format($price->price_per_kg, 2)
@@ -47,8 +47,14 @@ class SendPriceUpdateSms implements ShouldQueue
 
         foreach ($subscriptions as $subscription) {
             $farmer = $subscription->farmer;
-            
-            if (!empty($farmer->phone)) {
+
+            if (! $farmer->phoneVerified()) {
+                Log::info("Skipped SMS to farmer ID {$farmer->id} because phone is not verified.");
+
+                continue;
+            }
+
+            if (! empty($farmer->phone)) {
                 $this->semaphoreService->sendSms($farmer->phone, $message);
             } else {
                 Log::info("Skipped SMS to farmer ID {$farmer->id} because no phone number is set.");

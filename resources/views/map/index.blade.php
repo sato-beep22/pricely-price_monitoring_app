@@ -54,11 +54,30 @@
                 </div>
             </div>
             <div id="panel-shop-body" class="flex-1 overflow-y-auto px-5 py-4 space-y-5"></div>
-            <div class="px-5 py-4 border-t border-slate-100">
+            <div class="px-5 py-4 border-t border-slate-100 flex flex-col gap-2">
+                <button id="get-directions-btn" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                    Get Directions
+                </button>
                 <button id="shop-info-close" class="w-full py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-sm transition-colors">
                     Close
                 </button>
             </div>
+        </div>
+
+        {{-- Active Route Banner (shown inside map when route is active) --}}
+        <div
+            id="route-active-bar"
+            class="hidden absolute bottom-4 left-1/2 -translate-x-1/2 z-[510] bg-white rounded-2xl shadow-xl border border-emerald-100 px-5 py-3 flex items-center gap-4 min-w-[280px] max-w-[90%]"
+        >
+            <div class="w-8 h-8 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-xs font-bold text-emerald-700 leading-tight" id="route-label">Calculating route…</p>
+                <p class="text-[11px] text-slate-400" id="route-meta"></p>
+            </div>
+            <button id="clear-route-btn" class="flex-shrink-0 text-xs font-semibold text-slate-500 hover:text-red-600 transition-colors">✕ Clear</button>
         </div>
     </div>
 

@@ -1,3 +1,4 @@
+import 'leaflet-routing-machine';
 document.addEventListener('DOMContentLoaded', function () {
     console.log('📍 Map.js loaded');
     const mapElement = document.getElementById('price-map');
@@ -13,6 +14,178 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log('✅ Leaflet loaded, initializing map with CARTO Voyager basemap');
 
+    // ─── Shared Styles ────────────────────────────────────────────────────────────
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes locModalIn {
+            from { opacity:0; transform:scale(0.88) translateY(24px); }
+            to   { opacity:1; transform:scale(1) translateY(0); }
+        }
+        #grant-location-btn:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(5,150,105,0.45) !important; }
+        #deny-location-btn:hover  { background:#f8fafc !important; color:#64748b !important; }
+        #location-denied-banner { display:none; }
+        @keyframes userPulse {
+            0%   { transform:translate(-50%,-50%) scale(1);   opacity:0.7; }
+            70%  { transform:translate(-50%,-50%) scale(2.4); opacity:0; }
+            100% { transform:translate(-50%,-50%) scale(2.4); opacity:0; }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // ─── Modal Builder ────────────────────────────────────────────────────────────
+    // Builds different modal states: 'prompt' (ask user) or 'blocked' (already denied)
+    function buildLocationModal(state) {
+        const isBlocked = state === 'blocked';
+
+        const headerBg   = isBlocked
+            ? 'linear-gradient(135deg,#b91c1c 0%,#dc2626 100%)'
+            : 'linear-gradient(135deg,#059669 0%,#0d9488 100%)';
+        const iconSvg    = isBlocked
+            ? `<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><line x1='4.93' y1='4.93' x2='19.07' y2='19.07'/></svg>`
+            : `<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>`;
+        const title      = isBlocked ? 'Location is Blocked' : 'Location Required';
+        const subtitle   = isBlocked
+            ? 'Your browser has blocked location access for this site. Follow the steps below to re-enable it.'
+            : 'This map needs your location to show nearby shops and accurate distances.';
+
+        const bodyHtml = isBlocked ? `
+            <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin:0 0 0.75rem;">How to unblock location:</p>
+            <ol style="margin:0 0 1.25rem;padding-left:1.25rem;display:flex;flex-direction:column;gap:0.6rem;">
+                <li style="font-size:0.875rem;color:#334155;">
+                    Click the <strong>🔒 lock icon</strong> or <strong>ⓘ info icon</strong> in the address bar
+                </li>
+                <li style="font-size:0.875rem;color:#334155;">
+                    Find <strong>"Location"</strong> in the site permissions list
+                </li>
+                <li style="font-size:0.875rem;color:#334155;">
+                    Change it from <span style="color:#dc2626;font-weight:600;">Block</span> to <span style="color:#059669;font-weight:600;">Allow</span>
+                </li>
+                <li style="font-size:0.875rem;color:#334155;">
+                    <strong>Reload</strong> the page and try again
+                </li>
+            </ol>
+            <button id="grant-location-btn" style="
+                width:100%;padding:0.875rem;
+                background:linear-gradient(135deg,#2563eb,#1d4ed8);
+                color:white;border:none;border-radius:0.875rem;
+                font-size:0.95rem;font-weight:700;cursor:pointer;
+                box-shadow:0 4px 14px rgba(37,99,235,0.35);
+                transition:transform 0.15s,box-shadow 0.15s;
+                margin-bottom:0.625rem;
+            ">
+                🔄 Reload Page
+            </button>
+            <button id="deny-location-btn" style="
+                width:100%;padding:0.625rem;
+                background:transparent;color:#94a3b8;
+                border:1.5px solid #e2e8f0;border-radius:0.875rem;
+                font-size:0.85rem;font-weight:600;cursor:pointer;
+                transition:background 0.15s,color 0.15s;
+            ">
+                Continue without location
+            </button>
+        ` : `
+            <ul style="list-style:none;margin:0 0 1.5rem;padding:0;display:flex;flex-direction:column;gap:0.75rem;">
+                <li style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:#334155;">
+                    <span style="width:32px;height:32px;border-radius:50%;background:#ecfdf5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#059669' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>
+                    </span>
+                    <span>Find shops closest to you</span>
+                </li>
+                <li style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:#334155;">
+                    <span style="width:32px;height:32px;border-radius:50%;background:#ecfdf5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#059669' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><polyline points='12 6 12 12 16 14'/></svg>
+                    </span>
+                    <span>See real-time distances to each shop</span>
+                </li>
+                <li style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;color:#334155;">
+                    <span style="width:32px;height:32px;border-radius:50%;background:#ecfdf5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#059669' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='3 11 22 2 13 21 11 13 3 11'/></svg>
+                    </span>
+                    <span>Center the map on your current position</span>
+                </li>
+            </ul>
+            <button id="grant-location-btn" style="
+                width:100%;padding:0.875rem;
+                background:linear-gradient(135deg,#059669,#0d9488);
+                color:white;border:none;border-radius:0.875rem;
+                font-size:0.95rem;font-weight:700;cursor:pointer;
+                box-shadow:0 4px 14px rgba(5,150,105,0.4);
+                transition:transform 0.15s,box-shadow 0.15s;
+                margin-bottom:0.625rem;
+            ">
+                Allow Location Access
+            </button>
+            <button id="deny-location-btn" style="
+                width:100%;padding:0.625rem;
+                background:transparent;color:#94a3b8;
+                border:1.5px solid #e2e8f0;border-radius:0.875rem;
+                font-size:0.85rem;font-weight:600;cursor:pointer;
+                transition:background 0.15s,color 0.15s;
+            ">
+                Skip for now
+            </button>
+            <p style="text-align:center;font-size:0.75rem;color:#94a3b8;margin-top:1rem;margin-bottom:0;">
+                Your location is never stored or shared.
+            </p>
+        `;
+
+        const el = document.createElement('div');
+        el.id = 'location-permission-modal';
+        el.innerHTML = `
+            <div style="
+                position:fixed;inset:0;z-index:9999;
+                background:rgba(15,23,42,0.7);
+                backdrop-filter:blur(6px);
+                display:flex;align-items:center;justify-content:center;
+                padding:1rem;
+            ">
+                <div style="
+                    background:#fff;border-radius:1.5rem;
+                    box-shadow:0 25px 50px -12px rgba(0,0,0,0.4);
+                    max-width:420px;width:100%;
+                    overflow:hidden;
+                    animation:locModalIn 0.35s cubic-bezier(.34,1.56,.64,1) both;
+                ">
+                    <div style="background:${headerBg};padding:2rem 2rem 1.5rem;text-align:center;">
+                        <div style="width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+                            ${iconSvg}
+                        </div>
+                        <h2 style="color:white;font-size:1.3rem;font-weight:800;margin:0 0 0.4rem;">${title}</h2>
+                        <p style="color:rgba(255,255,255,0.85);font-size:0.875rem;margin:0;">${subtitle}</p>
+                    </div>
+                    <div style="padding:1.75rem 2rem;">
+                        ${bodyHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+        return el;
+    }
+
+    let locationModal = null;
+
+    // ─── Location Denied Banner ───────────────────────────────────────────────────
+    const deniedBanner = document.createElement('div');
+    deniedBanner.id = 'location-denied-banner';
+    deniedBanner.style.cssText = `
+        position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+        z-index:8000;background:#1e293b;color:white;
+        border-radius:1rem;padding:0.75rem 1.25rem;
+        display:flex;align-items:center;gap:0.75rem;
+        box-shadow:0 10px 30px rgba(0,0,0,0.3);
+        font-size:0.875rem;font-weight:500;
+        max-width:480px;width:calc(100% - 2rem);
+        animation:locModalIn 0.3s ease both;
+    `;
+    deniedBanner.innerHTML = `
+        <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='#f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='flex-shrink:0'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>
+        <span style='flex:1;color:#cbd5e1;'>Location access is limited. Nearby features disabled.</span>
+        <button id='banner-retry-btn' style='background:#059669;color:white;border:none;border-radius:0.5rem;padding:0.35rem 0.75rem;font-size:0.8rem;font-weight:700;cursor:pointer;white-space:nowrap;'>Fix</button>
+        <button id='banner-close-btn' style='background:transparent;border:none;color:#94a3b8;cursor:pointer;font-size:1.1rem;padding:0.1rem 0.25rem;'>✕</button>
+    `;
+    document.body.appendChild(deniedBanner);
+
     // Initialize Leaflet map
     const map = L.map('price-map').setView([16.916, 121.575], 12);
 
@@ -26,12 +199,130 @@ document.addEventListener('DOMContentLoaded', function () {
     let markers = [];
     let shopsData = [];
     let userLatLng = null;
+    let userLocationMarker = null;
     const cropFilter = document.getElementById('crop-filter');
     const classificationFilter = document.getElementById('classification-filter');
     const shopSearch = document.getElementById('shop-search');
     const searchResults = document.getElementById('shop-search-results');
     const markerMap = new Map();
     const viewedShops = new Set();
+
+    // ─── Routing State ────────────────────────────────────────────────────────────
+    let routingControl = null;
+    let activeRouteShop = null;
+
+    const routeBar      = document.getElementById('route-active-bar');
+    const routeLabel    = document.getElementById('route-label');
+    const routeMeta     = document.getElementById('route-meta');
+    const clearRouteBtn = document.getElementById('clear-route-btn');
+    const getDirectionsBtn = document.getElementById('get-directions-btn');
+
+    function formatDuration(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        if (h > 0) { return `${h}h ${m}m`; }
+        return `${m} min`;
+    }
+
+    function formatDistance(meters) {
+        if (meters >= 1000) { return `${(meters / 1000).toFixed(1)} km`; }
+        return `${Math.round(meters)} m`;
+    }
+
+    function clearRoute() {
+        if (routingControl) {
+            map.removeControl(routingControl);
+            routingControl = null;
+        }
+        activeRouteShop = null;
+        if (routeBar) { routeBar.classList.add('hidden'); }
+        if (getDirectionsBtn) {
+            getDirectionsBtn.textContent = '';
+            getDirectionsBtn.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polygon points='3 11 22 2 13 21 11 13 3 11'/></svg> Get Directions`;
+            getDirectionsBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+            getDirectionsBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+        }
+    }
+
+    function startRoute(shop) {
+        if (!userLatLng) {
+            alert('Location access is required to get directions. Please enable location first.');
+            return;
+        }
+
+        // Clear any existing route
+        clearRoute();
+        activeRouteShop = shop;
+
+        // Show "calculating" state
+        if (routeBar) {
+            routeLabel.textContent = `Directions to ${shop.name}`;
+            routeMeta.textContent = 'Calculating route…';
+            routeBar.classList.remove('hidden');
+        }
+
+        // Toggle button to "Clear Route"
+        if (getDirectionsBtn) {
+            getDirectionsBtn.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg> Clear Route`;
+            getDirectionsBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+            getDirectionsBtn.classList.add('bg-red-500', 'hover:bg-red-600');
+        }
+
+        routingControl = L.Routing.control({
+            waypoints: [
+                L.latLng(userLatLng.lat, userLatLng.lng),
+                L.latLng(shop.latitude, shop.longitude),
+            ],
+            router: L.Routing.osrmv1({
+                serviceUrl: 'https://router.project-osrm.org/route/v1',
+                profile: 'driving',
+            }),
+            lineOptions: {
+                styles: [
+                    { color: '#059669', weight: 6, opacity: 0.85 },
+                    { color: '#34d399', weight: 3, opacity: 0.6, dashArray: '1, 8' },
+                ],
+                extendToWaypoints: true,
+                missingRouteTolerance: 0,
+            },
+            createMarker: () => null, // Use our own markers, don't add default ones
+            show: false,              // Don't show the LRM turn-by-turn sidebar
+            addWaypoints: false,      // Prevent dragging waypoints
+            fitSelectedRoutes: true,
+            showAlternatives: false,
+        })
+        .on('routesfound', (e) => {
+            const route = e.routes[0];
+            const dist  = formatDistance(route.summary.totalDistance);
+            const time  = formatDuration(route.summary.totalTime);
+            if (routeLabel) { routeLabel.textContent = `To: ${shop.name}`; }
+            if (routeMeta)  { routeMeta.textContent  = `${dist}  ·  ${time} by road`; }
+        })
+        .on('routingerror', () => {
+            if (routeLabel) { routeLabel.textContent = 'Route not available'; }
+            if (routeMeta)  { routeMeta.textContent  = 'Could not calculate a driving route.'; }
+        })
+        .addTo(map);
+    }
+
+    // Clear-route button
+    if (clearRouteBtn) {
+        clearRouteBtn.addEventListener('click', clearRoute);
+    }
+
+    // Get-directions button (wired to current activeRouteShop or panel shop)
+    if (getDirectionsBtn) {
+        getDirectionsBtn.addEventListener('click', () => {
+            const panelShop = window._currentPanelShop;
+            if (activeRouteShop && panelShop && activeRouteShop.id === panelShop.id) {
+                // Same shop is already routed — clear it
+                clearRoute();
+            } else if (panelShop) {
+                // Start a new route to this shop
+                startRoute(panelShop);
+            }
+        });
+    }
 
     // ─── Classification Config ───────────────────────────────────────────────────
     const CLASSIFICATIONS = {
@@ -115,23 +406,199 @@ document.addEventListener('DOMContentLoaded', function () {
         return R * c;
     }
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                userLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                console.log('📍 User location acquired:', userLatLng);
-                if (shopsData.length > 0) {
-                    populateNearbyShops(shopsData);
+    // ─── Locate Me Control ────────────────────────────────────────────────────────
+    const LocateMeControl = L.Control.extend({
+        options: { position: 'topleft' },
+        onAdd: function () {
+            const btn = L.DomUtil.create('button', '');
+            btn.id = 'locate-me-btn';
+            btn.title = 'Center on my location';
+            btn.style.cssText = `
+                width:36px;height:36px;border-radius:8px;
+                background:white;border:2px solid rgba(0,0,0,0.2);
+                cursor:pointer;display:flex;align-items:center;justify-content:center;
+                box-shadow:0 2px 6px rgba(0,0,0,0.15);
+                transition:background 0.15s;
+            `;
+            btn.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#059669' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='3'/><line x1='12' y1='2' x2='12' y2='5'/><line x1='12' y1='19' x2='12' y2='22'/><line x1='2' y1='12' x2='5' y2='12'/><line x1='19' y1='12' x2='22' y2='12'/></svg>`;
+            btn.onmouseover = () => { btn.style.background = '#f0fdf4'; };
+            btn.onmouseout  = () => { btn.style.background = 'white'; };
+            L.DomEvent.on(btn, 'click', L.DomEvent.stopPropagation);
+            L.DomEvent.on(btn, 'click', () => {
+                if (userLatLng) {
+                    map.flyTo([userLatLng.lat, userLatLng.lng], 15, { duration: 1.2 });
+                } else {
+                    requestUserLocation();
                 }
-            },
-            () => {
-                console.warn('⚠️ Geolocation denied or unavailable');
-                showNearbyUnavailable();
+            });
+            return btn;
+        },
+    });
+    new LocateMeControl().addTo(map);
+
+    // ─── Geolocation Logic ────────────────────────────────────────────────────────
+    function placeUserMarker(lat, lng) {
+        if (userLocationMarker) {
+            map.removeLayer(userLocationMarker);
+        }
+        const pulseIcon = L.divIcon({
+            className: '',
+            html: `
+                <div style="
+                    position:relative;width:24px;height:24px;
+                    display:flex;align-items:center;justify-content:center;
+                ">
+                    <div style="
+                        position:absolute;width:36px;height:36px;
+                        border-radius:50%;background:rgba(37,99,235,0.2);
+                        top:50%;left:50%;transform:translate(-50%,-50%);
+                        animation:userPulse 2s ease-out infinite;
+                    "></div>
+                    <div style="
+                        width:14px;height:14px;border-radius:50%;
+                        background:#2563eb;border:3px solid white;
+                        box-shadow:0 2px 8px rgba(37,99,235,0.6);
+                        position:relative;z-index:1;
+                    "></div>
+                </div>
+            `,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12],
+        });
+        const pulseStyle = document.createElement('style');
+        pulseStyle.textContent = `
+            @keyframes userPulse {
+                0%   { transform:translate(-50%,-50%) scale(1);   opacity:0.7; }
+                70%  { transform:translate(-50%,-50%) scale(2.4); opacity:0; }
+                100% { transform:translate(-50%,-50%) scale(2.4); opacity:0; }
             }
-        );
-    } else {
+        `;
+        document.head.appendChild(pulseStyle);
+        userLocationMarker = L.marker([lat, lng], { icon: pulseIcon, zIndexOffset: 1000 })
+            .bindPopup('<b>Your Location</b>')
+            .addTo(map);
+    }
+
+    function showModal(state) {
+        const existing = document.getElementById('location-permission-modal');
+        if (existing) { existing.remove(); }
+        locationModal = buildLocationModal(state);
+        document.body.appendChild(locationModal);
+
+        const grantBtn = document.getElementById('grant-location-btn');
+        const denyBtn  = document.getElementById('deny-location-btn');
+
+        if (state === 'blocked') {
+            // Reload button
+            if (grantBtn) {
+                grantBtn.addEventListener('click', () => { window.location.reload(); });
+            }
+            if (denyBtn) {
+                denyBtn.addEventListener('click', () => {
+                    locationModal.remove();
+                    locationModal = null;
+                    deniedBanner.style.display = 'flex';
+                    showNearbyUnavailable();
+                });
+            }
+        } else {
+            if (grantBtn) {
+                grantBtn.addEventListener('click', () => {
+                    grantBtn.textContent = 'Requesting...';
+                    grantBtn.style.opacity = '0.7';
+                    grantBtn.disabled = true;
+                    requestUserLocation();
+                });
+            }
+            if (denyBtn) {
+                denyBtn.addEventListener('click', () => { onLocationDenied(false); });
+            }
+        }
+    }
+
+    function onLocationGranted(pos) {
+        userLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        console.log('📍 User location acquired:', userLatLng);
+        placeUserMarker(userLatLng.lat, userLatLng.lng);
+        map.flyTo([userLatLng.lat, userLatLng.lng], 14, { duration: 1.5 });
+        if (locationModal) { locationModal.remove(); locationModal = null; }
+        deniedBanner.style.display = 'none';
+        if (shopsData.length > 0) { populateNearbyShops(shopsData); }
+    }
+
+    function onLocationDenied(blocked = false) {
+        console.warn('⚠️ Geolocation denied or unavailable. blocked:', blocked);
+        if (locationModal) { locationModal.remove(); locationModal = null; }
+        deniedBanner.style.display = 'flex';
         showNearbyUnavailable();
     }
+
+    function requestUserLocation() {
+        if (!navigator.geolocation) {
+            onLocationDenied(false);
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(onLocationGranted, (err) => {
+            if (err.code === err.PERMISSION_DENIED) {
+                // Browser blocked it — replace modal with blocked variant
+                showModal('blocked');
+                showNearbyUnavailable();
+            } else {
+                onLocationDenied(false);
+            }
+        }, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+        });
+    }
+
+    // ─── Check permission state on load ─────────────────────────────────────────────────
+    function checkPermissionState() {
+        if (!navigator.permissions) {
+            // Permissions API not available — fall back to showing prompt modal
+            showModal('prompt');
+            return;
+        }
+        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+            console.log('📍 Geolocation permission state:', result.state);
+            if (result.state === 'granted') {
+                // Already granted — skip modal, get location silently
+                requestUserLocation();
+            } else if (result.state === 'denied') {
+                // Already blocked — show blocked modal with instructions
+                showModal('blocked');
+            } else {
+                // 'prompt' state — show normal ask modal
+                showModal('prompt');
+            }
+
+            // React to live permission changes (e.g. user unblocks in settings)
+            result.addEventListener('change', () => {
+                if (result.state === 'granted' && !userLatLng) {
+                    const existing = document.getElementById('location-permission-modal');
+                    if (existing) { existing.remove(); }
+                    requestUserLocation();
+                } else if (result.state === 'denied') {
+                    showModal('blocked');
+                }
+            });
+        }).catch(() => {
+            // Query failed — fall back gracefully
+            showModal('prompt');
+        });
+    }
+
+    checkPermissionState();
+
+    // ─── Denied Banner Handlers ───────────────────────────────────────────────────
+    document.getElementById('banner-retry-btn').addEventListener('click', () => {
+        deniedBanner.style.display = 'none';
+        // Check current state again so the correct modal variant is shown
+        checkPermissionState();
+    });
+    document.getElementById('banner-close-btn').addEventListener('click', () => {
+        deniedBanner.style.display = 'none';
+    });
 
     function openShopPanel(shop) {
         if (!panel) { return; }
@@ -213,6 +680,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>
         `;
+
+        // Track which shop is in the panel for Get Directions
+        window._currentPanelShop = shop;
+
+        // Sync the Get Directions / Clear Route button state
+        if (getDirectionsBtn) {
+            const isActiveRoute = activeRouteShop && activeRouteShop.id === shop.id;
+            if (isActiveRoute) {
+                getDirectionsBtn.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><line x1='18' y1='6' x2='6' y2='18'/><line x1='6' y1='6' x2='18' y2='18'/></svg> Clear Route`;
+                getDirectionsBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+                getDirectionsBtn.classList.add('bg-red-500', 'hover:bg-red-600');
+            } else {
+                getDirectionsBtn.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polygon points='3 11 22 2 13 21 11 13 3 11'/></svg> Get Directions`;
+                getDirectionsBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+                getDirectionsBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+            }
+        }
 
         panel.classList.remove('translate-x-full', 'opacity-0');
         panel.classList.add('translate-x-0', 'opacity-100');
@@ -347,20 +831,14 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="px-4 py-6 text-center">
                 <p class="text-xs text-slate-400 mb-2">Location access is required</p>
                 <button id="retry-geolocation" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors">
-                    Enable Location
+                    Enable Location ↗
                 </button>
             </div>`;
 
         const retryBtn = document.getElementById('retry-geolocation');
         if (retryBtn) {
             retryBtn.addEventListener('click', () => {
-                navigator.geolocation?.getCurrentPosition(
-                    (pos) => {
-                        userLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                        populateNearbyShops(shopsData);
-                    },
-                    () => {}
-                );
+                requestUserLocation();
             });
         }
     }

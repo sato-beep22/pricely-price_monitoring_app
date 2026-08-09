@@ -152,29 +152,24 @@
                 <span class="text-sm font-semibold">Your phone number ({{ $user->phone }}) is verified.</span>
             </div>
         @elseif($user->phone_verification_code && $user->phone_verification_expires_at && now()->lessThanOrEqualTo($user->phone_verification_expires_at))
-            {{-- Enter Verification Code Form --}}
-            <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 mb-4">
-                <p class="text-sm text-indigo-800 mb-2">
-                    A 5-digit verification code has been sent to <strong>{{ $user->phone }}</strong>.<br>
-                    It will expire in {{ now()->diffInMinutes($user->phone_verification_expires_at) }} minutes.
-                </p>
-                <form method="post" action="{{ route('phone.verification.verify') }}" class="flex gap-2 items-start mt-3">
-                    @csrf
-                    <div class="form-control flex-1">
-                        <input
-                            type="text"
-                            name="code"
-                            class="input input-bordered w-full @error('code') input-error @enderror"
-                            placeholder="Enter 5-digit code"
-                            maxlength="5"
-                            required
-                        >
-                        @error('code')
-                            <span class="text-error text-xs mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <button type="submit" class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 border-none text-white">Verify Code</button>
-                </form>
+            {{-- Code sent — show status + button to open modal --}}
+            <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 mb-4 flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm text-indigo-800">
+                        A 5-digit code was sent to <strong>{{ $user->phone }}</strong>.
+                    </p>
+                    <p class="text-xs text-indigo-500 mt-0.5">
+                        Expires in {{ ceil(now()->floatDiffInMinutes($user->phone_verification_expires_at)) }} minutes.
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    id="open-otp-modal"
+                    onclick="document.getElementById('otp-modal').showModal()"
+                    class="btn btn-primary bg-indigo-600 hover:bg-indigo-700 border-none text-white whitespace-nowrap text-sm"
+                >
+                    Enter Code
+                </button>
             </div>
         @else
             {{-- Send Verification Code Form --}}
@@ -209,6 +204,75 @@
             </div>
         @endif
     </div>
+
+    {{-- ── OTP Verification Modal ─────────────────────────────────────────── --}}
+    <dialog id="otp-modal" class="modal">
+        <div class="modal-box max-w-sm rounded-2xl shadow-2xl p-0 overflow-hidden">
+            {{-- Header --}}
+            <div class="bg-gradient-to-br from-indigo-600 to-indigo-700 px-6 py-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold text-base">Enter Verification Code</h3>
+                        <p class="text-indigo-200 text-xs">Check your phone for the 5-digit code</p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Body --}}
+            <form method="post" action="{{ route('phone.verification.verify') }}" class="px-6 py-5">
+                @csrf
+
+                @error('code')
+                    <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-3 py-2 mb-4">
+                        <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
+                        {{ $message }}
+                    </div>
+                @enderror
+
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Verification Code</label>
+                    <input
+                        type="text"
+                        name="code"
+                        id="otp-code-input"
+                        class="input input-bordered w-full text-center text-2xl font-bold tracking-[0.5em] @error('code') input-error border-red-400 @enderror"
+                        placeholder="_ _ _ _ _"
+                        maxlength="5"
+                        inputmode="numeric"
+                        pattern="[0-9]{5}"
+                        autocomplete="one-time-code"
+                        required
+                    >
+                    <p class="text-xs text-slate-400 mt-2 text-center">
+                        Sent to <span class="font-semibold text-slate-600">{{ $user->phone }}</span>
+                    </p>
+                </div>
+
+                <div class="flex gap-3">
+                    <button
+                        type="button"
+                        onclick="document.getElementById('otp-modal').close()"
+                        class="btn flex-1 bg-slate-100 hover:bg-slate-200 border-none text-slate-600 font-semibold"
+                    >
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn flex-1 bg-indigo-600 hover:bg-indigo-700 border-none text-white font-semibold">
+                        Verify
+                    </button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    @if(session('status') === 'phone-verification-sent' || $errors->has('code'))
+        <script>document.addEventListener('DOMContentLoaded', () => document.getElementById('otp-modal')?.showModal())</script>
+    @endif
     @endif
 
     {{-- ── Change Password ──────────────────────────────────────────────────── --}}

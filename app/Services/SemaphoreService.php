@@ -8,47 +8,129 @@ use Illuminate\Support\Facades\Log;
 class SemaphoreService
 {
     protected string $apiUrl;
+
+    protected string $otpUrl;
+
     protected ?string $apiKey;
+
     protected string $senderName;
+
+    protected bool $senderNameActive;
 
     public function __construct()
     {
         $this->apiUrl = config('services.semaphore.api_url', 'https://api.semaphore.co/api/v4/messages');
+        $this->otpUrl = 'https://api.semaphore.co/api/v4/otp';
         $this->apiKey = config('services.semaphore.api_key');
         $this->senderName = config('services.semaphore.sender_name', 'Pricely');
+        $this->senderNameActive = config('services.semaphore.sender_name_active', false);
+    }
+
+    /**
+     * Build the base payload for an API call.
+     * Includes sendername only when the sender name is active.
+     *
+     * @return array<string, string>
+     */
+    protected function basePayload(string $phone, string $message): array
+    {
+        $payload = [
+            'apikey' => $this->apiKey,
+            'number' => $phone,
+            'message' => $message,
+        ];
+
+        if ($this->senderNameActive) {
+            $payload['sendername'] = $this->senderName;
+        }
+
+        return $payload;
     }
 
     /**
      * Send an SMS message using the Semaphore API.
      *
-     * @param string $phone The recipient's phone number
-     * @param string $message The message content
+     * @param  string  $phone  The recipient's phone number
+     * @param  string  $message  The message content
      * @return bool True if successful, false otherwise
      */
     public function sendSms(string $phone, string $message): bool
     {
         if (empty($this->apiKey)) {
-            Log::warning("Semaphore API key is not configured. SMS not sent to {$phone}: {$message}");
+            Log::warning("Semaphore API key is not configured. SMS not sent to {$phone}.");
+
             return false;
         }
 
         try {
-            $response = Http::asForm()->post($this->apiUrl, [
-                'apikey' => $this->apiKey,
-                'number' => $phone,
-                'message' => $message,
-                'sendername' => $this->senderName,
-            ]);
+            $response = Http::asForm()->post($this->apiUrl, $this->basePayload($phone, $message));
 
             if ($response->successful()) {
-                Log::info("SMS sent successfully to {$phone}.");
+                Log::info("SMS sent successfully to {$phone}.", ['response' => $response->json()]);
+
                 return true;
             }
 
-            Log::error("Failed to send SMS to {$phone}.", ['response' => $response->json()]);
+            Log::error("Failed to send SMS to {$phone}.", [
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
             return false;
         } catch (\Exception $e) {
             Log::error("Exception while sending SMS to {$phone}.", ['error' => $e->getMessage()]);
+
+            return false;
+        }
+    }
+
+    /**
+     * Send an OTP code via SMS.
+     *
+     * When SEMAPHORE_SENDER_NAME_ACTIVE=true, uses Semaphore's dedicated /otp route
+     * (high-priority, bypasses DND). Otherwise falls back to /messages with a shared
+     * sender number — sufficient while waiting for sender name approval.
+     *
+     * @param  string  $phone  The recipient's phone number
+     * @param  string  $code  The OTP code to send
+     * @return bool True if successful, false otherwise
+     */
+    public function sendOtp(string $phone, string $code): bool
+    {
+        if (empty($this->apiKey)) {
+            Log::warning("Semaphore API key is not configured. OTP not sent to {$phone}.");
+
+            return false;
+        }
+
+        try {
+            if ($this->senderNameActive) {
+                // Use the dedicated OTP route — requires an active sender name.
+                $response = Http::asForm()->post($this->otpUrl, array_merge(
+                    $this->basePayload($phone, 'Your Pricely verification code is {otp}. It expires in 5 minutes.'),
+                    ['code' => $code]
+                ));
+            } else {
+                // Fallback: regular messages route — does not require an active sender name.
+                $message = "Your Pricely verification code is {$code}. It expires in 5 minutes.";
+                $response = Http::asForm()->post($this->apiUrl, $this->basePayload($phone, $message));
+            }
+
+            if ($response->successful()) {
+                Log::info("OTP sent successfully to {$phone}.", ['response' => $response->json()]);
+
+                return true;
+            }
+
+            Log::error("Failed to send OTP to {$phone}.", [
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
+            return false;
+        } catch (\Exception $e) {
+            Log::error("Exception while sending OTP to {$phone}.", ['error' => $e->getMessage()]);
+
             return false;
         }
     }

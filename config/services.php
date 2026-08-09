@@ -38,6 +38,7 @@ return [
     'semaphore' => [
         'api_key' => env('SEMAPHORE_API_KEY'),
         'sender_name' => env('SEMAPHORE_SENDER_NAME', 'Pricely'),
+        'sender_name_active' => env('SEMAPHORE_SENDER_NAME_ACTIVE', false),
         'api_url' => env('SEMAPHORE_API_URL', 'https://api.semaphore.co/api/v4/messages'),
     ],
 
