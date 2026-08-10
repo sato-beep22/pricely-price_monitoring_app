@@ -33,6 +33,9 @@
         <div class="flex items-center gap-1.5 md:gap-4 shrink-0 whitespace-nowrap">
             @if (Route::has('login'))
                 @auth
+                    <a href="{{ route('dashboard') }}" class="md:hidden text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-100 mr-1 whitespace-nowrap">
+                        Dashboard
+                    </a>
                     <form method="POST" action="{{ route('logout') }}" class="m-0 p-0 flex items-center">
                         @csrf
                         <button type="submit" class="text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-950 transition-colors px-1.5 md:px-3 py-2 rounded-xl cursor-pointer whitespace-nowrap">
