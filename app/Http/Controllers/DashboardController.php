@@ -21,13 +21,12 @@ class DashboardController extends Controller
             return view('dashboard.buyer');
         } else {
             $ceilingPrices = collect();
-            foreach (Crop::all() as $crop) {
+            $crops = Crop::orderBy('name')->get();
+            foreach ($crops as $crop) {
                 $specs = array_map('trim', explode(',', $crop->specification));
                 foreach ($specs as $spec) {
                     $cp = CeilingPrice::where('crop_id', $crop->id)
                         ->where('specification', $spec)
-                        ->where('effective_date', '<=', now())
-                        ->orderByDesc('effective_date')
                         ->first();
                     if ($cp) {
                         $ceilingPrices->push($cp);
@@ -35,7 +34,10 @@ class DashboardController extends Controller
                 }
             }
 
-            return view('dashboard.farmer', compact('ceilingPrices'));
+            $sourceLinks = \App\Models\Setting::where('key', 'like', 'da_price_source_link_%')
+                ->pluck('value', 'key')
+                ->toArray();
+            return view('dashboard.farmer', compact('ceilingPrices', 'sourceLinks', 'crops'));
         }
     }
 }

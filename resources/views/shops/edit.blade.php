@@ -65,7 +65,6 @@
                         'retailer'    => 'Retailer — Direct-to-consumer seller',
                         'government'  => 'Government-Accredited — NFA / DA-accredited buyer',
                         'cooperative' => 'Cooperative — Farmer coop / consolidator',
-                        'exporter'    => 'Exporter — International market buyer',
                     ] as $value => $label)
                         <option value="{{ $value }}" {{ old('classification', $shop->classification) === $value ? 'selected' : '' }}>
                             {{ $label }}

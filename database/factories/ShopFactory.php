@@ -27,7 +27,7 @@ class ShopFactory extends Factory
             'description' => fake()->sentence(),
             'is_active' => true,
             'classification' => fake()->randomElement([
-                'trader', 'miller', 'wholesaler', 'retailer', 'government', 'cooperative', 'exporter',
+                'trader', 'miller', 'wholesaler', 'retailer', 'government', 'cooperative',
             ]),
         ];
     }

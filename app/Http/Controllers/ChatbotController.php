@@ -75,9 +75,15 @@ PROMPT;
         $userMessage = $request->string('message');
         $history = $request->input('history', []);
 
+        $userRole = auth()->check() ? auth()->user()->role : 'farmer';
+        
+        $roleContext = $userRole === 'buyer' 
+            ? "\n\n=== USER CONTEXT ===\nThe user chatting with you is a BUYER. Tailor your responses to help them manage their shop, update crop prices, and understand how farmers subscribe to them."
+            : "\n\n=== USER CONTEXT ===\nThe user chatting with you is a FARMER. Tailor your responses to help them find buyers, check prices, and set up SMS alerts.";
+
         // Build OpenAI-compatible messages array
         $messages = [
-            ['role' => 'system', 'content' => $this->systemPrompt],
+            ['role' => 'system', 'content' => $this->systemPrompt . $roleContext],
         ];
 
         foreach ($history as $turn) {

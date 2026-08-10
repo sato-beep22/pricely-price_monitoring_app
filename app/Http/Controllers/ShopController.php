@@ -42,7 +42,7 @@ class ShopController extends Controller
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'description' => 'nullable|string',
-            'classification' => 'nullable|string|in:trader,miller,wholesaler,retailer,government,cooperative,exporter',
+            'classification' => 'nullable|string|in:trader,miller,wholesaler,retailer,government,cooperative',
         ]);
 
         $user = Auth::user();

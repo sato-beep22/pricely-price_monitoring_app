@@ -11,8 +11,8 @@
 
         <!-- Email Address -->
         <div class="mt-5">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="you@example.com" />
+            <x-input-label for="email" :value="__('Email (Optional)')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" autocomplete="username" placeholder="you@example.com" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -44,9 +44,9 @@
         </div>
 
         <!-- Buyer Classification (shown only when Buyer is selected) -->
-        <div id="buyer-classification-section" class="mt-4 overflow-hidden transition-all duration-300 ease-in-out" style="max-height: 0; opacity: 0;">
+        <div id="buyer-classification-section" class="mt-4" style="display: none;">
             <input type="hidden" name="buyer_classification" id="buyer-classification-input" value="{{ old('buyer_classification', '') }}">
-            <x-input-label :value="__('Buyer Classification')" class="mb-2" />
+            <x-input-label :value="__('Select Buyer Classification *')" class="mb-2 font-medium" />
             <x-input-error :messages="$errors->get('buyer_classification')" class="mb-2" />
             <div class="grid grid-cols-2 gap-2">
 
@@ -122,18 +122,6 @@
                     </div>
                 </button>
 
-                <button type="button" onclick="selectClassification('exporter')"
-                    data-classification="exporter"
-                    class="classification-option col-span-2 flex items-center gap-3 px-3 py-3 rounded-xl border-2 border-slate-200 transition-all duration-150 cursor-pointer text-left hover:border-cyan-300 hover:bg-cyan-50/50">
-                    <span class="w-8 h-8 rounded-lg bg-cyan-100 flex items-center justify-center flex-shrink-0">
-                        <i data-lucide="ship" class="w-4 h-4 text-cyan-600"></i>
-                    </span>
-                    <div>
-                        <p class="font-semibold text-xs text-slate-700 leading-tight">Exporter</p>
-                        <p class="text-[10px] text-slate-400 leading-tight">International market buyer</p>
-                    </div>
-                </button>
-
             </div>
         </div>
 
@@ -174,6 +162,21 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
+        <!-- Data Privacy Act Checkbox -->
+        <div class="mt-5 p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
+            <label class="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" id="privacy_policy" name="privacy_policy" value="1" required
+                    {{ old('privacy_policy') ? 'checked' : '' }}
+                    class="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer flex-shrink-0">
+                <span class="text-xs text-slate-600 leading-relaxed select-none">
+                    I agree to the collection and processing of my personal information in accordance with the
+                    <strong class="font-semibold text-slate-800">Republic Act No. 10173 (Data Privacy Act of 2012)</strong>
+                    and Pricely's Privacy Policy. <span class="text-red-500">*</span>
+                </span>
+            </label>
+            <x-input-error :messages="$errors->get('privacy_policy')" class="mt-2" />
+        </div>
+
         <div class="mt-6">
             <x-primary-button class="w-full justify-center">
                 {{ __('Create Account') }}
@@ -199,8 +202,37 @@
             retailer:    { border: '#0d9488', bg: '#f0fdfa', icon: 'bg-teal-100' },
             government:  { border: '#dc2626', bg: '#fef2f2', icon: 'bg-red-100' },
             cooperative: { border: '#d97706', bg: '#fffbeb', icon: 'bg-amber-100' },
-            exporter:    { border: '#0891b2', bg: '#ecfeff', icon: 'bg-cyan-100' },
         };
+
+        function checkRegisterForm() {
+            const submitBtn = document.querySelector('button[type="submit"]');
+            if (!submitBtn) return;
+
+            const name = document.getElementById('name').value.trim();
+            const role = document.getElementById('role-input').value;
+            const buyerClassification = document.getElementById('buyer-classification-input').value;
+            const password = document.getElementById('password').value.trim();
+            const passwordConfirm = document.getElementById('password_confirmation').value.trim();
+            const privacyPolicy = document.getElementById('privacy_policy').checked;
+
+            let isValid = name !== '' &&
+                          role !== '' &&
+                          password !== '' &&
+                          passwordConfirm !== '' &&
+                          privacyPolicy;
+
+            if (role === 'buyer' && buyerClassification === '') {
+                isValid = false;
+            }
+
+            if (isValid) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
 
         function selectRole(role) {
             document.getElementById('role-input').value = role;
@@ -214,7 +246,7 @@
             if (role === 'farmer') {
                 selectedBtn.classList.remove('border-slate-200');
                 selectedBtn.classList.add('border-emerald-500', 'bg-emerald-50');
-            } else {
+            } else if (role === 'buyer') {
                 selectedBtn.classList.remove('border-slate-200');
                 selectedBtn.classList.add('border-blue-500', 'bg-blue-50');
             }
@@ -222,13 +254,9 @@
             // Show/hide classification section
             const section = document.getElementById('buyer-classification-section');
             if (role === 'buyer') {
-                section.style.maxHeight = '600px';
-                section.style.opacity = '1';
-                section.style.marginTop = '1rem';
+                section.style.display = 'block';
             } else {
-                section.style.maxHeight = '0';
-                section.style.opacity = '0';
-                section.style.marginTop = '0';
+                section.style.display = 'none';
                 // Clear classification when switching away from buyer
                 document.getElementById('buyer-classification-input').value = '';
                 document.querySelectorAll('.classification-option').forEach(btn => {
@@ -236,6 +264,8 @@
                     btn.style.backgroundColor = '';
                 });
             }
+
+            checkRegisterForm();
         }
 
         function selectClassification(type) {
@@ -253,15 +283,28 @@
                 selected.style.borderColor = classificationColors[type].border;
                 selected.style.backgroundColor = classificationColors[type].bg;
             }
+
+            checkRegisterForm();
         }
 
-        // Restore state on validation error
+        // Restore state on validation error & setup listeners
         document.addEventListener('DOMContentLoaded', function() {
             const oldRole = document.getElementById('role-input').value;
             if (oldRole) selectRole(oldRole);
 
             const oldClassification = document.getElementById('buyer-classification-input').value;
             if (oldClassification) selectClassification(oldClassification);
+
+            // Attach input listeners for real-time validation
+            ['name', 'password', 'password_confirmation'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', checkRegisterForm);
+            });
+            const privacyEl = document.getElementById('privacy_policy');
+            if (privacyEl) privacyEl.addEventListener('change', checkRegisterForm);
+
+            // Initial check
+            checkRegisterForm();
         });
     </script>
 </x-guest-layout>

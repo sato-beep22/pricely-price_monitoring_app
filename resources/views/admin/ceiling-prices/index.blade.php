@@ -96,7 +96,7 @@
             <div class="card bg-base-100 shadow-sm border border-base-300">
                 <div class="card-body p-0">
                     <div class="p-6 border-b border-base-200">
-                        <h2 class="card-title text-lg">History</h2>
+                        <h2 class="card-title text-lg">Current Ceiling Prices</h2>
                     </div>
                     
                     <div class="overflow-x-auto">
@@ -118,11 +118,6 @@
                                         <td class="text-error font-bold">₱{{ number_format($cp->max_price, 2) }}</td>
                                         <td>
                                             {{ $cp->effective_date->format('M d, Y') }}
-                                            @if($cp->effective_date > now())
-                                                <span class="badge badge-warning badge-sm ml-2">Upcoming</span>
-                                            @elseif($cp->effective_date <= now() && $loop->first)
-                                                <span class="badge badge-success badge-sm ml-2">Active</span>
-                                            @endif
                                         </td>
                                         <td class="text-sm opacity-70">{{ $cp->admin->name }}</td>
                                     </tr>
@@ -133,10 +128,6 @@
                                 @endforelse
                             </tbody>
                         </table>
-                    </div>
-                    
-                    <div class="p-4 border-t border-base-200">
-                        {{ $ceilingPrices->links() }}
                     </div>
                 </div>
             </div>

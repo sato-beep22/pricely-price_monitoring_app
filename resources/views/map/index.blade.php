@@ -26,7 +26,6 @@
                 <option value="retailer">Retailer</option>
                 <option value="government">Gov't-Accredited</option>
                 <option value="cooperative">Cooperative</option>
-                <option value="exporter">Exporter</option>
             </select>
         </div>
     </div>
@@ -109,9 +108,6 @@
             </span>
             <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-xs font-semibold text-amber-700">
                 <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Cooperative
-            </span>
-            <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-50 border border-cyan-200 text-xs font-semibold text-cyan-700">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyan-600"></span> Exporter
             </span>
         </div>
     </div>

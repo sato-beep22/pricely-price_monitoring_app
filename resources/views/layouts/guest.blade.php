@@ -53,12 +53,6 @@
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 lucide.createIcons();
-
-                // Pre-select role if old value exists (validation error)
-                const roleInput = document.getElementById('role-input');
-                if (roleInput && roleInput.value) {
-                    selectRole(roleInput.value);
-                }
             });
 
             function togglePassword(inputId, btn) {
@@ -74,27 +68,6 @@
                     input.type = 'password';
                     eyeOpen.classList.remove('hidden');
                     eyeClosed.classList.add('hidden');
-                }
-            }
-
-            function selectRole(role) {
-                const input = document.getElementById('role-input');
-                const farmerBtn = document.getElementById('role-farmer-btn');
-                const buyerBtn = document.getElementById('role-buyer-btn');
-
-                if (!input || !farmerBtn || !buyerBtn) return;
-
-                input.value = role;
-
-                // Reset both
-                farmerBtn.className = farmerBtn.className.replace(/border-emerald-500 bg-emerald-50 ring-2 ring-emerald-500\/20/g, '').replace(/border-slate-200/g, '') + ' border-slate-200';
-                buyerBtn.className = buyerBtn.className.replace(/border-blue-500 bg-blue-50 ring-2 ring-blue-500\/20/g, '').replace(/border-slate-200/g, '') + ' border-slate-200';
-
-                // Activate selected
-                if (role === 'farmer') {
-                    farmerBtn.className = farmerBtn.className.replace('border-slate-200', 'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-500/20');
-                } else if (role === 'buyer') {
-                    buyerBtn.className = buyerBtn.className.replace('border-slate-200', 'border-blue-500 bg-blue-50 ring-2 ring-blue-500/20');
                 }
             }
         </script>

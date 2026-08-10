@@ -66,6 +66,49 @@
                 </div>
             </div>
 
+            {{-- Source Link Form --}}
+            <div class="card bg-base-100 shadow-sm border border-base-300">
+                <div class="card-body">
+                    <h2 class="card-title text-lg mb-1">DA Price Source Links</h2>
+                    <p class="text-sm text-base-content/60 mb-4">
+                        Provide a direct link to the DA Bantay Presyo page per crop so farmers can verify the prices.
+                    </p>
+
+                    @if(session('link_success'))
+                        <div class="alert alert-success mb-4 p-2 text-sm flex gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <span>{{ session('link_success') }}</span>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('admin.price-import.source-link') }}" class="space-y-3">
+                        @csrf
+                        @foreach($crops as $crop)
+                            <div class="form-control w-full">
+                                <label class="label pb-1">
+                                    <span class="label-text font-medium">{{ $crop->name }}</span>
+                                </label>
+                                <input
+                                    type="url"
+                                    name="source_links[{{ $crop->id }}]"
+                                    value="{{ old('source_links.' . $crop->id, $sourceLinks['da_price_source_link_' . $crop->id] ?? '') }}"
+                                    placeholder="https://..."
+                                    class="input input-bordered input-sm w-full @error('source_links.' . $crop->id) input-error @enderror"
+                                />
+                                @error('source_links.' . $crop->id)
+                                    <span class="label-text-alt text-error mt-1">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        @endforeach
+
+                        <button type="submit" class="btn btn-secondary btn-sm w-full mt-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+                            Save Links
+                        </button>
+                    </form>
+                </div>
+            </div>
+
             {{-- CSV Format Guide --}}
             <div class="card bg-base-100 shadow-sm border border-base-300">
                 <div class="card-body">

@@ -5,11 +5,11 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email Address -->
+        <!-- Email Address or Username -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="you@example.com" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-label for="login" :value="__('Email or Username')" />
+            <x-text-input id="login" class="block mt-1 w-full" type="text" name="login" :value="old('login')" required autofocus autocomplete="username" placeholder="you@example.com or your_username" />
+            <x-input-error :messages="$errors->get('login')" class="mt-2" />
         </div>
 
         <!-- Password -->
@@ -63,4 +63,28 @@
             </div>
         @endif
     </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginInput = document.getElementById('login');
+            const passwordInput = document.getElementById('password');
+            const submitBtn = document.querySelector('button[type="submit"]');
+
+            function checkForm() {
+                if (loginInput.value.trim() !== '' && passwordInput.value.trim() !== '') {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            }
+
+            loginInput.addEventListener('input', checkForm);
+            passwordInput.addEventListener('input', checkForm);
+
+            // Run check on page load to handle auto-filled credentials or old input
+            checkForm();
+        });
+    </script>
 </x-guest-layout>

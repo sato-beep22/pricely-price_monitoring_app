@@ -1,6 +1,6 @@
 @auth
 <div
-    x-data="pricelyChatbot()"
+    x-data="pricelyChatbot('{{ auth()->user()->role }}')"
     x-init="init()"
     class="fixed bottom-6 right-6 z-[200] flex flex-col items-end gap-3 font-sans"
     id="pricely-chatbot"
@@ -53,7 +53,7 @@
 
                 <div>
                     <p class="text-white font-bold text-sm leading-tight tracking-wide">Ka-Ani 🌾</p>
-                    <p class="text-emerald-200 text-[10px] mt-0.5 leading-none">AI Assistant · Farmers Support</p>
+                    <p class="text-emerald-200 text-[10px] mt-0.5 leading-none">AI Assistant · {{ auth()->user()->role === 'buyer' ? 'Buyer Support' : 'Farmers Support' }}</p>
                 </div>
             </div>
             <div class="flex items-center gap-1.5">
@@ -92,7 +92,14 @@
                     </svg>
                 </div>
                 <div class="bg-gradient-to-br from-slate-50 to-green-50 border border-green-100 rounded-2xl rounded-tl-sm px-3 py-2.5 shadow-sm">
-                    <p class="text-slate-700 text-xs leading-relaxed">Kumusta! Ako si <strong class="text-green-700">Ka-Ani</strong> 🌾<br>Paano kita matutulungan ngayon? Magtanong tungkol sa presyo ng ani, SMS alerts, o paggamit ng Pricely app!</p>
+                    <p class="text-slate-700 text-xs leading-relaxed">Kumusta! Ako si <strong class="text-green-700">Ka-Ani</strong> 🌾<br>
+                        Paano kita matutulungan ngayon? 
+                        @if(auth()->user()->role === 'buyer')
+                            Magtanong tungkol sa pag-update ng presyo, pag-manage ng shop, o paggamit ng Pricely app!
+                        @else
+                            Magtanong tungkol sa presyo ng ani, SMS alerts, o paggamit ng Pricely app!
+                        @endif
+                    </p>
                 </div>
             </div>
         </div>
@@ -242,7 +249,9 @@
 </div>
 
 <script>
-function pricelyChatbot() {
+function pricelyChatbot(userRole) {
+    const isBuyer = userRole === 'buyer';
+
     return {
         open: false,
         loading: false,
@@ -250,7 +259,38 @@ function pricelyChatbot() {
         messages: [],
         unread: 0,
         suggestions: [],
-        suggestionGroups: [
+        suggestionGroups: isBuyer ? [
+            {
+                label: '🏪 Shop Management',
+                items: [
+                    'Paano i-update ang presyo ng pananim?',
+                    'Paano i-edit ang details ng aking shop?',
+                    'Paano ipakita ang aking shop sa map?',
+                ]
+            },
+            {
+                label: '📱 SMS Updates',
+                items: [
+                    'Paano makakatanggap ng alerts ang mga farmers?',
+                    'Libre ba para sa akin mag-send ng SMS?',
+                    'Kailan nase-send ang SMS updates?',
+                ]
+            },
+            {
+                label: '📊 Market Prices',
+                items: [
+                    'Ano ang DA Ceiling Prices?',
+                    'Saan makikita ang price trends?',
+                ]
+            },
+            {
+                label: '⚙️ Account & Setup',
+                items: [
+                    'Paano mag-verify ng phone number?',
+                    'Paano baguhin ang aking password?',
+                ]
+            }
+        ] : [
             {
                 label: '🗺️ Map & Prices',
                 items: [

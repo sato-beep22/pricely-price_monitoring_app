@@ -71,14 +71,18 @@
         <!-- DA Ceiling Prices -->
         <div class="card bg-base-100 shadow-sm border border-base-300 md:col-span-3 mt-2 stat-card stagger-5">
             <div class="card-body">
-                <div class="flex items-center gap-2 mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-warning">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                    </svg>
-                    <h2 class="card-title text-lg">Department of Agriculture Ceiling Prices</h2>
-                    <span class="badge badge-warning badge-sm">Guidelines</span>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-3">
+                        <img src="https://img.bomboradyo.com/cauayan/2019/05/DA-LOGO.png" alt="Department of Agriculture Logo" class="w-10 h-10 object-contain drop-shadow-sm rounded-full bg-white">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="card-title text-lg">Department of Agriculture Ceiling Prices</h2>
+                                <span class="badge badge-warning badge-sm">Guidelines</span>
+                            </div>
+                            <p class="text-base-content/60 text-sm mt-0.5">Maximum recommended selling prices set by the Department of Agriculture.</p>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-base-content/60 text-sm mb-4">Maximum recommended selling prices set by the Department of Agriculture.</p>
 
                 <div class="overflow-x-auto">
                     <table class="table" id="ceiling-prices-table">
@@ -103,11 +107,6 @@
                                     </td>
                                     <td>
                                         {{ $cp->effective_date->format('M d, Y') }}
-                                        @if($cp->effective_date->isToday() || $cp->effective_date->isPast())
-                                            <span class="badge badge-success badge-sm ml-1">Active</span>
-                                        @else
-                                            <span class="badge badge-warning badge-sm ml-1">Upcoming</span>
-                                        @endif
                                     </td>
                                     <td class="text-sm text-base-content/70 max-w-xs">{{ $cp->notes ?? '—' }}</td>
                                 </tr>
@@ -118,6 +117,37 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- DA Price Direct Sources -->
+        <div class="card bg-base-100 shadow-sm border border-base-300 md:col-span-3 mt-2 stat-card stagger-6">
+            <div class="card-body">
+                <div class="flex items-center gap-3 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-info">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                    </svg>
+                    <div>
+                        <h2 class="card-title text-lg">DA Price Direct Sources</h2>
+                        <p class="text-base-content/60 text-sm mt-0.5">Click on a crop below to view the official reference link.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    @foreach($crops as $crop)
+                        <div class="flex items-center justify-between p-4 border border-base-200 rounded-xl hover:bg-base-200 transition-colors">
+                            <span class="font-medium text-base-content">{{ $crop->name }}</span>
+                            @if(isset($sourceLinks['da_price_source_link_' . $crop->id]))
+                                <a href="{{ $sourceLinks['da_price_source_link_' . $crop->id] }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-info btn-outline gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                    View
+                                </a>
+                            @else
+                                <span class="text-xs text-base-content/40 italic">No link available</span>
+                            @endif
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

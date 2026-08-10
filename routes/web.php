@@ -68,6 +68,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/price-import', [PriceImportController::class, 'index'])->name('price-import.index');
         Route::post('/price-import', [PriceImportController::class, 'store'])->name('price-import.store');
+        Route::post('/price-import/source-link', [PriceImportController::class, 'updateSourceLink'])->name('price-import.source-link');
 
         // Reports (Now restricted to Admins)
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

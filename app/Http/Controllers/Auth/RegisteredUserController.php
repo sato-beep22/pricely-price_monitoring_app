@@ -32,20 +32,21 @@ class RegisteredUserController extends Controller
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['nullable', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => ['required', 'string', 'in:farmer,buyer'],
+            'privacy_policy' => ['required', 'accepted'],
         ];
 
         if ($request->role === 'buyer') {
-            $rules['buyer_classification'] = ['required', 'string', 'in:trader,miller,wholesaler,retailer,government,cooperative,exporter'];
+            $rules['buyer_classification'] = ['required', 'string', 'in:trader,miller,wholesaler,retailer,government,cooperative'];
         }
 
         $request->validate($rules);
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => $request->email ?: null,
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);

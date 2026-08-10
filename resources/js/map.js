@@ -362,12 +362,6 @@ document.addEventListener('DOMContentLoaded', function () {
             bgColor: '#fef3c7',
             innerSvg: `<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke-width="1.5"/><circle cx="9" cy="7" r="4" stroke-width="1.5"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75" stroke-width="1.5"/>`,
         },
-        exporter: {
-            label: 'Exporter',
-            color: '#0891b2',
-            bgColor: '#cffafe',
-            innerSvg: `<path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" stroke-width="1.5"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76" stroke-width="1.5"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6" stroke-width="1.5"/><line x1="12" y1="10" x2="12" y2="10" stroke-width="2"/>`,
-        },
     };
 
     const DEFAULT_CLASSIFICATION = {

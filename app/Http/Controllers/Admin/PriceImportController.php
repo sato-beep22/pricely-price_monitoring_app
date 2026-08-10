@@ -17,7 +17,11 @@ class PriceImportController extends Controller
      */
     public function index(): View
     {
-        return view('admin.price-import.index');
+        $crops = Crop::orderBy('name')->get();
+        $sourceLinks = \App\Models\Setting::where('key', 'like', 'da_price_source_link_%')
+            ->pluck('value', 'key')
+            ->toArray();
+        return view('admin.price-import.index', compact('crops', 'sourceLinks'));
     }
 
     /**
@@ -113,5 +117,30 @@ class PriceImportController extends Controller
         return back()
             ->with('import_success', $message)
             ->with('import_errors', $errors);
+    }
+
+    /**
+     * Update the DA Price Source Link.
+     */
+    public function updateSourceLink(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'source_links' => ['nullable', 'array'],
+            'source_links.*' => ['nullable', 'url', 'max:2048'],
+        ]);
+
+        $links = $request->input('source_links', []);
+        foreach ($links as $cropId => $url) {
+            if ($url) {
+                \App\Models\Setting::updateOrCreate(
+                    ['key' => 'da_price_source_link_' . $cropId],
+                    ['value' => $url]
+                );
+            } else {
+                \App\Models\Setting::where('key', 'da_price_source_link_' . $cropId)->delete();
+            }
+        }
+
+        return back()->with('link_success', 'Source links updated successfully.');
     }
 }

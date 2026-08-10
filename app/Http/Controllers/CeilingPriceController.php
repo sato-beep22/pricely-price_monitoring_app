@@ -14,7 +14,10 @@ class CeilingPriceController extends Controller
      */
     public function index()
     {
-        $ceilingPrices = CeilingPrice::with(['crop', 'admin'])->latest()->paginate(10);
+        $ceilingPrices = CeilingPrice::with(['crop', 'admin'])
+            ->orderBy('crop_id')
+            ->orderBy('specification')
+            ->get();
         $crops = Crop::all();
         
         return view('admin.ceiling-prices.index', compact('ceilingPrices', 'crops'));
@@ -48,14 +51,18 @@ class CeilingPriceController extends Controller
             }
         }
 
-        CeilingPrice::create([
-            'crop_id' => $crop->id,
-            'admin_id' => Auth::id(),
-            'specification' => $specification,
-            'max_price' => $request->max_price,
-            'effective_date' => $request->effective_date,
-            'notes' => $request->notes,
-        ]);
+        CeilingPrice::updateOrCreate(
+            [
+                'crop_id' => $crop->id,
+                'specification' => $specification,
+            ],
+            [
+                'admin_id' => Auth::id(),
+                'max_price' => $request->max_price,
+                'effective_date' => $request->effective_date,
+                'notes' => $request->notes,
+            ]
+        );
 
         return redirect()->route('admin.ceiling-prices.index')->with('status', 'Ceiling price set successfully.');
     }
