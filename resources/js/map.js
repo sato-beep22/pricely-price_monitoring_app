@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const deniedBanner = document.createElement('div');
     deniedBanner.id = 'location-denied-banner';
     deniedBanner.style.cssText = `
-        position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+        position:fixed;bottom:1.5rem;left:0;right:0;margin:0 auto;
         z-index:8000;background:#1e293b;color:white;
         border-radius:1rem;padding:0.75rem 1.25rem;
         display:flex;align-items:center;gap:0.75rem;
