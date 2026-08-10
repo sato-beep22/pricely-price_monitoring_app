@@ -4,6 +4,9 @@ FROM php:8.2-cli
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
     zip \
     unzip \
     git \
@@ -12,7 +15,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs
 
 # Install PHP extensions required for Laravel and PostgreSQL
-RUN docker-php-ext-install pdo pdo_pgsql zip
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_pgsql zip gd
 
 # Set working directory
 WORKDIR /app
