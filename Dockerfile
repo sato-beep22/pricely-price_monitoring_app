@@ -33,5 +33,9 @@ RUN composer install --no-dev --optimize-autoloader
 # Install Node dependencies and build Tailwind/Vite assets
 RUN npm install && npm run build
 
+# Ensure storage directories exist and have correct permissions
+RUN mkdir -p storage/framework/views storage/framework/cache storage/framework/sessions storage/logs \
+    && chmod -R 777 storage bootstrap/cache
+
 # Run migrations and start the Laravel server
 CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
