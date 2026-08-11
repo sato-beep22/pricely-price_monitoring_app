@@ -14,12 +14,12 @@
         <div>
             <div class="pricely-card">
                 <div class="p-6">
-                    <h2 class="text-xl mb-4 text-slate-800">Active Subscriptions</h2>
+                    <h2 class="text-xl mb-4 text-slate-800">{{ __('Active Subscriptions') }}</h2>
 
                     @if($subscriptions->isEmpty())
                         <div class="text-center py-8 text-base-content/60">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-12 h-12 stroke-current mb-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-                            <p>You haven't subscribed to any buyers yet.</p>
+                            <p>{{ __('You haven\'t subscribed to any buyers yet.') }}</p>
                         </div>
                     @else
                         <ul class="space-y-3">
@@ -35,7 +35,18 @@
                                         @endif
                                     </div>
 
-                                    <button type="button" @click="$dispatch('open-modal', 'unsubscribe-{{ $sub->id }}')" class="btn btn-error btn-sm btn-outline hover:btn-active">Unsubscribe</button>
+                                    <div class="flex items-center gap-4">
+                                        <form method="POST" action="{{ route('subscriptions.update', $sub) }}" x-data="{ active: {{ $sub->is_active ? 'true' : 'false' }} }">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="is_active" :value="active ? 1 : 0">
+                                            <label class="cursor-pointer label p-0 gap-2">
+                                                <span class="text-xs font-semibold" :class="active ? 'text-emerald-600' : 'text-slate-400'" x-text="active ? 'SMS ON' : 'SMS OFF'"></span> 
+                                                <input type="checkbox" class="toggle toggle-success toggle-sm" x-model="active" @change="$event.target.form.submit()" />
+                                            </label>
+                                        </form>
+                                        <button type="button" @click="$dispatch('open-modal', 'unsubscribe-{{ $sub->id }}')" class="btn btn-error btn-sm btn-outline hover:btn-active">{{ __('Unsubscribe') }}</button>
+                                    </div>
 
                                     <!-- Unsubscribe Confirmation Modal -->
                                     <x-modal name="unsubscribe-{{ $sub->id }}" maxWidth="md">
@@ -43,15 +54,15 @@
                                             <div class="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4 ring-8 ring-red-50">
                                                 <i data-lucide="bell-off" class="w-8 h-8"></i>
                                             </div>
-                                            <h3 class="text-lg font-bold text-slate-800 mb-2">Unsubscribe Alert</h3>
-                                            <p class="text-sm text-slate-600 mb-6">Are you sure you want to stop receiving price alert notifications from <strong class="text-slate-900">{{ $sub->buyer->shop->name ?? $sub->buyer->name }}</strong>?</p>
+                                            <h3 class="text-lg font-bold text-slate-800 mb-2">{{ __('Unsubscribe Alert') }}</h3>
+                                            <p class="text-sm text-slate-600 mb-6">{{ __('Are you sure you want to stop receiving price alert notifications from :name?', ['name' => $sub->buyer->shop->name ?? $sub->buyer->name]) }}</p>
                                             
                                             <div class="flex justify-center gap-3">
-                                                <button type="button" @click="$dispatch('close')" class="btn btn-ghost">Cancel</button>
+                                                <button type="button" @click="$dispatch('close')" class="btn btn-ghost">{{ __('Cancel') }}</button>
                                                 <form method="POST" action="{{ route('subscriptions.destroy', $sub) }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-error text-white">Unsubscribe</button>
+                                                    <button type="submit" class="btn btn-error text-white">{{ __('Unsubscribe') }}</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -68,19 +79,19 @@
         <div>
             <div class="pricely-card">
                 <div class="p-6">
-                    <h2 class="text-xl mb-4 text-slate-800">Available Buyers</h2>
+                    <h2 class="text-xl mb-4 text-slate-800">{{ __('Available Buyers') }}</h2>
 
                     <!-- Search Box -->
                     <input
                         type="text"
                         id="shop-search-input"
-                        placeholder="Search buyers..."
+                        placeholder="{{ __('Search buyers...') }}"
                         class="input input-bordered input-sm w-full mb-4"
                     />
 
                     @if($availableShops->isEmpty())
                         <div class="text-center py-8 text-base-content/60">
-                            <p>No other active buyers available right now.</p>
+                            <p>{{ __('No other active buyers available right now.') }}</p>
                         </div>
                     @else
                         <ul class="space-y-3" id="shops-list">
@@ -96,7 +107,7 @@
                                         @click="$dispatch('open-modal', 'subscribe-{{ $shop->id }}')"
                                         class="btn btn-primary btn-sm"
                                     >
-                                        Subscribe
+                                        {{ __('Subscribe') }}
                                     </button>
                                 </li>
                             @endforeach

@@ -22,6 +22,14 @@ Route::get('/', function () {
 // Public map access
 Route::get('/map', [MapController::class, 'index'])->name('map.index');
 
+Route::get('/language/{locale}', function ($locale) {
+    if (! in_array($locale, ['en', 'tl'])) {
+        abort(400);
+    }
+    session()->put('locale', $locale);
+    return back();
+})->name('language.switch');
+
 Route::middleware('auth')->group(function () {
     // Shared Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -34,6 +42,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::post('/onboarding/complete', function () {
+        auth()->user()->update(['has_seen_tour' => true]);
+        return response()->json(['status' => 'success']);
+    })->name('onboarding.complete');
+
+    Route::get('/api/price-trend', [\App\Http\Controllers\PriceTrendController::class, 'index'])->name('api.price-trend');
+
     // Forecasting (Farmers & Admins usually, but available to all auth users)
     Route::get('/forecast', [ForecastController::class, 'index'])->name('forecast.index');
 
@@ -44,6 +59,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
         Route::post('/subscriptions', [SubscriptionController::class, 'store'])->middleware('phone.verified')->name('subscriptions.store');
+        Route::patch('/subscriptions/{subscription}', [SubscriptionController::class, 'update'])->name('subscriptions.update');
         Route::delete('/subscriptions/{subscription}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
     });
 

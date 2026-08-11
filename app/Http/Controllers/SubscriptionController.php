@@ -56,6 +56,27 @@ class SubscriptionController extends Controller
     /**
      * Unsubscribe from a buyer.
      */
+    public function update(Request $request, Subscription $subscription)
+    {
+        if ($subscription->farmer_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'is_active' => 'required|boolean',
+        ]);
+
+        $subscription->update([
+            'is_active' => $request->is_active,
+        ]);
+
+        $status = $request->is_active ? 'SMS alerts activated.' : 'SMS alerts paused.';
+        return redirect()->back()->with('status', $status);
+    }
+
+    /**
+     * Unsubscribe from a buyer.
+     */
     public function destroy(Subscription $subscription)
     {
         if ($subscription->farmer_id !== Auth::id()) {

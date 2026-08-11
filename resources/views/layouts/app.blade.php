@@ -10,6 +10,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2304965e' /%3E%3Cpath d='M7 18h10' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' /%3E%3Cpath d='M10 18c5.5-1.25 6-9.5 6-9.5s-2 1-4 2c-2.5-3.5-6-3-6-3s1 4.5 3 5.5c0 0-2.5 1-1 5' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' /%3E%3C/svg%3E">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 <body class="bg-base-100 relative">
     <!-- Global Notification Modal -->

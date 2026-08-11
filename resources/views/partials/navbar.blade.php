@@ -31,6 +31,19 @@
 
         <!-- Right Action buttons -->
         <div class="flex items-center gap-1.5 md:gap-4 shrink-0 whitespace-nowrap">
+            <!-- Language Toggle -->
+            <div class="relative ml-2 mr-2" x-data="{ open: false }">
+                <button @click="open = !open" class="flex items-center gap-1 text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors">
+                    <i data-lucide="globe" class="w-4 h-4"></i>
+                    {{ strtoupper(app()->getLocale()) }}
+                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                </button>
+                <div x-show="open" @click.away="open = false" style="display: none;" class="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg py-1 border border-slate-100 z-50">
+                    <a href="{{ route('language.switch', 'en') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 {{ app()->getLocale() == 'en' ? 'font-bold text-emerald-600' : '' }}">English</a>
+                    <a href="{{ route('language.switch', 'tl') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 {{ app()->getLocale() == 'tl' ? 'font-bold text-emerald-600' : '' }}">Tagalog</a>
+                </div>
+            </div>
+
             @if (Route::has('login'))
                 @auth
                     <a href="{{ route('dashboard') }}" class="md:hidden text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-100 mr-1 whitespace-nowrap">

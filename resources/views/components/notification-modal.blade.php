@@ -8,12 +8,13 @@
     $message = $success ?? $status ?? $error;
     $type = $error ? 'error' : 'success';
 
-    if ($message) {
+    if ($message === 'phone-verification-sent') {
+        $message = null; // Suppress global notification; the OTP modal handles this state
+    } elseif ($message) {
         $humanMessages = [
             'profile-updated' => 'Your profile information has been updated successfully.',
             'password-updated' => 'Your password has been changed successfully.',
             'verification-link-sent' => 'A new verification link has been sent to your email address.',
-            'phone-verification-sent' => 'A verification code has been sent to your mobile phone.',
             'phone-verified' => 'Your mobile phone number has been verified successfully.',
         ];
 

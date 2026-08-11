@@ -176,6 +176,15 @@
 
         {{-- ===== INPUT ===== --}}
         <div class="border-t border-slate-100 px-3 py-3 flex items-end gap-2 shrink-0 bg-white">
+            <button
+                @click="toggleVoice()"
+                type="button"
+                :class="isListening ? 'text-red-500 bg-red-50 animate-pulse border-red-200' : 'text-slate-400 hover:text-green-600 bg-slate-50 hover:bg-green-50 border-slate-200'"
+                class="w-8 h-8 rounded-full flex items-center justify-center transition-all shrink-0 border"
+                title="Voice to Text"
+            >
+                <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
             <textarea
                 x-model="input"
                 @keydown.enter.prevent="!$event.shiftKey && sendMessage()"
@@ -255,6 +264,8 @@ function pricelyChatbot(userRole) {
     return {
         open: false,
         loading: false,
+        isListening: false,
+        recognition: null,
         input: '',
         messages: [],
         unread: 0,
@@ -335,6 +346,40 @@ function pricelyChatbot(userRole) {
                     this.$nextTick(() => this.scrollToBottom());
                 }
             });
+
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                this.recognition = new SpeechRecognition();
+                this.recognition.continuous = false;
+                this.recognition.interimResults = false;
+                this.recognition.lang = 'tl-PH';
+
+                this.recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    this.input = (this.input + ' ' + transcript).trim();
+                    this.isListening = false;
+                    this.$nextTick(() => {
+                        const ta = document.getElementById('chatbot-input');
+                        if (ta) this.autoResize(ta);
+                    });
+                };
+                this.recognition.onerror = () => { this.isListening = false; };
+                this.recognition.onend = () => { this.isListening = false; };
+            }
+        },
+
+        toggleVoice() {
+            if (!this.recognition) {
+                alert('Your browser does not support Speech Recognition.');
+                return;
+            }
+            if (this.isListening) {
+                this.recognition.stop();
+                this.isListening = false;
+            } else {
+                this.recognition.start();
+                this.isListening = true;
+            }
         },
 
         autoResize(el) {
