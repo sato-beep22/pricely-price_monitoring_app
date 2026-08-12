@@ -19,7 +19,7 @@ class CeilingPriceController extends Controller
             ->orderBy('specification')
             ->get();
         $crops = Crop::all();
-        
+
         return view('admin.ceiling-prices.index', compact('ceilingPrices', 'crops'));
     }
 
@@ -42,9 +42,9 @@ class CeilingPriceController extends Controller
 
         if ($specification === 'manual' && $request->filled('manual_specification')) {
             $specification = strtolower(trim($request->manual_specification));
-            
+
             $existingSpecs = array_map('trim', explode(',', $crop->specification));
-            if (!in_array($specification, $existingSpecs)) {
+            if (! in_array($specification, $existingSpecs)) {
                 $existingSpecs[] = $specification;
                 $crop->specification = implode(',', array_filter($existingSpecs));
                 $crop->save();

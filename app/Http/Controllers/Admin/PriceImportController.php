@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Crop;
 use App\Models\Price;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,9 +19,10 @@ class PriceImportController extends Controller
     public function index(): View
     {
         $crops = Crop::orderBy('name')->get();
-        $sourceLinks = \App\Models\Setting::where('key', 'like', 'da_price_source_link_%')
+        $sourceLinks = Setting::where('key', 'like', 'da_price_source_link_%')
             ->pluck('value', 'key')
             ->toArray();
+
         return view('admin.price-import.index', compact('crops', 'sourceLinks'));
     }
 
@@ -132,12 +134,12 @@ class PriceImportController extends Controller
         $links = $request->input('source_links', []);
         foreach ($links as $cropId => $url) {
             if ($url) {
-                \App\Models\Setting::updateOrCreate(
-                    ['key' => 'da_price_source_link_' . $cropId],
+                Setting::updateOrCreate(
+                    ['key' => 'da_price_source_link_'.$cropId],
                     ['value' => $url]
                 );
             } else {
-                \App\Models\Setting::where('key', 'da_price_source_link_' . $cropId)->delete();
+                Setting::where('key', 'da_price_source_link_'.$cropId)->delete();
             }
         }
 

@@ -14,7 +14,9 @@ class PriceUpdated
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public Shop $shop;
+
     public Crop $crop;
+
     public Price $price;
 
     /**

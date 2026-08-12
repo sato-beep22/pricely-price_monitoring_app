@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CeilingPrice;
 use App\Models\Crop;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -34,9 +35,10 @@ class DashboardController extends Controller
                 }
             }
 
-            $sourceLinks = \App\Models\Setting::where('key', 'like', 'da_price_source_link_%')
+            $sourceLinks = Setting::where('key', 'like', 'da_price_source_link_%')
                 ->pluck('value', 'key')
                 ->toArray();
+
             return view('dashboard.farmer', compact('ceilingPrices', 'sourceLinks', 'crops'));
         }
     }

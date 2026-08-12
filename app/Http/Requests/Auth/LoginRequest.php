@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -28,8 +30,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'login' => ['required', 'string'],
-            'password' => ['required', 'string'],
+            'login' => ['required_without:phone', 'string'],
+            'password' => ['required_without:pin_code', 'string'],
+            'phone' => ['required_without:login', 'string'],
+            'pin_code' => ['required_without:password', 'string', 'digits:4'],
         ];
     }
 
@@ -41,6 +45,23 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+
+        if ($this->filled('phone') && $this->filled('pin_code')) {
+            $user = User::where('phone', $this->input('phone'))->first();
+
+            if ($user && Hash::check($this->input('pin_code'), $user->pin_code)) {
+                Auth::login($user, $this->boolean('remember'));
+                RateLimiter::clear($this->throttleKey());
+
+                return;
+            }
+
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'phone' => trans('auth.failed'),
+            ]);
+        }
 
         $loginType = filter_var($this->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
@@ -88,6 +109,8 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('login')).'|'.$this->ip());
+        $loginKey = $this->filled('phone') ? $this->string('phone') : $this->string('login');
+
+        return Str::transliterate(Str::lower($loginKey).'|'.$this->ip());
     }
 }

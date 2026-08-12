@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Crop;
 use App\Models\Shop;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class MapController extends Controller

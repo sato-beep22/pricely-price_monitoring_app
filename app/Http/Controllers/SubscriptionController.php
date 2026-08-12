@@ -71,6 +71,7 @@ class SubscriptionController extends Controller
         ]);
 
         $status = $request->is_active ? 'SMS alerts activated.' : 'SMS alerts paused.';
+
         return redirect()->back()->with('status', $status);
     }
 

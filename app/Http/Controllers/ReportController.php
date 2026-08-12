@@ -18,9 +18,9 @@ class ReportController extends Controller
         $crops = Crop::all();
         $selectedCrop = $request->input('crop_id', $crops->first()->id ?? null);
         $period = $request->input('period', '30'); // days
-        
+
         $startDate = Carbon::now()->subDays($period)->startOfDay();
-        
+
         $shops = Shop::all();
         $varieties = Price::whereNotNull('specification')->where('specification', '!=', '')->select('specification')->distinct()->pluck('specification');
         $selectedShop = $request->input('shop_id');
@@ -31,19 +31,20 @@ class ReportController extends Controller
             $query = Price::where('crop_id', $selectedCrop)
                 ->where('recorded_at', '>=', $startDate)
                 ->with('shop');
-                
+
             if ($selectedShop) {
                 $query->where('shop_id', $selectedShop);
             }
             if ($selectedVariety) {
                 $query->where('specification', $selectedVariety);
             }
-            
+
             $prices = $query->orderBy('recorded_at', 'desc')->get();
         }
 
         return view('reports.index', compact('crops', 'shops', 'varieties', 'selectedCrop', 'selectedShop', 'selectedVariety', 'period', 'prices'));
     }
+
     /**
      * Export the price trend reports to CSV.
      */
@@ -52,9 +53,9 @@ class ReportController extends Controller
         $crops = Crop::all();
         $selectedCrop = $request->input('crop_id', $crops->first()->id ?? null);
         $period = $request->input('period', '30'); // days
-        
+
         $startDate = Carbon::now()->subDays($period)->startOfDay();
-        
+
         $selectedShop = $request->input('shop_id');
         $selectedVariety = $request->input('variety');
 
@@ -63,19 +64,19 @@ class ReportController extends Controller
             $query = Price::where('crop_id', $selectedCrop)
                 ->where('recorded_at', '>=', $startDate)
                 ->with('shop');
-                
+
             if ($selectedShop) {
                 $query->where('shop_id', $selectedShop);
             }
             if ($selectedVariety) {
                 $query->where('specification', $selectedVariety);
             }
-            
+
             $prices = $query->orderBy('recorded_at', 'desc')->get();
         }
 
         $cropName = $crops->where('id', $selectedCrop)->first()->name ?? 'All_Crops';
-        $fileName = 'price_report_' . strtolower(str_replace(' ', '_', $cropName)) . '_' . date('Y_m_d') . '.csv';
+        $fileName = 'price_report_'.strtolower(str_replace(' ', '_', $cropName)).'_'.date('Y_m_d').'.csv';
 
         return response()->streamDownload(function () use ($prices) {
             $file = fopen('php://output', 'w');

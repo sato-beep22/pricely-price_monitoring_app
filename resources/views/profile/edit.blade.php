@@ -275,6 +275,23 @@
     @endif
     @endif
 
+    {{-- ── PIN Login Setup ─────────────────────────────────────────────────── --}}
+    @if(! $user->isAdmin())
+    <div class="pricely-card p-6">
+        <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+            <div class="w-8 h-8 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <i data-lucide="key" class="w-4 h-4 text-emerald-600"></i>
+            </div>
+            <div>
+                <p class="font-bold text-slate-800 text-sm">Login PIN</p>
+                <p class="text-xs text-slate-400">Set a 4-digit PIN code to log in quickly using your phone number.</p>
+            </div>
+        </div>
+
+        @include('profile.partials.update-pin-form')
+    </div>
+    @endif
+
     {{-- ── Change Password ──────────────────────────────────────────────────── --}}
     <div class="pricely-card p-6">
         <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">

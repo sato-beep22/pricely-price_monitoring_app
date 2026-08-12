@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -60,5 +61,21 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Update the user's PIN code.
+     */
+    public function updatePin(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('updatePin', [
+            'pin_code' => ['required', 'string', 'digits:4'],
+        ]);
+
+        $request->user()->update([
+            'pin_code' => Hash::make($request->pin_code),
+        ]);
+
+        return Redirect::route('profile.edit')->with('status', 'pin-updated');
     }
 }

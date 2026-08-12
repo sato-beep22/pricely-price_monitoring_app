@@ -9,6 +9,7 @@ use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\PhoneVerificationController;
 use App\Http\Controllers\PriceController;
+use App\Http\Controllers\PriceTrendController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShopController;
@@ -27,6 +28,7 @@ Route::get('/language/{locale}', function ($locale) {
         abort(400);
     }
     session()->put('locale', $locale);
+
     return back();
 })->name('language.switch');
 
@@ -41,13 +43,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::put('/profile/pin', [ProfileController::class, 'updatePin'])->name('profile.pin.update');
 
     Route::post('/onboarding/complete', function () {
         auth()->user()->update(['has_seen_tour' => true]);
+
         return response()->json(['status' => 'success']);
     })->name('onboarding.complete');
 
-    Route::get('/api/price-trend', [\App\Http\Controllers\PriceTrendController::class, 'index'])->name('api.price-trend');
+    Route::get('/api/price-trend', [PriceTrendController::class, 'index'])->name('api.price-trend');
 
     // Forecasting (Farmers & Admins usually, but available to all auth users)
     Route::get('/forecast', [ForecastController::class, 'index'])->name('forecast.index');
