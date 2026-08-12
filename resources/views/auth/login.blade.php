@@ -55,7 +55,13 @@
             <!-- PIN Code -->
             <div class="mt-5">
                 <x-input-label for="pin_code" :value="__('4-Digit PIN')" />
-                <x-text-input id="pin_code" class="block mt-1 w-full" type="password" name="pin_code" placeholder="••••" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" />
+                <div class="relative mt-1">
+                    <x-text-input id="pin_code" class="block w-full pr-12" type="password" name="pin_code" placeholder="••••" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" />
+                    <button type="button" onclick="togglePassword('pin_code', this)" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+                        <i data-lucide="eye" class="w-5 h-5 eye-open"></i>
+                        <i data-lucide="eye-off" class="w-5 h-5 eye-closed hidden"></i>
+                    </button>
+                </div>
                 <x-input-error :messages="$errors->get('pin_code')" class="mt-2" />
             </div>
         </div>

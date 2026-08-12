@@ -40,7 +40,7 @@
             </div>
 
             <!-- Auth Card -->
-            <div class="w-full sm:max-w-md mt-6 px-8 py-8 bg-white/70 shadow-xl shadow-slate-200/50 overflow-hidden sm:rounded-2xl border border-slate-200/60 backdrop-blur-xl">
+            <div class="w-full sm:max-w-md mt-6 px-8 py-8 bg-white/70 shadow-xl shadow-slate-200/50 overflow-hidden rounded-2xl border border-slate-200/60 backdrop-blur-xl">
                 {{ $slot }}
             </div>
 
