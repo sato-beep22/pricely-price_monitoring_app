@@ -929,13 +929,15 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('🎯 Navigating to shop:', shop.name);
         map.setView([shop.latitude, shop.longitude], 16);
         
-        // Auto-scroll to map on mobile screens
+        // Auto-scroll to map on mobile screens (delayed to avoid conflict with map pan animation)
         if (window.innerWidth < 1024) {
-            const mapContainer = document.getElementById('price-map');
-            if (mapContainer) {
-                const y = mapContainer.getBoundingClientRect().top + window.scrollY - 80;
-                window.scrollTo({ top: y, behavior: 'smooth' });
-            }
+            setTimeout(() => {
+                const mapContainer = document.getElementById('price-map');
+                if (mapContainer) {
+                    const y = mapContainer.getBoundingClientRect().top + window.scrollY - 80;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            }, 250);
         }
 
         if (markerMap.has(shop.id)) {
