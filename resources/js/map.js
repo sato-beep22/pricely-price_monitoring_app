@@ -928,6 +928,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function navigateToShop(shop) {
         console.log('🎯 Navigating to shop:', shop.name);
         map.setView([shop.latitude, shop.longitude], 16);
+        
+        // Auto-scroll to map on mobile screens
+        if (window.innerWidth < 1024) {
+            const mapContainer = document.getElementById('price-map');
+            if (mapContainer) {
+                mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
         if (markerMap.has(shop.id)) {
             const marker = markerMap.get(shop.id);
             marker.openPopup();
