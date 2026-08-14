@@ -321,6 +321,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Start a new route to this shop
                 startRoute(panelShop);
             }
+            
+            // Auto-close panel on mobile devices to fully view the map route
+            if (window.innerWidth < 1024) {
+                const panel = document.getElementById('shop-info-panel');
+                if (panel) {
+                    panel.classList.add('translate-x-full', 'opacity-0');
+                    panel.classList.remove('translate-x-0', 'opacity-100');
+                }
+            }
         });
     }
 
