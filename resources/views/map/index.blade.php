@@ -209,6 +209,7 @@
         .shop-crop-unit { font-size: 0.7rem; font-weight: 500; color: #94a3b8; margin-left: 1px; }
         .shop-no-crops { font-size: 0.8rem; color: #94a3b8; font-style: italic; text-align: center; padding: 0.5rem 0; }
         .discovery-shop-item:hover { background: #f8fafc; }
+        .leaflet-routing-container { display: none !important; }
     </style>
 
     @push('scripts')
