@@ -63,7 +63,7 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        $loginType = filter_var($this->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $loginType = filter_var($this->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
         $credentials = [
             $loginType => $this->input('login'),
