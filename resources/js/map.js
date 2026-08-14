@@ -933,7 +933,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (window.innerWidth < 1024) {
             const mapContainer = document.getElementById('price-map');
             if (mapContainer) {
-                mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const y = mapContainer.getBoundingClientRect().top + window.scrollY - 80;
+                window.scrollTo({ top: y, behavior: 'smooth' });
             }
         }
 

@@ -26,7 +26,7 @@ class ReportController extends Controller
         $selectedShop = $request->input('shop_id');
         $selectedVariety = $request->input('variety');
 
-        $prices = collect();
+        $prices = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
         if ($selectedCrop) {
             $query = Price::where('crop_id', $selectedCrop)
                 ->where('recorded_at', '>=', $startDate)
@@ -39,7 +39,7 @@ class ReportController extends Controller
                 $query->where('specification', $selectedVariety);
             }
 
-            $prices = $query->orderBy('recorded_at', 'desc')->get();
+            $prices = $query->orderBy('recorded_at', 'desc')->paginate(20)->withQueryString();
         }
 
         return view('reports.index', compact('crops', 'shops', 'varieties', 'selectedCrop', 'selectedShop', 'selectedVariety', 'period', 'prices'));

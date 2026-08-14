@@ -90,6 +90,11 @@
                     </tbody>
                 </table>
             </div>
+            @if($prices instanceof \Illuminate\Pagination\LengthAwarePaginator && $prices->hasPages())
+                <div class="p-4 border-t border-base-200">
+                    {{ $prices->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
