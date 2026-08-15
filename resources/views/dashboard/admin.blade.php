@@ -5,13 +5,29 @@
         </h2>
     </x-slot>
 
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
         <div class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stagger-1">
             <div class="stat-figure text-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
             </div>
             <div class="stat-title">Total Users</div>
             <div class="stat-value text-primary">{{ \App\Models\User::count() }}</div>
+        </div>
+
+        <div class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stagger-1">
+            <div class="stat-figure text-success">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </div>
+            <div class="stat-title">Farmers</div>
+            <div class="stat-value text-success">{{ \App\Models\User::where('role', 'farmer')->count() }}</div>
+        </div>
+
+        <div class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stagger-1">
+            <div class="stat-figure text-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </div>
+            <div class="stat-title">Buyers</div>
+            <div class="stat-value text-warning">{{ \App\Models\User::where('role', 'buyer')->count() }}</div>
         </div>
         
         <div class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stagger-2">

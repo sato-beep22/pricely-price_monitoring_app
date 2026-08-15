@@ -130,9 +130,9 @@
                     class="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col" style="max-height:90vh;"
                     @click.stop
                 >
-                    <div class="bg-emerald-50 border-b border-emerald-100 px-6 py-4 flex items-center justify-between">
+                    <div class="bg-emerald-50 border-b border-emerald-100 px-4 sm:px-6 py-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center">
+                            <div class="w-9 h-9 bg-emerald-100 rounded-xl flex items-center justify-center shrink-0">
                                 <i data-lucide="compass" class="w-4 h-4 text-emerald-600"></i>
                             </div>
                             <div>
@@ -140,31 +140,31 @@
                                 <p class="text-xs text-emerald-600 font-semibold">Paano ito Gumagana</p>
                             </div>
                         </div>
-                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors">
+                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <img src="{{ asset('images/feature_interactive_map.png') }}" alt="Interactive Map Demo" class="w-full" style="height:420px; object-fit:cover; object-position:top;">
-                        <div class="px-6 py-4 space-y-2">
+                        <img src="{{ asset('images/feature_interactive_map.png') }}" alt="Interactive Map Demo" class="w-full h-48 sm:h-80 md:h-[420px]" style="object-fit:cover; object-position:top;">
+                        <div class="px-4 sm:px-6 py-4 space-y-2">
                             <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
                             <div class="space-y-2">
                                 <div class="flex items-start gap-3">
                                     <span class="flex-shrink-0 w-5 h-5 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
-                                    <p class="text-sm text-slate-600">I open ang mapa para makita ang mga registered buyer sa inyong lugar.</p>
+                                    <p class="text-sm text-slate-600">I-open ang mapa para makita ang mga registered buyer sa inyong lugar.</p>
                                 </div>
                                 <div class="flex items-start gap-3">
                                     <span class="flex-shrink-0 w-5 h-5 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
-                                    <p class="text-sm text-slate-600">I Click ang marker ng mapa para makita ang presyo na inooffer ng shop na napili.</p>
+                                    <p class="text-sm text-slate-600">I-click ang marker ng mapa para makita ang presyo na ino-offer ng shop na napili.</p>
                                 </div>
                                 <div class="flex items-start gap-3">
                                     <span class="flex-shrink-0 w-5 h-5 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-bold flex items-center justify-center">3</span>
-                                    <p class="text-sm text-slate-600">I kumpara ang presyo ng ani at piliin ang pinakamagandang pag bentahan.</p>
+                                    <p class="text-sm text-slate-600">I-kumpara ang presyo ng ani at piliin ang pinakamagandang pagbentahan.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="px-6 pb-5">
+                    <div class="px-4 sm:px-6 pb-5">
                         <a href="{{ route('map.index') }}" class="btn-pricely-primary w-full flex items-center justify-center gap-2 text-sm">
                             Open Live Map <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </a>
@@ -183,48 +183,48 @@
                     class="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col" style="max-height:90vh;"
                     @click.stop
                 >
-                    <div class="bg-blue-50 border-b border-blue-100 px-6 py-4 flex items-center justify-between">
+                    <div class="bg-blue-50 border-b border-blue-100 px-4 sm:px-6 py-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <div class="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
                                 <i data-lucide="smartphone" class="w-4 h-4 text-blue-600"></i>
                             </div>
                             <div>
                                 <p class="text-base font-bold text-slate-800">Instant SMS Alerts</p>
-                                <p class="text-xs text-blue-600 font-semibold">Paano ito gumagana?</p>
+                                <p class="text-xs text-blue-600 font-semibold">Paano ito Gumagana</p>
                             </div>
                         </div>
-                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors">
+                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
                         <!-- SMS screenshots stacked for full visibility -->
-                        <div class="flex flex-col">
-                            <img src="{{ asset('images/feature_sms_page.png') }}" alt="My Price Alerts Page" class="w-full" style="height:340px; object-fit:cover; object-position:top;">
-                            <div class="border-t border-slate-100"></div>
-                            <img src="{{ asset('images/feature_sms_modal.png') }}" alt="Subscribe Modal" class="w-full bg-gray-100" style="height:340px; object-fit:contain; object-position:center;">
+                        <div class="flex flex-col md:flex-row">
+                            <img src="{{ asset('images/feature_sms_page.png') }}" alt="My Price Alerts Page" class="w-full md:w-1/2 h-48 sm:h-64 md:h-80" style="object-fit:cover; object-position:top;">
+                            <div class="border-t md:border-t-0 md:border-l border-slate-100"></div>
+                            <img src="{{ asset('images/feature_sms_modal.png') }}" alt="Subscribe Modal" class="w-full md:w-1/2 h-48 sm:h-64 md:h-80 bg-gray-100" style="object-fit:contain; object-position:center;">
                         </div>
-                        <div class="px-6 py-4">
+                        <div class="px-4 sm:px-6 py-4">
                             <div class="space-y-2">
                                 <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
                                 <div class="space-y-2">
                                     <div class="flex items-start gap-3">
                                         <span class="flex-shrink-0 w-5 h-5 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
-                                        <p class="text-sm text-slate-600">I register ang iyong phone number sa iyong profile setings.</p>
+                                        <p class="text-sm text-slate-600">I-register ang iyong phone number sa profile settings.</p>
                                     </div>
                                     <div class="flex items-start gap-3">
                                         <span class="flex-shrink-0 w-5 h-5 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
-                                        <p class="text-sm text-slate-600">When a subscribed buyer updates their price, you instantly receive an SMS alert.</p>
+                                        <p class="text-sm text-slate-600">Makakatanggap ka ng SMS alert kapag may bagong presyo ang shop na iyong na-subscribe.</p>
                                     </div>
                                     <div class="flex items-start gap-3">
                                         <span class="flex-shrink-0 w-5 h-5 bg-blue-100 text-blue-700 rounded-full text-[10px] font-bold flex items-center justify-center">3</span>
-                                        <p class="text-sm text-slate-600">No internet required — a basic mobile signal is enough to receive your price alerts.</p>
+                                        <p class="text-sm text-slate-600">Hindi kailangan ng internet — sapat na ang basic na signal para makatanggap ng text.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="px-6 pb-5">
+                    <div class="px-4 sm:px-6 pb-5">
                         <a href="{{ route('register') }}" class="w-full flex items-center justify-center gap-2 text-sm bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-3 rounded-2xl transition-all">
                             Sign Up to Enable Alerts <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </a>
@@ -240,44 +240,44 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="relative bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden"
+                    class="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col" style="max-height:90vh;"
                     @click.stop
                 >
-                    <div class="bg-amber-50 border-b border-amber-100 px-6 py-4 flex items-center justify-between">
+                    <div class="bg-amber-50 border-b border-amber-100 px-4 sm:px-6 py-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-amber-100 rounded-xl flex items-center justify-center">
+                            <div class="w-9 h-9 bg-amber-100 rounded-xl flex items-center justify-center shrink-0">
                                 <i data-lucide="trending-up" class="w-4 h-4 text-amber-600"></i>
                             </div>
                             <div>
                                 <p class="text-base font-bold text-slate-800">Price Forecasting</p>
-                                <p class="text-xs text-amber-600 font-semibold">How It Works</p>
+                                <p class="text-xs text-amber-600 font-semibold">Paano ito Gumagana</p>
                             </div>
                         </div>
-                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors">
+                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
-                    <div class="p-6 space-y-4">
-                        <img src="{{ asset('images/feature_price_forecasting.png') }}" alt="Price Forecasting Demo" class="w-full rounded-2xl border border-slate-100 shadow-sm">
-                        <div class="space-y-2">
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">How it works</p>
+                    <div class="overflow-y-auto flex-1">
+                        <img src="{{ asset('images/feature_price_forecasting.png') }}" alt="Price Forecasting Demo" class="w-full h-48 sm:h-80 md:h-[420px]" style="object-fit:cover; object-position:top;">
+                        <div class="px-4 sm:px-6 py-4 space-y-2">
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
                             <div class="space-y-2">
                                 <div class="flex items-start gap-3">
                                     <span class="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
-                                    <p class="text-sm text-slate-600">The system collects historical price data from all registered buyers over time.</p>
+                                    <p class="text-sm text-slate-600">Kinokolekta ng system ang mga nakaraang presyo mula sa mga registered buyers.</p>
                                 </div>
                                 <div class="flex items-start gap-3">
                                     <span class="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
-                                    <p class="text-sm text-slate-600">A predictive trend line shows where prices are likely heading over the next few weeks.</p>
+                                    <p class="text-sm text-slate-600">Ipinapakita ng trend line kung saan maaaring pumunta ang presyo sa mga susunod na linggo.</p>
                                 </div>
                                 <div class="flex items-start gap-3">
                                     <span class="flex-shrink-0 w-5 h-5 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold flex items-center justify-center">3</span>
-                                    <p class="text-sm text-slate-600">Use the insights to pick the best time to sell your harvest for maximum profit.</p>
+                                    <p class="text-sm text-slate-600">Gamitin ang impormasyong ito para piliin ang pinakamagandang oras ng pagbenta ng iyong ani.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="px-6 pb-5">
+                    <div class="px-4 sm:px-6 pb-5">
                         <a href="{{ route('forecast.index') }}" class="w-full flex items-center justify-center gap-2 text-sm bg-amber-500 hover:bg-amber-600 text-white font-bold px-5 py-3 rounded-2xl transition-all">
                             View Forecast Charts <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </a>
