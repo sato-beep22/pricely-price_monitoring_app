@@ -145,7 +145,7 @@
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <img src="{{ asset('images/feature_interactive_map.png') }}" alt="Interactive Map Demo" class="w-full h-48 sm:h-80 md:h-[420px]" style="object-fit:cover; object-position:top;">
+                        <img src="{{ asset('images/feature_interactive_map.png') }}?v=2" alt="Interactive Map Demo" class="w-full h-48 sm:h-80 md:h-[420px]" style="object-fit:cover; object-position:top;">
                         <div class="px-4 sm:px-6 py-4 space-y-2">
                             <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
                             <div class="space-y-2">
@@ -200,9 +200,9 @@
                     <div class="overflow-y-auto flex-1">
                         <!-- SMS screenshots stacked for full visibility -->
                         <div class="flex flex-col md:flex-row">
-                            <img src="{{ asset('images/feature_sms_page.png') }}" alt="My Price Alerts Page" class="w-full md:w-1/2 h-48 sm:h-64 md:h-80" style="object-fit:cover; object-position:top;">
+                            <img src="{{ asset('images/feature_sms_page.png') }}?v=2" alt="My Price Alerts Page" class="w-full md:w-1/2 h-48 sm:h-64 md:h-80" style="object-fit:cover; object-position:top;">
                             <div class="border-t md:border-t-0 md:border-l border-slate-100"></div>
-                            <img src="{{ asset('images/feature_sms_modal.png') }}" alt="Subscribe Modal" class="w-full md:w-1/2 h-48 sm:h-64 md:h-80 bg-gray-100" style="object-fit:contain; object-position:center;">
+                            <img src="{{ asset('images/feature_sms_modal.png') }}?v=2" alt="Subscribe Modal" class="w-full md:w-1/2 h-48 sm:h-64 md:h-80 bg-gray-100" style="object-fit:contain; object-position:center;">
                         </div>
                         <div class="px-4 sm:px-6 py-4">
                             <div class="space-y-2">
@@ -258,7 +258,7 @@
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <img src="{{ asset('images/feature_price_forecasting.png') }}" alt="Price Forecasting Demo" class="w-full h-48 sm:h-80 md:h-[420px]" style="object-fit:cover; object-position:top;">
+                        <img src="{{ asset('images/feature_price_forecasting.png') }}?v=2" alt="Price Forecasting Demo" class="w-full h-48 sm:h-80 md:h-[420px]" style="object-fit:cover; object-position:top;">
                         <div class="px-4 sm:px-6 py-4 space-y-2">
                             <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
                             <div class="space-y-2">
