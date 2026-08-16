@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class DaPriceSyncService
 {
-    private const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+    private const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
 
     /**
      * Maximum characters of HTML text content to send to the AI.
