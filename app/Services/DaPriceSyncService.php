@@ -22,20 +22,19 @@ class DaPriceSyncService
     private const EXTRACTION_PROMPT = <<<'PROMPT'
 You are a data extraction assistant for a Philippine agricultural price monitoring system.
 
-Your task is to extract all **ceiling prices** (maximum allowed prices / suggested retail prices / price caps / pinakamataas na presyo) for agricultural crops/commodities from this document.
+Your task is to extract all **prices** for agricultural crops/commodities from this document. The document might list them as prevailing prices, market prices, or suggested retail prices. Extract them all.
 
-Return ONLY a valid JSON array. Each element must have exactly these fields:
+Return ONLY a JSON object with a single key "prices" containing an array of items. Each item must have exactly these fields:
 - "crop": the crop or commodity name in English (e.g. "Rice", "Corn", "Mung Bean", "Onion", "Tomato", "Garlic")
 - "specification": the variety or grade in lowercase (e.g. "well milled", "yellow corn", "local", "imported") — use "regular" if not specified
-- "max_price": the ceiling/maximum price as a plain number in Philippine Pesos per kilogram (per kg)
+- "max_price": the price as a plain number in Philippine Pesos per kilogram (per kg)
 
 Rules:
 - Only include items with an explicit numeric price — skip rows with no price or "n/a"
 - If a price range is given (e.g. "45-50"), use the HIGHER value
 - If prices are per piece or per bundle (not per kg), skip them
 - Normalize crop names to English common names
-- Return an empty array [] if truly no ceiling prices are found
-- Return ONLY the raw JSON array — no explanation, no markdown fences, no extra text
+- Return {"prices": []} if truly no prices are found
 PROMPT;
 
     /**
@@ -94,22 +93,26 @@ PROMPT;
 
         $base64Pdf = base64_encode($pdfBinary);
 
-        $prices = $this->callGeminiWithParts($apiKey, [
-            [
-                'inlineData' => [
-                    'mimeType' => 'application/pdf',
-                    'data' => $base64Pdf,
+        try {
+            $prices = $this->callGeminiWithParts($apiKey, [
+                [
+                    'inlineData' => [
+                        'mimeType' => 'application/pdf',
+                        'data' => $base64Pdf,
+                    ],
                 ],
-            ],
-            ['text' => self::EXTRACTION_PROMPT],
-        ], $url);
+                ['text' => self::EXTRACTION_PROMPT],
+            ], $url);
+        } catch (\Exception $e) {
+            return $this->failure($url, 'pdf', $e->getMessage());
+        }
 
         if ($prices === null) {
             return $this->failure($url, 'pdf', 'AI could not extract price data from the PDF. It may be a purely decorative infographic without structured price data.');
         }
 
         if (empty($prices)) {
-            return $this->failure($url, 'pdf', 'No ceiling price data was found in this PDF. Try a different document or a webpage URL.');
+            return $this->failure($url, 'pdf', 'No price data was found in this PDF. Try a different document or a webpage URL.');
         }
 
         return ['success' => true, 'prices' => $prices, 'source_url' => $url, 'source_type' => 'pdf'];
@@ -134,16 +137,20 @@ PROMPT;
 
         $fullPrompt = self::EXTRACTION_PROMPT."\n\nPage content from {$url}:\n\n".$text;
 
-        $prices = $this->callGeminiWithParts($apiKey, [
-            ['text' => $fullPrompt],
-        ], $url);
+        try {
+            $prices = $this->callGeminiWithParts($apiKey, [
+                ['text' => $fullPrompt],
+            ], $url);
+        } catch (\Exception $e) {
+            return $this->failure($url, 'html', $e->getMessage());
+        }
 
         if ($prices === null) {
             return $this->failure($url, 'html', 'AI could not extract price data from the page. The page may not contain price information in a recognizable format.');
         }
 
         if (empty($prices)) {
-            return $this->failure($url, 'html', 'No ceiling price data was found on that page. Try a more specific DA price bulletin URL.');
+            return $this->failure($url, 'html', 'No price data was found on that page. Try a more specific DA price bulletin URL.');
         }
 
         return ['success' => true, 'prices' => $prices, 'source_url' => $url, 'source_type' => 'html'];
@@ -154,73 +161,74 @@ PROMPT;
      *
      * @param  list<array<string, mixed>>  $parts
      * @return list<array{crop: string, specification: string, max_price: float}>|null
+     * @throws \Exception
      */
     private function callGeminiWithParts(string $apiKey, array $parts, string $sourceUrl): ?array
     {
-        try {
-            $response = Http::timeout(60)
-                ->post(self::GEMINI_API_URL.'?key='.$apiKey, [
-                    'contents' => [['parts' => $parts]],
-                    'generationConfig' => [
-                        'temperature' => 0.1,
-                        'maxOutputTokens' => 2048,
-                    ],
-                ]);
+        $response = Http::timeout(60)
+            ->post(self::GEMINI_API_URL.'?key='.$apiKey, [
+                'contents' => [['parts' => $parts]],
+                'generationConfig' => [
+                    'temperature' => 0.1,
+                    'maxOutputTokens' => 2048,
+                    'responseMimeType' => 'application/json',
+                ],
+            ]);
 
-            if (! $response->successful()) {
-                Log::error('DaPriceSyncService: Gemini API error', [
-                    'url' => $sourceUrl,
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-
-                return null;
-            }
-
-            $aiText = $response->json('candidates.0.content.parts.0.text', '');
-
-            // Strip markdown code fences if the model wraps the JSON
-            $aiText = trim(preg_replace('/^```(?:json)?\s*/i', '', $aiText) ?? '');
-            $aiText = trim(preg_replace('/\s*```$/i', '', $aiText) ?? '');
-
-            $data = json_decode($aiText, true);
-
-            if (! is_array($data)) {
-                Log::warning('DaPriceSyncService: AI returned non-array response', [
-                    'url' => $sourceUrl,
-                    'ai_text' => substr($aiText, 0, 500),
-                ]);
-
-                return null;
-            }
-
-            $prices = [];
-            foreach ($data as $row) {
-                if (! isset($row['crop'], $row['specification'], $row['max_price'])) {
-                    continue;
-                }
-
-                $price = (float) $row['max_price'];
-                if ($price <= 0) {
-                    continue;
-                }
-
-                $prices[] = [
-                    'crop' => trim((string) $row['crop']),
-                    'specification' => strtolower(trim((string) $row['specification'])),
-                    'max_price' => $price,
-                ];
-            }
-
-            return $prices;
-        } catch (\Exception $e) {
-            Log::error('DaPriceSyncService: Gemini call exception', [
+        if (! $response->successful()) {
+            $status = $response->status();
+            Log::error('DaPriceSyncService: Gemini API error', [
                 'url' => $sourceUrl,
-                'error' => $e->getMessage(),
+                'status' => $status,
+                'body' => $response->body(),
+            ]);
+
+            if ($status === 503) {
+                throw new \Exception('The Gemini AI API is currently overloaded and experiencing high demand. Please wait a few minutes and try again.');
+            }
+
+            throw new \Exception("Gemini API error (Status $status). Please check your API key and quotas.");
+        }
+
+        $aiText = $response->json('candidates.0.content.parts.0.text', '');
+
+        // Strip markdown code fences if the model wraps the JSON
+        $aiText = trim(preg_replace('/^```(?:json)?\s*/i', '', $aiText) ?? '');
+        $aiText = trim(preg_replace('/\s*```$/i', '', $aiText) ?? '');
+
+        $data = json_decode($aiText, true);
+
+        // Handle both {"prices": [...]} and [...] just in case
+        $rows = isset($data['prices']) && is_array($data['prices']) ? $data['prices'] : (is_array($data) ? $data : null);
+
+        if (! is_array($rows)) {
+            Log::warning('DaPriceSyncService: AI returned non-array response', [
+                'url' => $sourceUrl,
+                'ai_text' => substr($aiText, 0, 500),
             ]);
 
             return null;
         }
+
+        $prices = [];
+        foreach ($rows as $row) {
+            if (! isset($row['crop'], $row['specification'], $row['max_price'])) {
+                continue;
+            }
+
+            $price = (float) $row['max_price'];
+            if ($price <= 0) {
+                continue;
+            }
+
+            $prices[] = [
+                'crop' => trim((string) $row['crop']),
+                'specification' => strtolower(trim((string) $row['specification'])),
+                'max_price' => $price,
+            ];
+        }
+
+        return $prices;
     }
 
     /**
