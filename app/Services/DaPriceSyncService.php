@@ -96,8 +96,8 @@ PROMPT;
 
         $prices = $this->callGeminiWithParts($apiKey, [
             [
-                'inline_data' => [
-                    'mime_type' => 'application/pdf',
+                'inlineData' => [
+                    'mimeType' => 'application/pdf',
                     'data' => $base64Pdf,
                 ],
             ],
