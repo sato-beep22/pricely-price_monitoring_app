@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Smalot\PdfParser\Parser as PdfParser;
 
 class DaPriceSyncService
 {
@@ -15,21 +16,21 @@ class DaPriceSyncService
     private const MAX_CONTENT_CHARS = 30000;
 
     /**
-     * Fetch a DA price monitoring URL and use Gemini AI to extract ceiling prices.
+     * Fetch a DA price monitoring URL (HTML page or PDF) and use Gemini AI to extract ceiling prices.
      *
-     * @return array{success: bool, prices: list<array{crop: string, specification: string, max_price: float}>, source_url: string, error?: string}
+     * @return array{success: bool, prices: list<array{crop: string, specification: string, max_price: float}>, source_url: string, source_type: string, error?: string}
      */
     public function syncFromUrl(string $url): array
     {
         $apiKey = config('services.gemini.api_key');
 
         if (empty($apiKey)) {
-            return ['success' => false, 'prices' => [], 'source_url' => $url, 'error' => 'Gemini API key is not configured.'];
+            return ['success' => false, 'prices' => [], 'source_url' => $url, 'source_type' => 'unknown', 'error' => 'Gemini API key is not configured.'];
         }
 
-        // Step 1: Fetch the page content
+        // Step 1: Fetch the raw response
         try {
-            $response = Http::timeout(20)
+            $response = Http::timeout(30)
                 ->withHeaders(['User-Agent' => 'Mozilla/5.0 (compatible; Pricely/1.0)'])
                 ->get($url);
 
@@ -38,19 +39,42 @@ class DaPriceSyncService
                     'success' => false,
                     'prices' => [],
                     'source_url' => $url,
+                    'source_type' => 'unknown',
                     'error' => "Failed to fetch the URL (HTTP {$response->status()}). Make sure the URL is publicly accessible.",
                 ];
             }
 
-            $rawHtml = $response->body();
+            $contentType = strtolower($response->header('Content-Type') ?? '');
+            $rawBody = $response->body();
         } catch (\Exception $e) {
             Log::error('DaPriceSyncService: URL fetch failed', ['url' => $url, 'error' => $e->getMessage()]);
 
-            return ['success' => false, 'prices' => [], 'source_url' => $url, 'error' => 'Could not reach the URL: '.$e->getMessage()];
+            return ['success' => false, 'prices' => [], 'source_url' => $url, 'source_type' => 'unknown', 'error' => 'Could not reach the URL: '.$e->getMessage()];
         }
 
-        // Step 2: Strip HTML tags and clean up the text
-        $text = $this->extractTextFromHtml($rawHtml);
+        // Step 2: Detect content type and extract text accordingly
+        $isPdf = str_contains($contentType, 'pdf')
+            || str_ends_with(strtolower(parse_url($url, PHP_URL_PATH) ?? ''), '.pdf');
+
+        if ($isPdf) {
+            $result = $this->extractTextFromPdf($rawBody, $url);
+        } else {
+            $result = ['text' => $this->extractTextFromHtml($rawBody), 'type' => 'html'];
+        }
+
+        if (! $result['text']) {
+            return [
+                'success' => false,
+                'prices' => [],
+                'source_url' => $url,
+                'source_type' => $result['type'],
+                'error' => $isPdf
+                    ? 'Could not extract text from the PDF. The file may be scanned/image-based or password-protected.'
+                    : 'Could not extract any text content from the page.',
+            ];
+        }
+
+        $text = $result['text'];
 
         // Step 3: Truncate to safe AI context size
         if (strlen($text) > self::MAX_CONTENT_CHARS) {
@@ -65,6 +89,7 @@ class DaPriceSyncService
                 'success' => false,
                 'prices' => [],
                 'source_url' => $url,
+                'source_type' => $result['type'],
                 'error' => 'AI could not extract price data from the page. The page may not contain price information in a recognizable format.',
             ];
         }
@@ -73,7 +98,32 @@ class DaPriceSyncService
             'success' => true,
             'prices' => $extractedPrices,
             'source_url' => $url,
+            'source_type' => $result['type'],
         ];
+    }
+
+    /**
+     * Extract plain text from a PDF binary using smalot/pdfparser.
+     *
+     * @return array{text: string, type: string}
+     */
+    private function extractTextFromPdf(string $pdfBinary, string $url): array
+    {
+        try {
+            $parser = new PdfParser;
+            $pdf = $parser->parseContent($pdfBinary);
+            $text = $pdf->getText();
+
+            // Clean up excessive whitespace
+            $text = preg_replace('/\s{3,}/', "\n\n", $text) ?? $text;
+            $text = trim($text);
+
+            return ['text' => $text, 'type' => 'pdf'];
+        } catch (\Exception $e) {
+            Log::error('DaPriceSyncService: PDF parse failed', ['url' => $url, 'error' => $e->getMessage()]);
+
+            return ['text' => '', 'type' => 'pdf'];
+        }
     }
 
     /**
@@ -107,9 +157,9 @@ class DaPriceSyncService
         $prompt = <<<PROMPT
 You are a data extraction assistant for a Philippine agricultural price monitoring system.
 
-Below is text extracted from a Department of Agriculture (DA) price monitoring page: {$sourceUrl}
+Below is text extracted from a Department of Agriculture (DA) price monitoring document or page: {$sourceUrl}
 
-Your task is to extract all **ceiling prices** (maximum allowed prices / suggested retail prices) for agricultural crops/commodities mentioned on the page.
+Your task is to extract all **ceiling prices** (maximum allowed prices / suggested retail prices / price caps) for agricultural crops/commodities mentioned in the content.
 
 Return ONLY a valid JSON array. Each element must have exactly these fields:
 - "crop": the crop or commodity name in English (e.g. "Rice", "Corn", "Mung Bean", "Onion", "Tomato")
@@ -123,7 +173,7 @@ Rules:
 - Return an empty array [] if no ceiling prices are found
 - Return ONLY the JSON array, no explanation, no markdown, no code fences
 
-Page content:
+Document content:
 {$pageText}
 PROMPT;
 
