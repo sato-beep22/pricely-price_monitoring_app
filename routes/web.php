@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\DaPriceSyncController;
 use App\Http\Controllers\Admin\PriceImportController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\CeilingPriceController;
@@ -86,9 +85,6 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/ceiling-prices', [CeilingPriceController::class, 'index'])->name('ceiling-prices.index');
         Route::post('/ceiling-prices', [CeilingPriceController::class, 'store'])->name('ceiling-prices.store');
-
-        Route::post('/da-price-sync/preview', [DaPriceSyncController::class, 'preview'])->name('da-price-sync.preview');
-        Route::post('/da-price-sync/apply', [DaPriceSyncController::class, 'apply'])->name('da-price-sync.apply');
 
         Route::get('/price-import', [PriceImportController::class, 'index'])->name('price-import.index');
         Route::post('/price-import', [PriceImportController::class, 'store'])->name('price-import.store');
