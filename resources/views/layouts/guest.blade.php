@@ -15,15 +15,18 @@
     <body class="font-sans antialiased bg-[#F8FAFC] min-h-screen text-base-content relative overflow-x-hidden">
         <!-- Global Notification Modal -->
         <x-notification-modal />
-        <!-- Ambient Background Layer -->
-        <div class="bg-ambient absolute inset-0 z-0 opacity-40 pointer-events-none"></div>
+        <!-- Background Wrapper to prevent overflow -->
+        <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+            <!-- Ambient Background Layer -->
+            <div class="bg-ambient absolute inset-0 opacity-40"></div>
 
-        <!-- Decorative Gradient Orbs -->
-        <div class="absolute w-[500px] h-[500px] rounded-full -top-28 -left-28 opacity-60 pointer-events-none animate-blob blur-3xl" style="background: radial-gradient(circle, rgba(16,185,129,0.35) 0%, rgba(13,148,136,0.15) 50%, transparent 70%);"></div>
-        <div class="absolute w-80 h-80 rounded-full top-[10%] right-[5%] opacity-40 pointer-events-none animate-blob blur-2xl" style="background: radial-gradient(circle, rgba(56,189,248,0.25) 0%, rgba(99,102,241,0.10) 50%, transparent 70%); animation-delay: 2s;"></div>
-        <div class="absolute w-72 h-72 rounded-full bottom-[10%] -left-16 opacity-35 pointer-events-none animate-blob blur-2xl" style="background: radial-gradient(circle, rgba(52,211,153,0.30) 0%, rgba(16,185,129,0.10) 50%, transparent 70%); animation-delay: 5s;"></div>
-        <div class="absolute w-[450px] h-[450px] rounded-full -bottom-24 -right-24 opacity-50 pointer-events-none animate-blob blur-3xl" style="background: radial-gradient(circle, rgba(13,148,136,0.30) 0%, rgba(16,185,129,0.12) 50%, transparent 70%); animation-delay: 3s;"></div>
-        <div class="absolute w-56 h-56 rounded-full top-[40%] right-[25%] opacity-30 pointer-events-none animate-blob blur-xl" style="background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, rgba(139,92,246,0.06) 50%, transparent 70%); animation-delay: 7s;"></div>
+            <!-- Decorative Gradient Orbs -->
+            <div class="absolute w-[500px] h-[500px] rounded-full -top-28 -left-28 opacity-60 animate-blob blur-3xl" style="background: radial-gradient(circle, rgba(16,185,129,0.35) 0%, rgba(13,148,136,0.15) 50%, transparent 70%);"></div>
+            <div class="absolute w-80 h-80 rounded-full top-[10%] right-[5%] opacity-40 animate-blob blur-2xl" style="background: radial-gradient(circle, rgba(56,189,248,0.25) 0%, rgba(99,102,241,0.10) 50%, transparent 70%); animation-delay: 2s;"></div>
+            <div class="absolute w-72 h-72 rounded-full bottom-[10%] -left-16 opacity-35 animate-blob blur-2xl" style="background: radial-gradient(circle, rgba(52,211,153,0.30) 0%, rgba(16,185,129,0.10) 50%, transparent 70%); animation-delay: 5s;"></div>
+            <div class="absolute w-[450px] h-[450px] rounded-full -bottom-24 -right-24 opacity-50 animate-blob blur-3xl" style="background: radial-gradient(circle, rgba(13,148,136,0.30) 0%, rgba(16,185,129,0.12) 50%, transparent 70%); animation-delay: 3s;"></div>
+            <div class="absolute w-56 h-56 rounded-full top-[40%] right-[25%] opacity-30 animate-blob blur-xl" style="background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, rgba(139,92,246,0.06) 50%, transparent 70%); animation-delay: 7s;"></div>
+        </div>
 
         <!-- Content -->
         <div class="relative z-10 min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 px-4">
