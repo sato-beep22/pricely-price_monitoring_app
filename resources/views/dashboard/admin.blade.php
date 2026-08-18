@@ -46,14 +46,14 @@
             <div class="stat-value text-accent">{{ \App\Models\Price::count() }}</div>
         </div>
 
-        <div class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stagger-4">
+        <a href="{{ route('admin.sms-logs.index') }}" class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stagger-4 hover:border-info transition-colors block">
             <div class="stat-figure text-info">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
             </div>
             <div class="stat-title">SMS Alerts Sent</div>
-            <div class="stat-value text-info">--</div>
-            <div class="stat-desc">Check Semaphore logs</div>
-        </div>
+            <div class="stat-value text-info">{{ \App\Models\SmsLog::count() }}</div>
+            <div class="stat-desc text-info underline">View IPROG SMS Logs</div>
+        </a>
     </div>
 
     <div class="grid grid-cols-1 gap-6">

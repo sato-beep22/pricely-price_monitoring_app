@@ -86,6 +86,10 @@
                     <i data-lucide="upload-cloud" class="w-5 h-5 {{ request()->routeIs('admin.price-import.*') ? 'text-white' : 'text-slate-500' }}"></i>
                     {{ __('Import Prices') }}
                 </a>
+                <a href="{{ route('admin.sms-logs.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors {{ request()->routeIs('admin.sms-logs.*') ? 'bg-emerald-600 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-50 font-medium' }}">
+                    <i data-lucide="message-square" class="w-5 h-5 {{ request()->routeIs('admin.sms-logs.*') ? 'text-white' : 'text-slate-500' }}"></i>
+                    {{ __('SMS Logs') }}
+                </a>
             </div>
         </div>
         @endif
