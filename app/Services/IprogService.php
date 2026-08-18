@@ -41,7 +41,7 @@ class IprogService
         ]);
 
         try {
-            $response = Http::asForm()->post($this->apiUrl, [
+            $response = Http::timeout(3)->asForm()->post($this->apiUrl, [
                 'api_token' => $this->apiToken,
                 'phone_number' => $phone,
                 'message' => $message,

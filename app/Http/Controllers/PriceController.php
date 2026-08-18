@@ -24,17 +24,18 @@ class PriceController extends Controller
 
         $crops = Crop::all();
 
-        // Get the latest price for each crop and specification
+        // Get the absolute latest price IDs for this shop per crop/spec
+        $latestPriceIds = Price::where('shop_id', $shop->id)
+            ->selectRaw('MAX(id) as id')
+            ->groupBy('crop_id', 'specification')
+            ->pluck('id');
+
+        // Fetch those latest prices in one go
+        $prices = Price::whereIn('id', $latestPriceIds)->get();
+
         $latestPrices = [];
-        foreach ($crops as $crop) {
-            $specs = array_map('trim', explode(',', $crop->specification));
-            foreach ($specs as $spec) {
-                $latestPrices[$crop->id][$spec] = Price::where('shop_id', $shop->id)
-                    ->where('crop_id', $crop->id)
-                    ->where('specification', $spec)
-                    ->latest('recorded_at')
-                    ->first();
-            }
+        foreach ($prices as $price) {
+            $latestPrices[$price->crop_id][$price->specification] = $price;
         }
 
         return view('prices.create', compact('crops', 'latestPrices'));
