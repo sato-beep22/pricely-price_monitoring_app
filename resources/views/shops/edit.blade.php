@@ -91,7 +91,18 @@
                     const startLat = latInput.value ? parseFloat(latInput.value) : 14.5995;
                     const startLng = lngInput.value ? parseFloat(lngInput.value) : 120.9842;
                     
+                    // Fix Leaflet's default icon path issue with Vite
+                    delete L.Icon.Default.prototype._getIconUrl;
+                    L.Icon.Default.mergeOptions({
+                        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+                        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+                    });
+
                     const map = L.map('location-picker-map').setView([startLat, startLng], 10);
+                    
+                    // Delay map resize calculation until after any container animation
+                    setTimeout(() => map.invalidateSize(), 1500);
                     
                     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                         maxZoom: 19,

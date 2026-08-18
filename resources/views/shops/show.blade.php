@@ -47,7 +47,16 @@
                             <i data-lucide="map" class="w-5 h-5 text-secondary"></i> Location Map
                         </h3>
                     </div>
-                    <div id="shop-map" class="h-80 w-full rounded-b-box z-0"></div>
+                    @if((float)$shop->latitude != 0 && (float)$shop->longitude != 0)
+                        <div id="shop-map" class="h-80 w-full rounded-b-box z-0"></div>
+                    @else
+                        <div class="h-80 w-full rounded-b-box flex items-center justify-center bg-base-200">
+                            <div class="text-center text-base-content/60">
+                                <i data-lucide="map-pin-off" class="w-12 h-12 mx-auto mb-2 opacity-50"></i>
+                                <p>No Location set yet.</p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -104,8 +113,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 if(typeof L !== 'undefined') {
-                    const lat = {{ $shop->latitude ?? 14.5995 }};
-                    const lng = {{ $shop->longitude ?? 120.9842 }};
+                    @if((float)$shop->latitude != 0 && (float)$shop->longitude != 0)
+                    // Fallback to Manila coordinates if null, 0, or empty string
+                    const lat = {{ $shop->latitude ?: 14.5995 }};
+                    const lng = {{ $shop->longitude ?: 120.9842 }};
                     
                     // Fix Leaflet's default icon path issue with Vite
                     delete L.Icon.Default.prototype._getIconUrl;
@@ -117,7 +128,8 @@
 
                     const map = L.map('shop-map').setView([lat, lng], 15);
                     
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    // Use updated OSM URL without {s}
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; OpenStreetMap contributors'
                     }).addTo(map);
 
@@ -126,8 +138,9 @@
                         .bindPopup('<b>{{ addslashes($shop->name) }}</b><br>Here is your shop.')
                         .openPopup();
                     
-                    // Invalidate size to fix tile loading issues if container size was calculated wrong initially
-                    setTimeout(() => map.invalidateSize(), 100);
+                    // Wait for GSAP animations to fully complete (1+ seconds) before recalculating size
+                    setTimeout(() => map.invalidateSize(), 1500);
+                    @endif
                 }
             }, 500);
         });
