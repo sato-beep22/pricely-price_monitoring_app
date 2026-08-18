@@ -59,7 +59,7 @@ PROMPT;
     /**
      * Handle a chat message and return the Groq AI response.
      */
-    public function chat(Request $request): JsonResponse
+    public function chat(Request $request)
     {
         $request->validate([
             'message' => ['required', 'string', 'max:1000'],
