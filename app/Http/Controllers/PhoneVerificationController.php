@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PhoneVerificationRequest;
 use App\Http\Requests\VerifyCodeRequest;
-use App\Services\SemaphoreService;
+use App\Services\InfobipService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -13,7 +13,7 @@ class PhoneVerificationController extends Controller
     /**
      * Create the controller instance.
      */
-    public function __construct(public SemaphoreService $semaphoreService) {}
+    public function __construct(public InfobipService $infobipService) {}
 
     /**
      * Send the verification code to the user's phone.
@@ -31,11 +31,11 @@ class PhoneVerificationController extends Controller
         $user->phone_verification_expires_at = now()->addMinutes(5);
         $user->save();
 
-        // Send OTP via Semaphore's dedicated OTP route (bypasses DND filters)
-        $sent = $this->semaphoreService->sendOtp($user->phone, $code);
+        // Send OTP via Infobip
+        $sent = $this->infobipService->sendOtp($user->phone, $code);
 
         if (! $sent) {
-            Log::warning("Semaphore OTP failed for phone {$user->phone}. Code: {$code}");
+            Log::warning("Infobip OTP failed for phone {$user->phone}. Code: {$code}");
         }
 
         return redirect()->back()->with('status', 'phone-verification-sent');
