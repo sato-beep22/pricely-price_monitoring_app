@@ -31,21 +31,28 @@ class HistoricalPriceSeeder extends Seeder
                 // Base price for realistic variation
                 $basePrice = rand(20, 100);
                 
+                // Get valid specifications for this crop
+                $specs = array_map('trim', explode(',', $crop->specification));
+                
                 $currentDate = clone $startDate;
                 while ($currentDate <= $endDate) {
-                    // Random walk for price (trend)
-                    $change = rand(-2, 3);
-                    $basePrice += $change;
-                    if ($basePrice < 10) $basePrice = 10;
+                    foreach ($specs as $spec) {
+                        if (empty($spec)) continue;
+                        
+                        // Random walk for price (trend) per spec
+                        $change = rand(-2, 3);
+                        $basePrice += $change;
+                        if ($basePrice < 10) $basePrice = 10;
 
-                    Price::create([
-                        'shop_id' => $shop->id,
-                        'crop_id' => $crop->id,
-                        'specification' => 'Standard',
-                        'price_per_kg' => $basePrice,
-                        'recorded_at' => $currentDate->copy(),
-                        'source' => 'testing',
-                    ]);
+                        Price::create([
+                            'shop_id' => $shop->id,
+                            'crop_id' => $crop->id,
+                            'specification' => $spec,
+                            'price_per_kg' => $basePrice,
+                            'recorded_at' => $currentDate->copy(),
+                            'source' => 'testing',
+                        ]);
+                    }
 
                     // Add an entry for every 1 to 4 days to simulate realistic sporadic updates
                     $currentDate->addDays(rand(1, 4));
