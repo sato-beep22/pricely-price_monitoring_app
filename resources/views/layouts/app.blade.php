@@ -11,6 +11,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        window.AppUrl = "{{ rtrim(url('/'), '/') }}";
+    </script>
 </head>
 <body class="bg-base-100 relative">
     <!-- Global Notification Modal -->
