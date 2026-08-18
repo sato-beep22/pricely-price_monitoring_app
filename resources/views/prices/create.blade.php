@@ -12,6 +12,16 @@
             <span>Select one or more crops below, enter their new prices, and submit. SMS alerts will be sent to all subscribed farmers.</span>
         </div>
 
+        @if ($errors->any())
+            <div class="alert alert-error shadow-sm mb-8">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('prices.store') }}" x-data="multiPriceForm()" @submit.prevent="submitForm($el)">
             @csrf
 
@@ -84,9 +94,9 @@
                                             x-model="prices['{{ $key }}']"
                                             placeholder="0.00"
                                             class="grow"
+                                            :disabled="!selected.includes('{{ $key }}')"
                                             @click.stop
                                             @focus.stop
-                                            required
                                         />
                                     </label>
                                     <input type="hidden" :name="'entries[{{ $key }}][crop_id]'" value="{{ $crop->id }}" :disabled="!selected.includes('{{ $key }}')" />
