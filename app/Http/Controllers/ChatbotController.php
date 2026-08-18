@@ -66,7 +66,7 @@ PROMPT;
             'history' => ['nullable', 'array'],
         ]);
 
-        $apiKey = config('services.groq.api_key');
+        $apiKey = config('services.ai.api_key');
 
         if (empty($apiKey)) {
             return response()->json(['error' => 'Chatbot is not configured.'], 503);
@@ -100,11 +100,12 @@ PROMPT;
         $messages[] = ['role' => 'user', 'content' => (string) $userMessage];
 
         try {
-            $modelId = config('services.groq.model', 'mixtral-8x7b-32768');
+            $modelId = config('services.ai.model', 'gemini-2.5-flash');
+            $baseUrl = config('services.ai.base_url', 'https://generativelanguage.googleapis.com/v1beta/openai/');
             
             $response = Http::timeout(30)
                 ->withToken($apiKey)
-                ->post('https://api.groq.com/openai/v1/chat/completions', [
+                ->post(rtrim($baseUrl, '/') . '/chat/completions', [
                     'model' => $modelId,
                     'messages' => $messages,
                     'temperature' => 0.7,
@@ -112,7 +113,7 @@ PROMPT;
                 ]);
 
             if (! $response->successful()) {
-                Log::error('Groq API error', ['status' => $response->status(), 'body' => $response->body()]);
+                Log::error('AI API error', ['status' => $response->status(), 'body' => $response->body()]);
 
                 if ($response->status() === 429) {
                     return response()->json(['error' => 'Ang AI ay abala ngayon. Subukan ulit mamaya.'], 429);

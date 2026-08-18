@@ -46,9 +46,10 @@ return [
         'api_key' => env('GEMINI_API_KEY'),
     ],
 
-    'groq' => [
-        'api_key' => env('GROQ_API_KEY'),
-        'model' => env('GROQ_MODEL', 'mixtral-8x7b-32768'),
+    'ai' => [
+        'api_key' => env('AI_API_KEY', env('GROQ_API_KEY')),
+        'model' => env('AI_MODEL', env('GROQ_MODEL', 'gemini-2.5-flash')),
+        'base_url' => env('AI_BASE_URL', 'https://generativelanguage.googleapis.com/v1beta/openai/'),
     ],
 
     'infobip' => [
