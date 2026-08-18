@@ -100,7 +100,7 @@ PROMPT;
         $messages[] = ['role' => 'user', 'content' => (string) $userMessage];
 
         try {
-            $modelId = config('services.ai.model', 'gemini-2.5-flash');
+            $modelId = config('services.ai.model', 'gemini-3.6-flash');
             $baseUrl = config('services.ai.base_url', 'https://generativelanguage.googleapis.com/v1beta/openai/');
             
             $response = Http::timeout(30)

@@ -48,7 +48,7 @@ return [
 
     'ai' => [
         'api_key' => env('AI_API_KEY', env('GROQ_API_KEY')),
-        'model' => env('AI_MODEL', env('GROQ_MODEL', 'gemini-2.5-flash')),
+        'model' => env('AI_MODEL', env('GROQ_MODEL', 'gemini-3.6-flash')),
         'base_url' => env('AI_BASE_URL', 'https://generativelanguage.googleapis.com/v1beta/openai/'),
     ],
 
