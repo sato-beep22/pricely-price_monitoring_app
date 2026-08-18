@@ -10,12 +10,14 @@ class InfobipService
     protected ?string $apiKey;
     protected ?string $baseUrl;
     protected bool $testMode;
+    protected string $sender;
 
     public function __construct()
     {
         $this->apiKey = config('services.infobip.api_key', env('INFOBIP_API_KEY'));
         $this->baseUrl = config('services.infobip.base_url', env('INFOBIP_BASE_URL', 'https://api.infobip.com'));
         $this->testMode = config('services.infobip.test_mode', env('INFOBIP_TEST_MODE', true));
+        $this->sender = config('services.infobip.sender', env('INFOBIP_SENDER', 'ServiceSMS'));
     }
 
     /**
@@ -49,7 +51,7 @@ class InfobipService
                 'messages' => [
                     [
                         'destinations' => [['to' => $phone]],
-                        'from' => 'Pricely',
+                        'from' => $this->sender,
                         'text' => $message,
                     ]
                 ]
@@ -92,7 +94,7 @@ class InfobipService
                 'messages' => [
                     [
                         'destinations' => [['to' => $phone]],
-                        'from' => 'Pricely',
+                        'from' => $this->sender,
                         'text' => $message,
                     ]
                 ]
