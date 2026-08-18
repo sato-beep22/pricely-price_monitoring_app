@@ -231,7 +231,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function clearRoute() {
         if (routingControl) {
-            map.removeControl(routingControl);
+            if (routingControl.isFallback) {
+                routingControl.remove();
+            } else {
+                map.removeControl(routingControl);
+            }
             routingControl = null;
         }
         activeRouteShop = null;
@@ -300,7 +304,35 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .on('routingerror', () => {
             if (routeLabel) { routeLabel.textContent = 'Route not available'; }
-            if (routeMeta)  { routeMeta.textContent  = 'Could not calculate a driving route.'; }
+            if (routeMeta)  { routeMeta.textContent  = 'Showing straight-line distance instead.'; }
+            
+            // Fallback: draw a straight dashed line if driving route fails
+            if (routingControl) {
+                map.removeControl(routingControl);
+            }
+            
+            const startLatLng = L.latLng(userLatLng.lat, userLatLng.lng);
+            const endLatLng = L.latLng(shop.latitude, shop.longitude);
+            
+            const fallbackLine = L.polyline([startLatLng, endLatLng], {
+                color: '#f59e0b', // Amber color for fallback
+                weight: 4,
+                opacity: 0.8,
+                dashArray: '10, 10'
+            }).addTo(map);
+            
+            // Store the fallback line on the routing control object so it can be cleared later
+            routingControl = {
+                isFallback: true,
+                getPlan: () => ({ getWaypoints: () => [] }),
+                remove: function() { map.removeLayer(fallbackLine); }
+            };
+            
+            // Calculate straight-line distance
+            const distMeters = startLatLng.distanceTo(endLatLng);
+            if (routeMeta) {
+                routeMeta.textContent = `${formatDistance(distMeters)} (Straight Line)`;
+            }
         })
         .addTo(map);
     }
