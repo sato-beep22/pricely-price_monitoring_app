@@ -20,7 +20,7 @@
                 @elseif(Auth::user()->isAdmin())
                     <li><a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.index') ? 'active' : '' }}">Users</a></li>
                     <li><a href="{{ route('admin.ceiling-prices.index') }}" class="{{ request()->routeIs('admin.ceiling-prices.index') ? 'active' : '' }}">Ceiling Prices</a></li>
-                    <li><a href="{{ route('admin.price-import.index') }}" class="{{ request()->routeIs('admin.price-import.index') ? 'active' : '' }}">Import Prices</a></li>
+                    <li><a href="{{ route('admin.price-import.index') }}" class="{{ request()->routeIs('admin.price-import.index') ? 'active' : '' }}">Manage DA Links</a></li>
                     <li><a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">Reports</a></li>
                     <li><a href="{{ route('admin.sms-logs.index') }}" class="{{ request()->routeIs('admin.sms-logs.*') ? 'active' : '' }}">SMS Logs</a></li>
                 @endif
@@ -52,7 +52,7 @@
                         <ul class="p-2 z-[1] shadow bg-base-100 rounded-box w-48 border border-base-300">
                             <li><a href="{{ route('admin.users.index') }}">Users</a></li>
                             <li><a href="{{ route('admin.ceiling-prices.index') }}">Ceiling Prices</a></li>
-                            <li><a href="{{ route('admin.price-import.index') }}">Import Prices</a></li>
+                            <li><a href="{{ route('admin.price-import.index') }}">Manage DA Links</a></li>
                         </ul>
                     </details>
                 </li>
