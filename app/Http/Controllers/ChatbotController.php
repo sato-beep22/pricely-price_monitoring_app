@@ -100,10 +100,12 @@ PROMPT;
         $messages[] = ['role' => 'user', 'content' => (string) $userMessage];
 
         try {
+            $modelId = config('services.groq.model', 'mixtral-8x7b-32768');
+            
             $response = Http::timeout(30)
                 ->withToken($apiKey)
                 ->post('https://api.groq.com/openai/v1/chat/completions', [
-                    'model' => 'llama3-8b-8192',
+                    'model' => $modelId,
                     'messages' => $messages,
                     'temperature' => 0.7,
                     'max_tokens' => 512,
