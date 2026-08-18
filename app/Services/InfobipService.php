@@ -71,4 +71,47 @@ class InfobipService
             return false;
         }
     }
+    public function sendSms(string $phone, string $message): bool
+    {
+        if ($this->testMode) {
+            Log::info("INFOBIP TEST MODE: Fake SMS sent to {$phone}. Message: {$message}");
+            return true;
+        }
+
+        if (empty($this->apiKey)) {
+            Log::warning("Infobip API key is not configured. SMS not sent to {$phone}.");
+            return false;
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => "App {$this->apiKey}",
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])->post(rtrim($this->baseUrl, '/') . '/sms/2/text/advanced', [
+                'messages' => [
+                    [
+                        'destinations' => [['to' => $phone]],
+                        'from' => 'Pricely',
+                        'text' => $message,
+                    ]
+                ]
+            ]);
+
+            if ($response->successful()) {
+                Log::info("SMS sent successfully via Infobip to {$phone}.", ['response' => $response->json()]);
+                return true;
+            }
+
+            Log::error("Failed to send SMS via Infobip to {$phone}.", [
+                'status' => $response->status(),
+                'response' => $response->body(),
+            ]);
+
+            return false;
+        } catch (\Exception $e) {
+            Log::error("Exception while sending SMS via Infobip to {$phone}.", ['error' => $e->getMessage()]);
+            return false;
+        }
+    }
 }
