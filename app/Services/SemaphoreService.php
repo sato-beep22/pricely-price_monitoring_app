@@ -23,7 +23,9 @@ class SemaphoreService
         $this->otpUrl = 'https://api.semaphore.co/api/v4/otp';
         $this->apiKey = config('services.semaphore.api_key');
         $this->senderName = config('services.semaphore.sender_name', 'Pricely');
-        $this->senderNameActive = config('services.semaphore.sender_name_active', false);
+        
+        $activeConfig = config('services.semaphore.sender_name_active', false);
+        $this->senderNameActive = filter_var($activeConfig, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
