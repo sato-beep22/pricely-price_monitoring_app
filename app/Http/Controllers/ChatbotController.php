@@ -102,29 +102,52 @@ PROMPT;
         try {
             $modelId = config('services.ai.model', 'gemini-3.6-flash');
             $baseUrl = config('services.ai.base_url', 'https://generativelanguage.googleapis.com/v1beta/openai/');
-            
-            $response = Http::timeout(30)
-                ->withToken($apiKey)
-                ->post(rtrim($baseUrl, '/') . '/chat/completions', [
-                    'model' => $modelId,
-                    'messages' => $messages,
-                    'temperature' => 0.7,
-                    'max_tokens' => 2048,
-                ]);
 
-            if (! $response->successful()) {
-                Log::error('AI API error', ['status' => $response->status(), 'body' => $response->body()]);
+            return response()->stream(function () use ($baseUrl, $apiKey, $modelId, $messages) {
+                $client = new \GuzzleHttp\Client();
+                try {
+                    $response = $client->post(rtrim($baseUrl, '/') . '/chat/completions', [
+                        'headers' => [
+                            'Authorization' => 'Bearer ' . $apiKey,
+                            'Content-Type'  => 'application/json',
+                            'Accept'        => 'text/event-stream',
+                        ],
+                        'json' => [
+                            'model'       => $modelId,
+                            'messages'    => $messages,
+                            'temperature' => 0.7,
+                            'max_tokens'  => 8192,
+                            'stream'      => true,
+                        ],
+                        'stream'  => true,
+                        'timeout' => 120,
+                    ]);
 
-                if ($response->status() === 429) {
-                    return response()->json(['error' => 'Ang AI ay abala ngayon. Subukan ulit mamaya.'], 429);
+                    $body = $response->getBody();
+                    while (!$body->eof()) {
+                        echo $body->read(1024);
+                        if (ob_get_level() > 0) {
+                            ob_flush();
+                        }
+                        flush();
+                    }
+                } catch (\GuzzleHttp\Exception\RequestException $e) {
+                    $statusCode = $e->hasResponse() ? $e->getResponse()->getStatusCode() : 500;
+                    if ($statusCode === 429) {
+                        echo "data: " . json_encode(['error' => 'Ang AI ay abala ngayon. Subukan ulit mamaya.']) . "\n\n";
+                    } else {
+                        Log::error('AI API error', ['status' => $statusCode, 'body' => $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : '']);
+                        echo "data: " . json_encode(['error' => 'Failed to reach AI service. Please try again.']) . "\n\n";
+                    }
+                } catch (\Exception $e) {
+                    Log::error('Chatbot streaming exception', ['error' => $e->getMessage()]);
+                    echo "data: " . json_encode(['error' => 'Something went wrong.']) . "\n\n";
                 }
-
-                return response()->json(['error' => 'Failed to reach AI service. Please try again.'], 502);
-            }
-
-            $reply = $response->json('choices.0.message.content', 'Sorry, I could not generate a response.');
-
-            return response()->json(['reply' => $reply]);
+            }, 200, [
+                'Cache-Control' => 'no-cache',
+                'Content-Type'  => 'text/event-stream',
+                'X-Accel-Buffering' => 'no',
+            ]);
         } catch (\Exception $e) {
             Log::error('Chatbot exception', ['error' => $e->getMessage()]);
 

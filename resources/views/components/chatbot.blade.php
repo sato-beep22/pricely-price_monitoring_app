@@ -427,20 +427,65 @@ function pricelyChatbot(userRole) {
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'text/event-stream',
                     },
                     body: JSON.stringify({ message: text, history }),
                 });
 
-                const data = await response.json();
-
-                if (data.reply) {
-                    this.messages.push({ role: 'model', text: data.reply });
-                    if (!this.open) this.unread++;
-                } else {
+                if (!response.ok) {
+                    const data = await response.json();
                     this.messages.push({ role: 'model', text: data.error || 'Sorry, something went wrong.' });
+                    this.loading = false;
+                    this.$nextTick(() => this.scrollToBottom());
+                    return;
                 }
+
+                this.messages.push({ role: 'model', text: '' });
+                const modelIndex = this.messages.length - 1;
+                this.loading = false; // Hide the typing indicator
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let done = false;
+                let buffer = '';
+
+                while (!done) {
+                    const { value, done: readerDone } = await reader.read();
+                    done = readerDone;
+                    if (value) {
+                        buffer += decoder.decode(value, { stream: true });
+                        const lines = buffer.split('\n');
+                        buffer = lines.pop(); // keep the last incomplete line
+
+                        for (const line of lines) {
+                            if (line.trim() === '') continue;
+                            if (line.startsWith('data: ')) {
+                                const dataStr = line.slice(6).trim();
+                                if (dataStr === '[DONE]') {
+                                    done = true;
+                                    break;
+                                }
+                                try {
+                                    const json = JSON.parse(dataStr);
+                                    if (json.error) {
+                                        this.messages[modelIndex].text += "\n" + json.error;
+                                    } else if (json.choices && json.choices[0].delta && json.choices[0].delta.content) {
+                                        this.messages[modelIndex].text += json.choices[0].delta.content;
+                                        this.$nextTick(() => this.scrollToBottom());
+                                    }
+                                } catch (e) {
+                                    // ignore parse errors for partial chunks
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (!this.open) this.unread++;
+
             } catch (e) {
                 this.messages.push({ role: 'model', text: 'Hindi ako makakonekta sa server. Subukan ulit.' });
+                this.loading = false;
             } finally {
                 this.loading = false;
                 this.$nextTick(() => this.scrollToBottom());
