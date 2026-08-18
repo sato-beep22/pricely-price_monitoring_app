@@ -6,7 +6,7 @@ use App\Models\Crop;
 use App\Models\Shop;
 use App\Models\Subscription;
 use App\Models\User;
-use App\Services\SemaphoreService;
+use App\Services\IprogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +36,7 @@ class SubscriptionController extends Controller
     /**
      * Subscribe to a buyer.
      */
-    public function store(Request $request, SemaphoreService $smsService)
+    public function store(Request $request, IprogService $smsService)
     {
         $request->validate([
             'buyer_id' => 'required|exists:users,id',

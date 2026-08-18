@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PhoneVerificationRequest;
 use App\Http\Requests\VerifyCodeRequest;
-use App\Services\SemaphoreService;
+use App\Services\IprogService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -13,7 +13,7 @@ class PhoneVerificationController extends Controller
     /**
      * Create the controller instance.
      */
-    public function __construct(public SemaphoreService $smsService) {}
+    public function __construct(public IprogService $smsService) {}
 
     /**
      * Send the verification code to the user's phone.

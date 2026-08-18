@@ -57,4 +57,9 @@ return [
         'sender' => env('INFOBIP_SENDER', 'ServiceSMS'),
     ],
 
+    'iprog' => [
+        'api_url' => env('IPROG_API_URL', 'https://www.iprogsms.com/api/v1/sms_messages'),
+        'api_token' => env('IPROG_API_TOKEN'),
+    ],
+
 ];

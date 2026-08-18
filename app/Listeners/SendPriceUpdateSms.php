@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\PriceUpdated;
-use App\Services\SemaphoreService;
+use App\Services\IprogService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -12,12 +12,12 @@ class SendPriceUpdateSms implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    protected SemaphoreService $smsService;
+    protected IprogService $smsService;
 
     /**
      * Create the event listener.
      */
-    public function __construct(SemaphoreService $smsService)
+    public function __construct(IprogService $smsService)
     {
         $this->smsService = $smsService;
     }
