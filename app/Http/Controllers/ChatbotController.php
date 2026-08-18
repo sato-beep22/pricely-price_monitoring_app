@@ -109,7 +109,7 @@ PROMPT;
                     'model' => $modelId,
                     'messages' => $messages,
                     'temperature' => 0.7,
-                    'max_tokens' => 512,
+                    'max_tokens' => 2048,
                 ]);
 
             if (! $response->successful()) {
