@@ -18,10 +18,11 @@
                     <li><a href="{{ route('shops.edit') }}" class="{{ request()->routeIs('shops.edit') ? 'active' : '' }}">My Shop</a></li>
                     <li><a href="{{ route('prices.create') }}" class="{{ request()->routeIs('prices.create') ? 'active' : '' }}">Update Prices</a></li>
                 @elseif(Auth::user()->isAdmin())
-                    <li><a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.index') ? 'active' : '' }}">Reports</a></li>
                     <li><a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.index') ? 'active' : '' }}">Users</a></li>
                     <li><a href="{{ route('admin.ceiling-prices.index') }}" class="{{ request()->routeIs('admin.ceiling-prices.index') ? 'active' : '' }}">Ceiling Prices</a></li>
                     <li><a href="{{ route('admin.price-import.index') }}" class="{{ request()->routeIs('admin.price-import.index') ? 'active' : '' }}">Import Prices</a></li>
+                    <li><a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">Reports</a></li>
+                    <li><a href="{{ route('admin.sms-logs.index') }}" class="{{ request()->routeIs('admin.sms-logs.*') ? 'active' : '' }}">SMS Logs</a></li>
                 @endif
                 @endauth
             </ul>

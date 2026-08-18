@@ -21,14 +21,24 @@ class IprogService
      *
      * @param  string  $phone  The recipient's phone number
      * @param  string  $message  The message content
+     * @param  string  $type  The type of SMS (e.g. 'OTP Verification', 'Price Update')
      * @return bool True if successful, false otherwise
      */
-    public function sendSms(string $phone, string $message): bool
+    public function sendSms(string $phone, string $message, string $type = 'General'): bool
     {
         if (empty($this->apiToken)) {
             Log::warning("IPROG API token is not configured. SMS not sent to {$phone}.");
             return false;
         }
+
+        $smsLog = \App\Models\SmsLog::create([
+            'phone_number' => $phone,
+            'message' => $message,
+            'type' => $type,
+            'status' => 'Pending',
+            'provider' => 'IPROG',
+            'message_code' => 'iSms-' . \Illuminate\Support\Str::random(6),
+        ]);
 
         try {
             $response = Http::asForm()->post($this->apiUrl, [
@@ -39,6 +49,12 @@ class IprogService
 
             if ($response->successful()) {
                 Log::info("SMS sent successfully via IPROG to {$phone}.", ['response' => $response->json()]);
+                
+                $smsLog->update([
+                    'status' => 'Completed',
+                    'response_data' => $response->json(),
+                ]);
+                
                 return true;
             }
 
@@ -47,9 +63,20 @@ class IprogService
                 'response' => $response->body(),
             ]);
 
+            $smsLog->update([
+                'status' => 'Failed',
+                'response_data' => ['status' => $response->status(), 'body' => $response->body()],
+            ]);
+
             return false;
         } catch (\Exception $e) {
             Log::error("Exception while sending SMS via IPROG to {$phone}.", ['error' => $e->getMessage()]);
+            
+            $smsLog->update([
+                'status' => 'Failed',
+                'response_data' => ['error' => $e->getMessage()],
+            ]);
+            
             return false;
         }
     }
@@ -64,6 +91,6 @@ class IprogService
     public function sendOtp(string $phone, string $code): bool
     {
         $message = "Your Pricely verification code is {$code}. It expires in 5 minutes.";
-        return $this->sendSms($phone, $message);
+        return $this->sendSms($phone, $message, 'OTP Verification');
     }
 }

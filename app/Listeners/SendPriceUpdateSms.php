@@ -83,7 +83,7 @@ class SendPriceUpdateSms implements ShouldQueue
             
             $message = implode("\n", $messageLines);
 
-            $this->smsService->sendSms($farmer->phone, $message);
+            $this->smsService->sendSms($farmer->phone, $message, 'Price Update');
         }
     }
 }

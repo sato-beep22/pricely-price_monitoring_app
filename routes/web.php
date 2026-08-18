@@ -93,6 +93,9 @@ Route::middleware('auth')->group(function () {
         // Reports (Now restricted to Admins)
         Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/export', [ReportController::class, 'export'])->name('reports.export');
+
+        // SMS Logs
+        Route::get('/sms-logs', [\App\Http\Controllers\Admin\SmsLogController::class, 'index'])->name('sms-logs.index');
     });
 });
 
