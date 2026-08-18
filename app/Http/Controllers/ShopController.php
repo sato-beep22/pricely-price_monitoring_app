@@ -47,6 +47,11 @@ class ShopController extends Controller
 
         $user = Auth::user();
 
+        // Auto-activate the shop when a valid location has been set
+        if ((float) $validated['latitude'] !== 0.0 || (float) $validated['longitude'] !== 0.0) {
+            $validated['is_active'] = true;
+        }
+
         if ($user->shop) {
             $user->shop->update($validated);
         } else {
