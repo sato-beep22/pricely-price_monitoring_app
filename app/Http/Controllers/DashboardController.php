@@ -21,19 +21,8 @@ class DashboardController extends Controller
         } elseif ($user->isBuyer()) {
             return view('dashboard.buyer');
         } else {
-            $ceilingPrices = collect();
             $crops = Crop::orderBy('name')->get();
-            foreach ($crops as $crop) {
-                $specs = array_map('trim', explode(',', $crop->specification));
-                foreach ($specs as $spec) {
-                    $cp = CeilingPrice::where('crop_id', $crop->id)
-                        ->where('specification', $spec)
-                        ->first();
-                    if ($cp) {
-                        $ceilingPrices->push($cp);
-                    }
-                }
-            }
+            $ceilingPrices = CeilingPrice::with('crop')->get();
 
             $sourceLinks = Setting::where('key', 'like', 'da_price_source_link_%')
                 ->pluck('value', 'key')

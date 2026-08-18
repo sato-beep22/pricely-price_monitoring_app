@@ -10,22 +10,27 @@ Route::get('/shops', function () {
     $shops = Shop::with([
         'user' => function ($query) {
             $query->withCount('subscribers');
-        },
-        'prices' => function ($query) {
-            // Fetch all prices
-        },
+        }
     ])
-        ->where('is_active', true)
-        ->get();
+    ->where('is_active', true)
+    ->get();
 
-    $formattedShops = $shops->map(function ($shop) {
-        $latestPrices = $shop->prices->groupBy(function ($price) {
-            return $price->crop_id.'_'.$price->specification;
-        })->map(function ($prices) {
-            return $prices->sortByDesc('recorded_at')->first();
-        })->values();
+    $shopIds = $shops->pluck('id');
 
-        $latestPrice = $shop->prices->sortByDesc('recorded_at')->first();
+    $allLatestPrices = \App\Models\Price::whereIn('shop_id', $shopIds)
+        ->whereIn('id', function ($query) {
+            $query->selectRaw('MAX(id)')
+                ->from('prices')
+                ->groupBy('shop_id', 'crop_id', 'specification');
+        })
+        ->with('crop')
+        ->get()
+        ->groupBy('shop_id');
+
+    $formattedShops = $shops->map(function ($shop) use ($allLatestPrices) {
+        $latestPrices = $allLatestPrices->get($shop->id, collect());
+        
+        $latestPrice = $latestPrices->sortByDesc('recorded_at')->first();
 
         return [
             'id' => $shop->id,
@@ -48,7 +53,7 @@ Route::get('/shops', function () {
                     'price' => $p->price_per_kg,
                     'date' => $p->recorded_at->format('M d, Y'),
                 ];
-            }),
+            })->values(),
         ];
     });
 
@@ -62,8 +67,7 @@ Route::post('/shops/{id}/view', function (int $id) {
     return response()->json(['ok' => true]);
 });
 
-// Provide forecast data for ApexCharts
-Route::get('/forecast/{crop_id}', function ($crop_id, Request $request, PriceForecastService $forecastService) {
+Route::get('/v2/forecast/{crop_id}', function ($crop_id, Request $request, PriceForecastService $forecastService) {
     $spec = $request->query('spec');
     $data = $forecastService->getForecast($crop_id, $spec);
 
