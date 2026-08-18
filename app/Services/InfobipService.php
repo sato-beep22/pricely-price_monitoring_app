@@ -30,6 +30,7 @@ class InfobipService
      */
     public function sendOtp(string $phone, string $code): bool
     {
+        $phone = $this->formatPhone($phone);
         $message = "Your Pricely verification code is {$code}. It expires in 5 minutes.";
 
         // If we are in test mode, do not send the actual SMS (save the 15 free messages).
@@ -74,8 +75,28 @@ class InfobipService
             return false;
         }
     }
+    /**
+     * Format phone number to E.164 format (+63)
+     */
+    protected function formatPhone(string $phone): string
+    {
+        // If it starts with 09, convert to +639
+        if (preg_match('/^0(9\d{9})$/', $phone, $matches)) {
+            return '+63' . $matches[1];
+        }
+
+        // If it starts with 639, prepend +
+        if (preg_match('/^63(9\d{9})$/', $phone, $matches)) {
+            return '+63' . $matches[1];
+        }
+
+        return $phone;
+    }
+
     public function sendSms(string $phone, string $message): bool
     {
+        $phone = $this->formatPhone($phone);
+
         if ($this->testMode) {
             Log::info("INFOBIP TEST MODE: Fake SMS sent to {$phone}. Message: {$message}");
             return true;
