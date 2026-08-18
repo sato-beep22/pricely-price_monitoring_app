@@ -39,11 +39,12 @@ class SendPriceUpdateSms implements ShouldQueue
         }
 
         $message = sprintf(
-            'Pricely Update: %s updated their price for %s to P%s/kg. Visit the map for details.',
+            'Pricely Update: Magandang araw mga ka Farmers! Ang shop na %s ay nag update ng presyo ng %s sa halagang P%s/kg. Bisitahin ang mapa para sa detalye.',
             $shop->name,
             $crop->name,
             number_format($price->price_per_kg, 2)
         );
+
 
         foreach ($subscriptions as $subscription) {
             $farmer = $subscription->farmer;

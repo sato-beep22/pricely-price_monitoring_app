@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Crop;
 use App\Models\Shop;
 use App\Models\Subscription;
+use App\Models\User;
+use App\Services\InfobipService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,7 +36,7 @@ class SubscriptionController extends Controller
     /**
      * Subscribe to a buyer.
      */
-    public function store(Request $request)
+    public function store(Request $request, InfobipService $infobipService)
     {
         $request->validate([
             'buyer_id' => 'required|exists:users,id',
@@ -49,6 +51,15 @@ class SubscriptionController extends Controller
             'crop_ids' => $request->crop_ids,
             'is_active' => true,
         ]);
+
+        $farmer = Auth::user();
+        $buyer = User::with('shop')->find($request->buyer_id);
+        $shopName = $buyer && $buyer->shop ? $buyer->shop->name : 'the shop';
+
+        if (! empty($farmer->phone)) {
+            $message = "Pricely: Matagumpay kang naka-subscribe sa mga update ng presyo mula sa {$shopName}. Makakatanggap ka ng text kapag nagbago ang kanilang presyo.";
+            $infobipService->sendSms($farmer->phone, $message);
+        }
 
         return redirect()->back()->with('status', 'Successfully subscribed to price alerts.');
     }
