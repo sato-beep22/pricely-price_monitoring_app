@@ -24,10 +24,10 @@
                     @else
                         <ul class="space-y-3">
                             @foreach($subscriptions as $sub)
-                                <li class="flex items-center justify-between p-4 bg-base-200 rounded-box border border-base-300">
-                                    <div>
-                                        <div class="font-bold">{{ $sub->buyer->shop->name ?? $sub->buyer->name }}</div>
-                                        <div class="text-sm text-base-content/70">{{ $sub->buyer->shop->address ?? 'No address' }}</div>
+                                <li class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-base-200 rounded-box border border-base-300">
+                                    <div class="w-full">
+                                        <div class="font-bold text-lg leading-tight">{{ $sub->buyer->shop->name ?? $sub->buyer->name }}</div>
+                                        <div class="text-sm text-base-content/70 mt-1">{{ $sub->buyer->shop->address ?? 'No address' }}</div>
                                         @if($sub->crop_ids)
                                             <div class="text-xs text-base-content/60 mt-1">
                                                 Crops: {{ count($sub->crop_ids) }} selected
@@ -35,17 +35,17 @@
                                         @endif
                                     </div>
 
-                                    <div class="flex items-center gap-4">
+                                    <div class="flex flex-row items-center justify-between w-full sm:w-auto gap-4">
                                         <form method="POST" action="{{ route('subscriptions.update', $sub) }}" x-data="{ active: {{ $sub->is_active ? 'true' : 'false' }} }">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="is_active" :value="active ? 1 : 0">
-                                            <label class="cursor-pointer label p-0 gap-2">
-                                                <span class="text-xs font-semibold" :class="active ? 'text-emerald-600' : 'text-slate-400'" x-text="active ? 'SMS ON' : 'SMS OFF'"></span> 
+                                            <label class="cursor-pointer flex items-center gap-2 p-0 m-0">
+                                                <span class="text-xs font-semibold whitespace-nowrap" :class="active ? 'text-emerald-600' : 'text-slate-400'" x-text="active ? 'SMS ON' : 'SMS OFF'"></span> 
                                                 <input type="checkbox" class="toggle toggle-success toggle-sm" x-model="active" @change="$event.target.form.submit()" />
                                             </label>
                                         </form>
-                                        <button type="button" @click="$dispatch('open-modal', 'unsubscribe-{{ $sub->id }}')" class="btn btn-error btn-sm btn-outline hover:btn-active">{{ __('Unsubscribe') }}</button>
+                                        <button type="button" @click="$dispatch('open-modal', 'unsubscribe-{{ $sub->id }}')" class="btn btn-error btn-sm btn-outline hover:btn-active whitespace-nowrap">{{ __('Unsubscribe') }}</button>
                                     </div>
 
                                     <!-- Unsubscribe Confirmation Modal -->

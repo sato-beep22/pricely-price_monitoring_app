@@ -15,17 +15,14 @@ class PriceUpdated
 
     public Shop $shop;
 
-    public Crop $crop;
-
-    public Price $price;
+    public array $updates;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Shop $shop, Crop $crop, Price $price)
+    public function __construct(Shop $shop, array $updates)
     {
         $this->shop = $shop;
-        $this->crop = $crop;
-        $this->price = $price;
+        $this->updates = $updates;
     }
 }

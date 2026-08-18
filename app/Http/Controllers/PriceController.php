@@ -60,9 +60,18 @@ class PriceController extends Controller
 
         $count = 0;
 
+        $updates = [];
+
         foreach ($request->entries as $entry) {
             $crop = Crop::findOrFail($entry['crop_id']);
             $specification = $entry['specification'];
+
+            // Get the old price BEFORE inserting the new one
+            $oldPriceRecord = Price::where('shop_id', $shop->id)
+                ->where('crop_id', $crop->id)
+                ->where('specification', $specification)
+                ->latest('recorded_at')
+                ->first();
 
             $price = Price::create([
                 'shop_id' => $shop->id,
@@ -73,9 +82,19 @@ class PriceController extends Controller
                 'source' => 'buyer',
             ]);
 
-            // Dispatch event to trigger SMS notifications
-            PriceUpdated::dispatch($shop, $crop, $price);
+            $updates[] = [
+                'crop_id' => $crop->id,
+                'crop_name' => $crop->name,
+                'specification' => $specification,
+                'old_price' => $oldPriceRecord ? $oldPriceRecord->price_per_kg : null,
+                'new_price' => $price->price_per_kg,
+            ];
             $count++;
+        }
+
+        if (!empty($updates)) {
+            // Dispatch one event for all updates
+            PriceUpdated::dispatch($shop, $updates);
         }
 
         $label = $count === 1 ? '1 crop price' : "{$count} crop prices";
