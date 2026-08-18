@@ -14,10 +14,11 @@ class InfobipService
 
     public function __construct()
     {
-        $this->apiKey = config('services.infobip.api_key', env('INFOBIP_API_KEY'));
-        $this->baseUrl = config('services.infobip.base_url', env('INFOBIP_BASE_URL', 'https://api.infobip.com'));
-        $this->testMode = config('services.infobip.test_mode', env('INFOBIP_TEST_MODE', true));
-        $this->sender = config('services.infobip.sender', env('INFOBIP_SENDER', 'ServiceSMS'));
+        $this->apiKey = config('services.infobip.api_key');
+        $this->baseUrl = config('services.infobip.base_url');
+        $testModeConfig = config('services.infobip.test_mode');
+        $this->testMode = filter_var($testModeConfig, FILTER_VALIDATE_BOOLEAN);
+        $this->sender = config('services.infobip.sender');
     }
 
     /**

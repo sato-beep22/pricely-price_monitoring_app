@@ -50,4 +50,11 @@ return [
         'api_key' => env('GROQ_API_KEY'),
     ],
 
+    'infobip' => [
+        'api_key' => env('INFOBIP_API_KEY'),
+        'base_url' => env('INFOBIP_BASE_URL', 'https://6zw45r.api.infobip.com'),
+        'test_mode' => env('INFOBIP_TEST_MODE', true),
+        'sender' => env('INFOBIP_SENDER', 'ServiceSMS'),
+    ],
+
 ];
