@@ -107,6 +107,14 @@
                     const lat = {{ $shop->latitude ?? 14.5995 }};
                     const lng = {{ $shop->longitude ?? 120.9842 }};
                     
+                    // Fix Leaflet's default icon path issue with Vite
+                    delete L.Icon.Default.prototype._getIconUrl;
+                    L.Icon.Default.mergeOptions({
+                        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+                        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+                    });
+
                     const map = L.map('shop-map').setView([lat, lng], 15);
                     
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -117,6 +125,9 @@
                         .addTo(map)
                         .bindPopup('<b>{{ addslashes($shop->name) }}</b><br>Here is your shop.')
                         .openPopup();
+                    
+                    // Invalidate size to fix tile loading issues if container size was calculated wrong initially
+                    setTimeout(() => map.invalidateSize(), 100);
                 }
             }, 500);
         });
