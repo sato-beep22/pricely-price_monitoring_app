@@ -6,7 +6,7 @@ use App\Models\Crop;
 use App\Models\Shop;
 use App\Models\Subscription;
 use App\Models\User;
-use App\Services\InfobipService;
+use App\Services\SemaphoreService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +36,7 @@ class SubscriptionController extends Controller
     /**
      * Subscribe to a buyer.
      */
-    public function store(Request $request, InfobipService $infobipService)
+    public function store(Request $request, SemaphoreService $smsService)
     {
         $request->validate([
             'buyer_id' => 'required|exists:users,id',
@@ -58,7 +58,7 @@ class SubscriptionController extends Controller
 
         if (! empty($farmer->phone)) {
             $message = "Pricely: Matagumpay kang naka-subscribe sa mga update ng presyo mula sa {$shopName}. Makakatanggap ka ng text kapag nagbago ang kanilang presyo.";
-            $infobipService->sendSms($farmer->phone, $message);
+            $smsService->sendSms($farmer->phone, $message);
         }
 
         return redirect()->back()->with('status', 'Successfully subscribed to price alerts.');

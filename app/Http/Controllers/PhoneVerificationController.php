@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PhoneVerificationRequest;
 use App\Http\Requests\VerifyCodeRequest;
-use App\Services\InfobipService;
+use App\Services\SemaphoreService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -13,7 +13,7 @@ class PhoneVerificationController extends Controller
     /**
      * Create the controller instance.
      */
-    public function __construct(public InfobipService $infobipService) {}
+    public function __construct(public SemaphoreService $smsService) {}
 
     /**
      * Send the verification code to the user's phone.
@@ -21,6 +21,9 @@ class PhoneVerificationController extends Controller
     public function store(PhoneVerificationRequest $request)
     {
         $user = $request->user();
+
+        // Check if there's already a valid code sent recently (e.g., within 1 minute) to prevent spam
+        // (Assuming you have a way to track this, otherwise simplified here)
 
         // Generate a 5-digit verification code
         $code = str_pad((string) random_int(10000, 99999), 5, '0', STR_PAD_LEFT);
@@ -31,11 +34,11 @@ class PhoneVerificationController extends Controller
         $user->phone_verification_expires_at = now()->addMinutes(5);
         $user->save();
 
-        // Send OTP via Infobip
-        $sent = $this->infobipService->sendOtp($user->phone, $code);
+        // Send OTP via SMS
+        $sent = $this->smsService->sendOtp($user->phone, $code);
 
         if (! $sent) {
-            Log::warning("Infobip OTP failed for phone {$user->phone}. Code: {$code}");
+            Log::warning("OTP failed for phone {$user->phone}. Code: {$code}");
         }
 
         return redirect()->back()->with('status', 'phone-verification-sent');

@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\PriceUpdated;
-use App\Services\InfobipService;
+use App\Services\SemaphoreService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -12,14 +12,14 @@ class SendPriceUpdateSms implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    protected InfobipService $infobipService;
+    protected SemaphoreService $smsService;
 
     /**
      * Create the event listener.
      */
-    public function __construct(InfobipService $infobipService)
+    public function __construct(SemaphoreService $smsService)
     {
-        $this->infobipService = $infobipService;
+        $this->smsService = $smsService;
     }
 
     /**
@@ -56,7 +56,7 @@ class SendPriceUpdateSms implements ShouldQueue
             }
 
             if (! empty($farmer->phone)) {
-                $this->infobipService->sendSms($farmer->phone, $message);
+                $this->smsService->sendSms($farmer->phone, $message);
             } else {
                 Log::info("Skipped SMS to farmer ID {$farmer->id} because no phone number is set.");
             }
