@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         legendBreakEven.classList.add('hidden');
 
-        fetch(`/api/forecast/${cropId}?spec=${spec}`)
+        fetch(`/api/forecast/${cropId}?spec=${spec}&_t=${Date.now()}`)
             .then(res => res.json())
             .then(data => {
                 loader.classList.add('hidden');

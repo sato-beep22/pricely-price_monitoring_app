@@ -67,5 +67,8 @@ Route::get('/forecast/{crop_id}', function ($crop_id, Request $request, PriceFor
     $spec = $request->query('spec');
     $data = $forecastService->getForecast($crop_id, $spec);
 
-    return response()->json($data);
+    return response()->json($data)->withHeaders([
+        'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma' => 'no-cache',
+    ]);
 });
