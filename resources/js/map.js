@@ -738,7 +738,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!el || !userLatLng) { return; }
 
         const sorted = shops
-            .filter((s) => s.latitude !== 0 && s.longitude !== 0)
+            .filter((s) => parseFloat(s.latitude) !== 0 && parseFloat(s.longitude) !== 0)
             .map((s) => ({ ...s, _distance: haversineDistance(userLatLng.lat, userLatLng.lng, s.latitude, s.longitude) }))
             .sort((a, b) => a._distance - b._distance)
             .slice(0, 6);
@@ -757,7 +757,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!el) { return; }
 
         const sorted = [...shops]
-            .filter((s) => s.latitude !== 0 && s.longitude !== 0)
+            .filter((s) => parseFloat(s.latitude) !== 0 && parseFloat(s.longitude) !== 0)
             .sort((a, b) => (b.subscribers_count + b.views) - (a.subscribers_count + a.views))
             .slice(0, 6);
 
@@ -781,7 +781,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!el) { return; }
 
         const sorted = [...shops]
-            .filter((s) => s.latest_price_at && s.latitude !== 0 && s.longitude !== 0)
+            .filter((s) => s.latest_price_at && parseFloat(s.latitude) !== 0 && parseFloat(s.longitude) !== 0)
             .sort((a, b) => new Date(b.latest_price_at) - new Date(a.latest_price_at))
             .slice(0, 6);
 
@@ -806,7 +806,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!el) { return; }
 
         const shopsWithMax = shops
-            .filter((s) => s.prices && s.prices.length > 0 && s.latitude !== 0 && s.longitude !== 0)
+            .filter((s) => s.prices && s.prices.length > 0 && parseFloat(s.latitude) !== 0 && parseFloat(s.longitude) !== 0)
             .map((s) => ({
                 ...s,
                 _maxPrice: Math.max(...s.prices.map((p) => parseFloat(p.price))),
@@ -977,7 +977,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         shops.forEach((shop) => {
             if (filterClassification !== 'all' && shop.classification !== filterClassification) { return; }
-            if (shop.latitude === 0 && shop.longitude === 0) { return; }
+            if (parseFloat(shop.latitude) === 0 && parseFloat(shop.longitude) === 0) { return; }
 
             let hasPrice = false;
             let cropInfoHtml = '';
