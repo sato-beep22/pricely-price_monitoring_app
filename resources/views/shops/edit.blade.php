@@ -138,7 +138,7 @@
                                 detectBtn.innerHTML = '<span class="loading loading-spinner loading-xs"></span> Detecting...';
                                 detectBtn.disabled = true;
                                 
-                                navigator.geolocation.getCurrentPosition(function(position) {
+                                const successCallback = function(position) {
                                     const lat = position.coords.latitude.toFixed(7);
                                     const lng = position.coords.longitude.toFixed(7);
                                     
@@ -157,14 +157,35 @@
                                     detectBtn.innerHTML = originalHtml;
                                     detectBtn.disabled = false;
                                     if(typeof lucide !== 'undefined') lucide.createIcons();
-                                }, function(error) {
-                                    alert("Error detecting location: " + error.message);
+                                };
+
+                                const errorCallback = function(error) {
+                                    let errorMsg = "Unable to detect location.";
+                                    if(error.code === 1) errorMsg = "Location access denied. Please allow location permissions in your browser.";
+                                    else if(error.code === 2) errorMsg = "Location unavailable. Please ensure your GPS/location services are turned on.";
+                                    else if(error.code === 3) errorMsg = "Location detection timed out. Please try again or click the map manually.";
+                                    
+                                    alert(errorMsg);
                                     detectBtn.innerHTML = originalHtml;
                                     detectBtn.disabled = false;
                                     if(typeof lucide !== 'undefined') lucide.createIcons();
+                                };
+
+                                // Try high accuracy first
+                                navigator.geolocation.getCurrentPosition(successCallback, function(error) {
+                                    // If high accuracy times out (code 3), try again with low accuracy
+                                    if (error.code === 3) {
+                                        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
+                                            enableHighAccuracy: false,
+                                            timeout: 10000,
+                                            maximumAge: 0
+                                        });
+                                    } else {
+                                        errorCallback(error);
+                                    }
                                 }, {
                                     enableHighAccuracy: true,
-                                    timeout: 5000,
+                                    timeout: 5000, // 5 seconds for high accuracy
                                     maximumAge: 0
                                 });
                             } else {
