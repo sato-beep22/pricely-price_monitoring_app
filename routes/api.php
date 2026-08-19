@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Price;
 use App\Models\Shop;
 use App\Services\PriceForecastService;
 use Illuminate\Http\Request;
@@ -10,14 +11,14 @@ Route::get('/shops', function () {
     $shops = Shop::with([
         'user' => function ($query) {
             $query->withCount('subscribers');
-        }
+        },
     ])
-    ->where('is_active', true)
-    ->get();
+        ->where('is_active', true)
+        ->get();
 
     $shopIds = $shops->pluck('id');
 
-    $allLatestPrices = \App\Models\Price::whereIn('shop_id', $shopIds)
+    $allLatestPrices = Price::whereIn('shop_id', $shopIds)
         ->whereIn('id', function ($query) {
             $query->selectRaw('MAX(id)')
                 ->from('prices')
@@ -29,7 +30,7 @@ Route::get('/shops', function () {
 
     $formattedShops = $shops->map(function ($shop) use ($allLatestPrices) {
         $latestPrices = $allLatestPrices->get($shop->id, collect());
-        
+
         $latestPrice = $latestPrices->sortByDesc('recorded_at')->first();
 
         return [

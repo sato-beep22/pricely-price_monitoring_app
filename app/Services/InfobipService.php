@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\Log;
 class InfobipService
 {
     protected ?string $apiKey;
+
     protected ?string $baseUrl;
+
     protected bool $testMode;
+
     protected string $sender;
 
     public function __construct()
@@ -36,11 +39,13 @@ class InfobipService
         // If we are in test mode, do not send the actual SMS (save the 15 free messages).
         if ($this->testMode) {
             Log::info("INFOBIP TEST MODE: Fake SMS sent to {$phone}. Code: {$code}");
+
             return true;
         }
 
         if (empty($this->apiKey)) {
             Log::warning("Infobip API key is not configured. OTP not sent to {$phone}.");
+
             return false;
         }
 
@@ -49,18 +54,19 @@ class InfobipService
                 'Authorization' => "App {$this->apiKey}",
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-            ])->post(rtrim($this->baseUrl, '/') . '/sms/2/text/advanced', [
+            ])->post(rtrim($this->baseUrl, '/').'/sms/2/text/advanced', [
                 'messages' => [
                     [
                         'destinations' => [['to' => $phone]],
                         'from' => $this->sender,
                         'text' => $message,
-                    ]
-                ]
+                    ],
+                ],
             ]);
 
             if ($response->successful()) {
                 Log::info("OTP sent successfully via Infobip to {$phone}.", ['response' => $response->json()]);
+
                 return true;
             }
 
@@ -72,9 +78,11 @@ class InfobipService
             return false;
         } catch (\Exception $e) {
             Log::error("Exception while sending OTP via Infobip to {$phone}.", ['error' => $e->getMessage()]);
+
             return false;
         }
     }
+
     /**
      * Format phone number to E.164 format (+63)
      */
@@ -82,12 +90,12 @@ class InfobipService
     {
         // If it starts with 09, convert to +639
         if (preg_match('/^0(9\d{9})$/', $phone, $matches)) {
-            return '+63' . $matches[1];
+            return '+63'.$matches[1];
         }
 
         // If it starts with 639, prepend +
         if (preg_match('/^63(9\d{9})$/', $phone, $matches)) {
-            return '+63' . $matches[1];
+            return '+63'.$matches[1];
         }
 
         return $phone;
@@ -99,11 +107,13 @@ class InfobipService
 
         if ($this->testMode) {
             Log::info("INFOBIP TEST MODE: Fake SMS sent to {$phone}. Message: {$message}");
+
             return true;
         }
 
         if (empty($this->apiKey)) {
             Log::warning("Infobip API key is not configured. SMS not sent to {$phone}.");
+
             return false;
         }
 
@@ -112,18 +122,19 @@ class InfobipService
                 'Authorization' => "App {$this->apiKey}",
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-            ])->post(rtrim($this->baseUrl, '/') . '/sms/2/text/advanced', [
+            ])->post(rtrim($this->baseUrl, '/').'/sms/2/text/advanced', [
                 'messages' => [
                     [
                         'destinations' => [['to' => $phone]],
                         'from' => $this->sender,
                         'text' => $message,
-                    ]
-                ]
+                    ],
+                ],
             ]);
 
             if ($response->successful()) {
                 Log::info("SMS sent successfully via Infobip to {$phone}.", ['response' => $response->json()]);
+
                 return true;
             }
 
@@ -135,6 +146,7 @@ class InfobipService
             return false;
         } catch (\Exception $e) {
             Log::error("Exception while sending SMS via Infobip to {$phone}.", ['error' => $e->getMessage()]);
+
             return false;
         }
     }

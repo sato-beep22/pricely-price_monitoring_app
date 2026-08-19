@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Crop;
-use App\Models\Shop;
 use App\Models\Price;
+use App\Models\Shop;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class HistoricalPriceSeeder extends Seeder
 {
@@ -20,6 +20,7 @@ class HistoricalPriceSeeder extends Seeder
 
         if ($crops->isEmpty() || $shops->isEmpty()) {
             $this->command->info('No crops or shops found. Please create crops and shops first.');
+
             return;
         }
 
@@ -30,19 +31,23 @@ class HistoricalPriceSeeder extends Seeder
             foreach ($crops as $crop) {
                 // Base price for realistic variation
                 $basePrice = rand(20, 100);
-                
+
                 // Get valid specifications for this crop
                 $specs = array_map('trim', explode(',', $crop->specification));
-                
+
                 $currentDate = clone $startDate;
                 while ($currentDate <= $endDate) {
                     foreach ($specs as $spec) {
-                        if (empty($spec)) continue;
-                        
+                        if (empty($spec)) {
+                            continue;
+                        }
+
                         // Random walk for price (trend) per spec
                         $change = rand(-2, 3);
                         $basePrice += $change;
-                        if ($basePrice < 10) $basePrice = 10;
+                        if ($basePrice < 10) {
+                            $basePrice = 10;
+                        }
 
                         Price::create([
                             'shop_id' => $shop->id,

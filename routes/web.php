@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\PriceImportController;
+use App\Http\Controllers\Admin\SmsLogController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\CeilingPriceController;
 use App\Http\Controllers\ChatbotController;
@@ -95,7 +96,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/reports/export', [ReportController::class, 'export'])->name('reports.export');
 
         // SMS Logs
-        Route::get('/sms-logs', [\App\Http\Controllers\Admin\SmsLogController::class, 'index'])->name('sms-logs.index');
+        Route::get('/sms-logs', [SmsLogController::class, 'index'])->name('sms-logs.index');
     });
 });
 

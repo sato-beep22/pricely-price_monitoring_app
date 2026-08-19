@@ -93,7 +93,7 @@ class PriceController extends Controller
             $count++;
         }
 
-        if (!empty($updates)) {
+        if (! empty($updates)) {
             // Dispatch one event for all updates
             PriceUpdated::dispatch($shop, $updates);
         }

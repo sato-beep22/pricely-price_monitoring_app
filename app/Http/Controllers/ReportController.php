@@ -7,6 +7,7 @@ use App\Models\Price;
 use App\Models\Shop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ReportController extends Controller
 {
@@ -26,7 +27,7 @@ class ReportController extends Controller
         $selectedShop = $request->input('shop_id');
         $selectedVariety = $request->input('variety');
 
-        $prices = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 20);
+        $prices = new LengthAwarePaginator([], 0, 20);
         if ($selectedCrop) {
             $query = Price::where('crop_id', $selectedCrop)
                 ->where('recorded_at', '>=', $startDate)

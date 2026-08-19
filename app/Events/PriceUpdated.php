@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Crop;
-use App\Models\Price;
 use App\Models\Shop;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
