@@ -97,6 +97,7 @@ Route::middleware('auth')->group(function () {
 
         // SMS Logs
         Route::get('/sms-logs', [SmsLogController::class, 'index'])->name('sms-logs.index');
+        Route::delete('/sms-logs/{smsLog}', [SmsLogController::class, 'destroy'])->name('sms-logs.destroy');
     });
 });
 

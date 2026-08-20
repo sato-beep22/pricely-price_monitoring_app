@@ -47,7 +47,8 @@
                             <th class="p-4 font-medium">Type</th>
                             <th class="p-4 font-medium">Message</th>
                             <th class="p-4 font-medium">Status</th>
-                            <th class="p-4 pr-6 font-medium">Date</th>
+                            <th class="p-4 font-medium">Date</th>
+                            <th class="p-4 pr-6 font-medium text-right">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="text-sm divide-y divide-slate-100">
@@ -97,14 +98,23 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="p-4 pr-6 align-top whitespace-nowrap text-slate-500">
-                                    {{ $log->created_at->format('M d, Y') }}<br>
-                                    <span class="text-xs">{{ $log->created_at->format('h:i A') }}</span>
+                                <td class="p-4 align-top whitespace-nowrap text-slate-500">
+                                    {{ $log->created_at->timezone('Asia/Manila')->format('M d, Y') }}<br>
+                                    <span class="text-xs">{{ $log->created_at->timezone('Asia/Manila')->format('h:i A') }}</span>
+                                </td>
+                                <td class="p-4 pr-6 align-top text-right whitespace-nowrap">
+                                    <form action="{{ route('admin.sms-logs.destroy', $log) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this log?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete Log">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="p-8 text-center text-slate-500">
+                                <td colspan="7" class="p-8 text-center text-slate-500">
                                     <div class="flex flex-col items-center justify-center">
                                         <i data-lucide="message-square-dashed" class="w-12 h-12 text-slate-300 mb-3"></i>
                                         <p>No SMS logs found.</p>
