@@ -7,7 +7,7 @@
 
     <title>{{ config('app.name', 'Pricely') }}</title>
     
-    <link rel="icon" type="image/png" href="{{ asset('san-mateo-logo.png') }}?v=2">
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v=3">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
