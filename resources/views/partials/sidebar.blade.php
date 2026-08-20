@@ -5,12 +5,11 @@
     <!-- Header -->
     <div class="p-6">
         <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-[#04965e] flex items-center justify-center text-white shadow-sm">
-                <i data-lucide="sprout" class="w-6 h-6"></i>
-            </div>
+            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-12 h-12 object-contain shadow-sm">
             <div class="flex flex-col">
-                <span class="font-bold text-slate-800 text-lg leading-none tracking-tight">Pricely Agri</span>
-                <span class="text-xs font-bold text-emerald-600 tracking-wider mt-1">{{ strtoupper(auth()->user()?->role ?? 'GUEST') }} SPACE</span>
+                <span class="font-bold text-slate-800 text-lg leading-none tracking-tight">Pricely</span>
+                <span class="text-[10px] md:text-xs font-medium text-slate-500 leading-tight mt-0.5">San Mateo Isabela</span>
+                <span class="text-[10px] font-bold text-emerald-600 tracking-wider mt-1">{{ strtoupper(auth()->user()?->role ?? 'GUEST') }} SPACE</span>
             </div>
         </a>
     </div>

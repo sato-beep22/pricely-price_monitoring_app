@@ -7,7 +7,7 @@
 
         <title>{{ config('app.name', 'Pricely') }}</title>
 
-        <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2304965e' /%3E%3Cpath d='M7 18h10' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' /%3E%3Cpath d='M10 18c5.5-1.25 6-9.5 6-9.5s-2 1-4 2c-2.5-3.5-6-3-6-3s1 4.5 3 5.5c0 0-2.5 1-1 5' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' /%3E%3C/svg%3E">
+        <link rel="icon" href="{{ asset('san-mateo-logo.png') }}">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="https://unpkg.com/lucide@latest"></script>
@@ -33,12 +33,13 @@
             <!-- Logo -->
             <div class="mb-2">
                 <a href="/" class="flex items-center gap-3 group">
-                    <span class="w-10 h-10 bg-[#04965e] rounded-xl flex items-center justify-center text-white shadow-lg shadow-emerald-200 group-hover:scale-105 transition-all duration-300">
-                        <i data-lucide="sprout" class="w-6 h-6"></i>
-                    </span>
-                    <span class="font-display font-bold text-2xl text-gradient">
-                        Pricely
-                    </span>
+                    <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-14 h-14 object-contain shadow-md rounded-xl group-hover:scale-105 transition-all duration-300">
+                    <div class="flex flex-col">
+                        <span class="font-display font-bold text-2xl text-gradient leading-none">
+                            Pricely
+                        </span>
+                        <span class="text-xs font-medium text-slate-500 leading-tight">San Mateo Isabela</span>
+                    </div>
                 </a>
             </div>
 

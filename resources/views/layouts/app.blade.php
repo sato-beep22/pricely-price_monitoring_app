@@ -7,7 +7,7 @@
 
     <title>{{ config('app.name', 'Pricely') }}</title>
     
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2304965e' /%3E%3Cpath d='M7 18h10' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' /%3E%3Cpath d='M10 18c5.5-1.25 6-9.5 6-9.5s-2 1-4 2c-2.5-3.5-6-3-6-3s1 4.5 3 5.5c0 0-2.5 1-1 5' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' /%3E%3C/svg%3E">
+    <link rel="icon" href="{{ asset('san-mateo-logo.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -55,10 +55,11 @@
                 <!-- Mobile Header for Hamburger -->
                 <div class="md:hidden flex items-center justify-between bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-[#04965e] flex items-center justify-center text-white">
-                            <i data-lucide="sprout" class="w-5 h-5"></i>
+                        <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-8 h-8 object-contain shadow-sm rounded-lg">
+                        <div class="flex flex-col">
+                            <span class="font-bold text-slate-800 text-lg tracking-tight leading-none">Pricely</span>
+                            <span class="text-[10px] font-medium text-slate-500 leading-tight">San Mateo Isabela</span>
                         </div>
-                        <span class="font-bold text-slate-800 text-lg tracking-tight">Pricely</span>
                     </div>
                     <button @click="sidebarOpen = true" class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
                         <i data-lucide="menu" class="w-6 h-6"></i>

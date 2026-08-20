@@ -3,13 +3,12 @@
         
         <!-- Logo segment -->
         <a href="/" class="flex items-center gap-2 group shrink-0">
-            <span class="w-8 h-8 bg-[#04965e] rounded-lg flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-all duration-300">
-                <i data-lucide="sprout" class="w-5 h-5"></i>
-            </span>
+            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-10 h-10 object-contain shadow-sm group-hover:scale-105 transition-all duration-300">
             <div class="flex flex-col">
                 <span class="font-display font-bold text-base md:text-lg text-slate-900 tracking-tight leading-none">
                     Pricely
                 </span>
+                <span class="text-[10px] md:text-xs font-medium text-slate-500 leading-tight">San Mateo Isabela</span>
             </div>
         </a>
 
