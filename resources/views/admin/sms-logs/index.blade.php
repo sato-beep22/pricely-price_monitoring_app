@@ -4,7 +4,7 @@
     <h2 class="font-display font-bold text-2xl text-slate-900 leading-tight tracking-tight page-header">
         {{ __('SMS Logs') }}
     </h2>
-    <p class="text-sm text-slate-500 mt-1">Manage and track your SMS message history via IPROG.</p>
+    <p class="text-sm text-slate-500 mt-1">Manage and track your SMS message history.</p>
 @endsection
 
 @section('content')
@@ -54,7 +54,7 @@
                         @forelse($logs as $log)
                             <tr class="hover:bg-slate-50 transition-colors">
                                 <td class="p-4 pl-6 align-top">
-                                    <span class="font-mono text-rose-500 bg-rose-50 px-2 py-1 rounded text-xs">{{ $log->message_code ?? 'iSms-unknown' }}</span>
+                                    <span class="font-mono text-rose-500 bg-rose-50 px-2 py-1 rounded text-xs">{{ $log->message_code ?? 'unknown' }}</span>
                                 </td>
                                 <td class="p-4 align-top whitespace-nowrap">
                                     <div class="flex items-center gap-2 text-slate-700">

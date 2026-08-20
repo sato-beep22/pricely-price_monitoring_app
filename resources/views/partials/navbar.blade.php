@@ -3,7 +3,7 @@
         
         <!-- Logo segment -->
         <a href="/" class="flex items-center gap-2 group shrink-0">
-            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-10 h-10 object-contain group-hover:scale-105 transition-all duration-300">
+            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-14 h-14 object-contain group-hover:scale-105 transition-all duration-300">
             <div class="flex flex-col">
                 <span class="font-display font-bold text-base md:text-lg text-slate-900 tracking-tight leading-none">
                     Pricely

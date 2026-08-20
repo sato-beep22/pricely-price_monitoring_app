@@ -28,7 +28,7 @@
             </ul>
         </div>
         <a href="/" class="btn btn-ghost normal-case flex items-center gap-2 h-auto py-2">
-            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-8 h-8 object-contain">
+            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-12 h-12 object-contain">
             <div class="flex flex-col items-start">
                 <span class="text-xl text-primary font-bold leading-none">Pricely</span>
                 <span class="text-[10px] font-medium text-slate-500 leading-tight">San Mateo Isabela</span>

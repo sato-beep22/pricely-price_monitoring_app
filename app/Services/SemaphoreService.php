@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\SmsLog;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -68,10 +69,38 @@ class SemaphoreService
             $response = Http::asForm()->post($this->apiUrl, $this->basePayload($phone, $message));
 
             if ($response->successful()) {
-                Log::info("SMS sent successfully to {$phone}.", ['response' => $response->json()]);
+                $responseData = $response->json();
+                $messageId = null;
+
+                if (is_array($responseData) && count($responseData) > 0 && isset($responseData[0]['message_id'])) {
+                    $messageId = $responseData[0]['message_id'];
+                } elseif (is_array($responseData) && isset($responseData['message_id'])) {
+                    $messageId = $responseData['message_id'];
+                }
+
+                SmsLog::create([
+                    'phone_number' => $phone,
+                    'message' => $message,
+                    'type' => 'Price Update',
+                    'status' => 'Completed',
+                    'provider' => 'Semaphore',
+                    'message_code' => $messageId,
+                    'response_data' => $responseData,
+                ]);
+
+                Log::info("SMS sent successfully to {$phone}.", ['response' => $responseData]);
 
                 return true;
             }
+
+            SmsLog::create([
+                'phone_number' => $phone,
+                'message' => $message,
+                'type' => 'Price Update',
+                'status' => 'Failed',
+                'provider' => 'Semaphore',
+                'response_data' => $response->json(),
+            ]);
 
             Log::error("Failed to send SMS to {$phone}.", [
                 'status' => $response->status(),
@@ -80,6 +109,15 @@ class SemaphoreService
 
             return false;
         } catch (\Exception $e) {
+            SmsLog::create([
+                'phone_number' => $phone,
+                'message' => $message,
+                'type' => 'Price Update',
+                'status' => 'Failed',
+                'provider' => 'Semaphore',
+                'response_data' => ['error' => $e->getMessage()],
+            ]);
+
             Log::error("Exception while sending SMS to {$phone}.", ['error' => $e->getMessage()]);
 
             return false;
@@ -106,23 +144,52 @@ class SemaphoreService
         }
 
         try {
+            $message = "Your Pricely verification code is {$code}. It expires in 5 minutes.";
+            
             if ($this->senderNameActive) {
                 // Use the dedicated OTP route — requires an active sender name.
                 $response = Http::asForm()->post($this->otpUrl, array_merge(
-                    $this->basePayload($phone, 'Your Pricely verification code is {otp}. It expires in 5 minutes.'),
+                    $this->basePayload($phone, $message),
                     ['code' => $code]
                 ));
             } else {
                 // Fallback: regular messages route — does not require an active sender name.
-                $message = "Your Pricely verification code is {$code}. It expires in 5 minutes.";
                 $response = Http::asForm()->post($this->apiUrl, $this->basePayload($phone, $message));
             }
 
             if ($response->successful()) {
-                Log::info("OTP sent successfully to {$phone}.", ['response' => $response->json()]);
+                $responseData = $response->json();
+                $messageId = null;
+
+                if (is_array($responseData) && count($responseData) > 0 && isset($responseData[0]['message_id'])) {
+                    $messageId = $responseData[0]['message_id'];
+                } elseif (is_array($responseData) && isset($responseData['message_id'])) {
+                    $messageId = $responseData['message_id'];
+                }
+
+                SmsLog::create([
+                    'phone_number' => $phone,
+                    'message' => $message,
+                    'type' => 'OTP Verification',
+                    'status' => 'Completed',
+                    'provider' => 'Semaphore',
+                    'message_code' => $messageId,
+                    'response_data' => $responseData,
+                ]);
+
+                Log::info("OTP sent successfully to {$phone}.", ['response' => $responseData]);
 
                 return true;
             }
+
+            SmsLog::create([
+                'phone_number' => $phone,
+                'message' => $message,
+                'type' => 'OTP Verification',
+                'status' => 'Failed',
+                'provider' => 'Semaphore',
+                'response_data' => $response->json(),
+            ]);
 
             Log::error("Failed to send OTP to {$phone}.", [
                 'status' => $response->status(),
@@ -131,6 +198,15 @@ class SemaphoreService
 
             return false;
         } catch (\Exception $e) {
+            SmsLog::create([
+                'phone_number' => $phone,
+                'message' => 'Your Pricely verification code is ...',
+                'type' => 'OTP Verification',
+                'status' => 'Failed',
+                'provider' => 'Semaphore',
+                'response_data' => ['error' => $e->getMessage()],
+            ]);
+
             Log::error("Exception while sending OTP to {$phone}.", ['error' => $e->getMessage()]);
 
             return false;
