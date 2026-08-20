@@ -7,7 +7,7 @@
 
     <title>{{ config('app.name', 'Pricely') }}</title>
     
-    <link rel="icon" href="{{ asset('san-mateo-logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('san-mateo-logo.png') }}?v=2">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -55,7 +55,7 @@
                 <!-- Mobile Header for Hamburger -->
                 <div class="md:hidden flex items-center justify-between bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30">
                     <div class="flex items-center gap-2">
-                        <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-8 h-8 object-contain shadow-sm rounded-lg">
+                        <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-10 h-10 object-contain">
                         <div class="flex flex-col">
                             <span class="font-bold text-slate-800 text-lg tracking-tight leading-none">Pricely</span>
                             <span class="text-[10px] font-medium text-slate-500 leading-tight">San Mateo Isabela</span>

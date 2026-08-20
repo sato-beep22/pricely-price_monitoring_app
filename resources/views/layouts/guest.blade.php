@@ -7,7 +7,7 @@
 
         <title>{{ config('app.name', 'Pricely') }}</title>
 
-        <link rel="icon" href="{{ asset('san-mateo-logo.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('san-mateo-logo.png') }}?v=2">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="https://unpkg.com/lucide@latest"></script>
@@ -33,7 +33,7 @@
             <!-- Logo -->
             <div class="mb-2">
                 <a href="/" class="flex items-center gap-3 group">
-                    <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-14 h-14 object-contain shadow-md rounded-xl group-hover:scale-105 transition-all duration-300">
+                    <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-16 h-16 object-contain group-hover:scale-105 transition-all duration-300">
                     <div class="flex flex-col">
                         <span class="font-display font-bold text-2xl text-gradient leading-none">
                             Pricely

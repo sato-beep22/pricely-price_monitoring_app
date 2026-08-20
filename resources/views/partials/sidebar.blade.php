@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="p-6">
         <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-12 h-12 object-contain shadow-sm">
+            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-12 h-12 object-contain">
             <div class="flex flex-col">
                 <span class="font-bold text-slate-800 text-lg leading-none tracking-tight">Pricely</span>
                 <span class="text-[10px] md:text-xs font-medium text-slate-500 leading-tight mt-0.5">San Mateo Isabela</span>
