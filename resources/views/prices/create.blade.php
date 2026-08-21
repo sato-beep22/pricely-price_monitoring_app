@@ -110,6 +110,16 @@
                                             @focus.stop
                                         />
                                     </label>
+                                    @if($ceiling)
+                                    <div 
+                                        x-cloak
+                                        x-show="prices['{{ $key }}'] && parseFloat(prices['{{ $key }}']) < {{ $ceiling->max_price }}" 
+                                        class="text-error text-xs mt-1.5 font-medium leading-tight"
+                                        x-transition
+                                    >
+                                        Prices should exceed the minimum price of Department of Agriculture
+                                    </div>
+                                    @endif
                                     <input type="hidden" :name="'entries[{{ $key }}][crop_id]'" value="{{ $crop->id }}" :disabled="!selected.includes('{{ $key }}')" />
                                     <input type="hidden" :name="'entries[{{ $key }}][specification]'" value="{{ $spec }}" :disabled="!selected.includes('{{ $key }}')" />
                                 </div>
