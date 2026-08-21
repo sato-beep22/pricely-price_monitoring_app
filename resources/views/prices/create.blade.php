@@ -114,7 +114,7 @@
                                     <div 
                                         x-cloak
                                         x-show="prices['{{ $key }}'] && parseFloat(prices['{{ $key }}']) < {{ $ceiling->max_price }}" 
-                                        class="text-error text-xs mt-1.5 font-medium leading-tight"
+                                        class="text-error text-xs mt-2 px-1 pt-1 font-medium leading-tight"
                                         x-transition
                                     >
                                         Prices should exceed the minimum price of Department of Agriculture
