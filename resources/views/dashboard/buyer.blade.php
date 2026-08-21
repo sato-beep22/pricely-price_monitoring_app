@@ -80,10 +80,6 @@
                                                 @else
                                                     <div class="text-base-content/50 italic">Not set</div>
                                                 @endif
-                                                
-                                                @if($ceiling)
-                                                    <div class="text-xs text-warning mt-1">DA Min: ₱{{ number_format($ceiling->max_price, 2) }}</div>
-                                                @endif
                                             </td>
                                             <td>
                                                 @if($latestPrice)
@@ -96,6 +92,59 @@
                                     @endforeach
                                 @empty
                                     <tr><td colspan="3" class="text-center">No crops available in the system.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DA Minimum Prices -->
+            <div class="card bg-base-100 shadow-sm border border-base-300 md:col-span-3 mt-4 stat-card stagger-5">
+                <div class="card-body">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-3">
+                            <img src="https://img.bomboradyo.com/cauayan/2019/05/DA-LOGO.png" alt="Department of Agriculture Logo" class="w-10 h-10 object-contain drop-shadow-sm rounded-full bg-white">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h2 class="card-title text-lg">{{ __('Department of Agriculture Minimum Prices') }}</h2>
+                                    <span class="badge badge-warning badge-sm">{{ __('Guidelines') }}</span>
+                                </div>
+                                <p class="text-base-content/60 text-sm mt-0.5">{{ __('Minimum recommended buying prices set by the Department of Agriculture.') }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="table" id="ceiling-prices-table">
+                            <thead class="bg-base-200">
+                                <tr>
+                                    <th>{{ __('Crop') }}</th>
+                                    <th>{{ __('Specification') }}</th>
+                                    <th>{{ __('Minimum Price') }}</th>
+                                    <th>{{ __('Effective Date') }}</th>
+                                    <th>{{ __('Notes') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($latestCeilings as $cp)
+                                    <tr class="hover">
+                                        <td class="font-semibold">{{ $cp->crop->name }}</td>
+                                        <td><span class="badge badge-primary badge-outline">{{ ucfirst($cp->specification) }}</span></td>
+                                        <td>
+                                            <span class="badge badge-error badge-lg font-bold gap-1">
+                                                ₱{{ number_format($cp->max_price, 2) }}/{{ $cp->crop->unit }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{ $cp->effective_date->format('M d, Y') }}
+                                        </td>
+                                        <td class="text-sm text-base-content/70 max-w-xs">{{ $cp->notes ?? '—' }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center py-6 text-base-content/50 italic">{{ __('No DA minimum prices have been set yet.') }}</td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
