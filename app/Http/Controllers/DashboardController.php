@@ -19,7 +19,19 @@ class DashboardController extends Controller
         if ($user->isAdmin()) {
             return view('dashboard.admin');
         } elseif ($user->isBuyer()) {
-            return view('dashboard.buyer');
+            $ceilings = \App\Models\CeilingPrice::where('effective_date', '<=', now())
+                ->orderByDesc('effective_date')
+                ->get();
+                
+            $latestCeilings = [];
+            foreach ($ceilings as $ceiling) {
+                $key = $ceiling->crop_id . '_' . $ceiling->specification;
+                if (!isset($latestCeilings[$key])) {
+                    $latestCeilings[$key] = $ceiling;
+                }
+            }
+
+            return view('dashboard.buyer', compact('latestCeilings'));
         } else {
             $crops = Crop::orderBy('name')->get();
             $ceilingPrices = CeilingPrice::with('crop')->get();

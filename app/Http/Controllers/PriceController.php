@@ -38,7 +38,19 @@ class PriceController extends Controller
             $latestPrices[$price->crop_id][$price->specification] = $price;
         }
 
-        return view('prices.create', compact('crops', 'latestPrices'));
+        $ceilings = \App\Models\CeilingPrice::where('effective_date', '<=', now())
+            ->orderByDesc('effective_date')
+            ->get();
+            
+        $latestCeilings = [];
+        foreach ($ceilings as $ceiling) {
+            $key = $ceiling->crop_id . '_' . $ceiling->specification;
+            if (!isset($latestCeilings[$key])) {
+                $latestCeilings[$key] = $ceiling;
+            }
+        }
+
+        return view('prices.create', compact('crops', 'latestPrices', 'latestCeilings'));
     }
 
     /**
@@ -58,6 +70,34 @@ class PriceController extends Controller
             'entries.*.specification' => 'required|string',
             'entries.*.price_per_kg' => 'required|numeric|min:0',
         ]);
+
+        $ceilings = \App\Models\CeilingPrice::where('effective_date', '<=', now())
+            ->orderByDesc('effective_date')
+            ->get();
+            
+        $latestCeilings = [];
+        foreach ($ceilings as $ceiling) {
+            $key = $ceiling->crop_id . '_' . $ceiling->specification;
+            if (!isset($latestCeilings[$key])) {
+                $latestCeilings[$key] = $ceiling;
+            }
+        }
+
+        $errors = [];
+        foreach ($request->entries as $key => $entry) {
+            $ceilingKey = $entry['crop_id'] . '_' . $entry['specification'];
+            if (isset($latestCeilings[$ceilingKey])) {
+                $ceiling = $latestCeilings[$ceilingKey];
+                if ($entry['price_per_kg'] < $ceiling->max_price) {
+                    $crop = Crop::find($entry['crop_id']);
+                    $errors["entries.{$key}.price_per_kg"] = "For {$crop->name} ({$entry['specification']}), your price should exceed the minimum price of DA (₱" . number_format($ceiling->max_price, 2) . ").";
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            return back()->withErrors($errors)->withInput();
+        }
 
         $count = 0;
 

@@ -69,14 +69,20 @@
                                     @foreach($specs as $spec)
                                         @php
                                             $latestPrice = $shop->prices()->where('crop_id', $crop->id)->where('specification', $spec)->latest('recorded_at')->first();
+                                            $key = $crop->id . '_' . $spec;
+                                            $ceiling = $latestCeilings[$key] ?? null;
                                         @endphp
                                         <tr>
                                             <td class="font-semibold">{{ $crop->name }} ({{ ucfirst($spec) }})</td>
                                             <td>
                                                 @if($latestPrice)
-                                                    <span class="text-lg font-bold">₱{{ number_format($latestPrice->price_per_kg, 2) }}</span>
+                                                    <div class="text-lg font-bold {{ $ceiling && $latestPrice->price_per_kg < $ceiling->max_price ? 'text-error' : '' }}">₱{{ number_format($latestPrice->price_per_kg, 2) }}</div>
                                                 @else
-                                                    <span class="text-base-content/50 italic">Not set</span>
+                                                    <div class="text-base-content/50 italic">Not set</div>
+                                                @endif
+                                                
+                                                @if($ceiling)
+                                                    <div class="text-xs text-warning mt-1">DA Min: ₱{{ number_format($ceiling->max_price, 2) }}</div>
                                                 @endif
                                             </td>
                                             <td>

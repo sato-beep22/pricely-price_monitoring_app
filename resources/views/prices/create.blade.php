@@ -7,9 +7,12 @@
 
     <div class="max-w-4xl mx-auto animate-fade-in-up">
 
-        <div class="alert alert-info shadow-sm mb-8">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span>Select one or more crops below, enter their new prices, and submit. SMS alerts will be sent to all subscribed farmers.</span>
+        <div class="alert alert-info shadow-sm mb-8 items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6 mt-0.5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <div>
+                <p>Select one or more crops below, enter their new prices, and submit. SMS alerts will be sent to all subscribed farmers.</p>
+                <p class="font-semibold mt-1">Note: Your price should exceed the minimum price of DA.</p>
+            </div>
         </div>
 
         @if ($errors->any())
@@ -47,6 +50,7 @@
                         @php
                             $key = $crop->id . '_' . $spec;
                             $latest = $latestPrices[$crop->id][$spec] ?? null;
+                            $ceiling = $latestCeilings[$key] ?? null;
                         @endphp
                         <div
                             x-show="matchesSearch('{{ addslashes($crop->name) }}', '{{ addslashes($spec) }}')"
@@ -79,6 +83,12 @@
                                             <span class="badge badge-ghost badge-sm">No price yet</span>
                                         </div>
                                     @endif
+                                    @if($ceiling)
+                                        <div class="text-right flex-shrink-0 border-l border-base-200 pl-3 ml-3">
+                                            <div class="text-xs text-warning font-semibold">DA Minimum Price</div>
+                                            <div class="font-bold text-warning">₱{{ number_format($ceiling->max_price, 2) }}</div>
+                                        </div>
+                                    @endif
                                 </div>
 
                                 {{-- Price Input (shown when selected) --}}
@@ -89,11 +99,12 @@
                                         <input
                                             type="number"
                                             step="0.01"
-                                            min="0"
+                                            min="{{ $ceiling ? $ceiling->max_price : '0' }}"
                                             :name="'entries[{{ $key }}][price_per_kg]'"
                                             x-model="prices['{{ $key }}']"
                                             placeholder="0.00"
                                             class="grow"
+                                            :class="prices['{{ $key }}'] && parseFloat(prices['{{ $key }}']) < {{ $ceiling ? $ceiling->max_price : '0' }} ? 'text-error' : ''"
                                             :disabled="!selected.includes('{{ $key }}')"
                                             @click.stop
                                             @focus.stop
@@ -131,6 +142,10 @@
         $allKeys = collect($crops)->flatMap(function($crop) {
             return collect(array_filter(array_map('trim', explode(',', $crop->specification))))->map(fn($spec) => $crop->id . '_' . $spec);
         })->values();
+        
+        $ceilingsJson = collect($latestCeilings)->mapWithKeys(function($ceiling, $key) {
+            return [$key => $ceiling->max_price];
+        });
     @endphp
     @push('scripts')
     <script>
@@ -140,6 +155,7 @@
                 selected: [],
                 prices: {},
                 allKeys: @json($allKeys),
+                ceilings: @json($ceilingsJson),
 
                 get allSelected() {
                     return this.allKeys.length > 0 && this.allKeys.every(k => this.selected.includes(k));
@@ -181,7 +197,12 @@
                 },
 
                 canSubmit() {
-                    return this.selected.length > 0 && this.selected.every(k => this.prices[k] && parseFloat(this.prices[k]) > 0);
+                    return this.selected.length > 0 && this.selected.every(k => {
+                        const val = parseFloat(this.prices[k]);
+                        if (!val || val <= 0) return false;
+                        if (this.ceilings[k] && val < this.ceilings[k]) return false;
+                        return true;
+                    });
                 },
 
                 submitForm(el) {
