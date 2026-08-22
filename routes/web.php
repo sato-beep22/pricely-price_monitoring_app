@@ -21,6 +21,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Web-based cron job endpoint for shared hosting
+Route::get('/run-queue', function (\Illuminate\Http\Request $request) {
+    // Basic security token to prevent random visitors from triggering it
+    if ($request->query('token') !== 'pricely123') {
+        abort(403, 'Unauthorized');
+    }
+    
+    \Illuminate\Support\Facades\Artisan::call('queue:work', ['--stop-when-empty' => true]);
+    return response()->json(['status' => 'Queue processed successfully']);
+});
+
 // Public map access
 Route::get('/map', [MapController::class, 'index'])->name('map.index');
 
