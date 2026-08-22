@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CeilingPriceUpdated;
 use App\Models\CeilingPrice;
 use App\Models\Crop;
 use Illuminate\Http\Request;
@@ -51,6 +52,13 @@ class CeilingPriceController extends Controller
             }
         }
 
+        // Capture old price before saving so the SMS can show the change.
+        $existing = CeilingPrice::where('crop_id', $crop->id)
+            ->where('specification', $specification)
+            ->first();
+
+        $oldMaxPrice = $existing?->max_price;
+
         CeilingPrice::updateOrCreate(
             [
                 'crop_id' => $crop->id,
@@ -63,6 +71,15 @@ class CeilingPriceController extends Controller
                 'notes' => $request->notes,
             ]
         );
+
+        CeilingPriceUpdated::dispatch([
+            [
+                'crop_name' => $crop->name,
+                'specification' => $specification !== 'all' ? $specification : null,
+                'old_max_price' => $oldMaxPrice,
+                'new_max_price' => $request->max_price,
+            ],
+        ]);
 
         return redirect()->route('admin.ceiling-prices.index')->with('status', 'Ceiling price set successfully.');
     }

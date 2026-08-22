@@ -133,6 +133,184 @@
         </form>
     </div>
 
+    {{-- ── Ceiling Price SMS Alerts (Buyers Only) ────────────────────────── --}}
+    @if($user->isBuyer())
+    <div class="pricely-card p-6">
+        <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-100">
+            <div class="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+                <i data-lucide="bell" class="w-4 h-4 text-blue-600"></i>
+            </div>
+            <div>
+                <p class="font-bold text-slate-800 text-sm">Ceiling Price SMS Alerts</p>
+                <p class="text-xs text-slate-400">Get notified by SMS when the government sets a new price ceiling.</p>
+            </div>
+        </div>
+
+        @if($user->phoneVerified())
+            {{-- Verified — show toggle --}}
+            <div class="flex items-center gap-2 text-emerald-600 bg-emerald-50 px-4 py-3 rounded-lg border border-emerald-100 mb-4">
+                <i data-lucide="check-circle" class="w-5 h-5"></i>
+                <span class="text-sm font-semibold">Your phone number ({{ $user->phone }}) is verified.</span>
+            </div>
+
+            <form method="post" action="{{ route('buyer.sms-notifications.toggle') }}" class="flex items-center justify-between">
+                @csrf
+                @method('patch')
+                <div>
+                    <p class="text-sm font-semibold text-slate-700">SMS Notifications</p>
+                    <p class="text-xs text-slate-400 mt-0.5">
+                        {{ $user->smsNotificationsEnabled() ? 'You will receive ceiling price alerts.' : 'You will not receive ceiling price alerts.' }}
+                    </p>
+                </div>
+                <button
+                    id="sms-toggle-btn"
+                    type="submit"
+                    title="{{ $user->smsNotificationsEnabled() ? 'Disable SMS alerts' : 'Enable SMS alerts' }}"
+                    class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                        {{ $user->smsNotificationsEnabled() ? 'bg-blue-600' : 'bg-slate-300' }}"
+                >
+                    <span class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform
+                        {{ $user->smsNotificationsEnabled() ? 'translate-x-6' : 'translate-x-1' }}">
+                    </span>
+                </button>
+            </form>
+
+            @if(session('status') === 'sms-enabled')
+                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)"
+                   class="mt-3 text-sm text-emerald-600 font-semibold flex items-center gap-1">
+                    <i data-lucide="check-circle-2" class="w-4 h-4"></i> SMS alerts enabled.
+                </p>
+            @elseif(session('status') === 'sms-disabled')
+                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 3000)"
+                   class="mt-3 text-sm text-slate-500 font-semibold flex items-center gap-1">
+                    <i data-lucide="bell-off" class="w-4 h-4"></i> SMS alerts disabled.
+                </p>
+            @endif
+
+        @elseif($user->phone_verification_code && $user->phone_verification_expires_at && now()->lessThanOrEqualTo($user->phone_verification_expires_at))
+            {{-- Code sent — show pending banner + enter button --}}
+            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-4 flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm text-blue-800">
+                        A 5-digit code was sent to <strong>{{ $user->phone }}</strong>.
+                    </p>
+                    <p class="text-xs text-blue-500 mt-0.5">
+                        Expires in {{ ceil(now()->floatDiffInMinutes($user->phone_verification_expires_at)) }} minutes.
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    id="buyer-open-otp-modal"
+                    onclick="document.getElementById('buyer-otp-modal').showModal()"
+                    class="btn btn-primary bg-blue-600 hover:bg-blue-700 border-none text-white whitespace-nowrap text-sm"
+                >
+                    Enter Code
+                </button>
+            </div>
+
+        @else
+            {{-- Not verified — show send-code form --}}
+            <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 mb-4">
+                <p class="text-sm text-slate-600 mb-3">
+                    Verify your mobile number to receive ceiling price alert SMS messages.
+                </p>
+                <form method="post" action="{{ route('buyer.phone.verification.send') }}" class="flex gap-2 items-start">
+                    @csrf
+                    <div class="form-control flex-1">
+                        <input
+                            type="tel"
+                            name="phone"
+                            id="buyer-phone-input"
+                            class="input input-bordered w-full @error('phone') input-error @enderror"
+                            value="{{ old('phone', $user->phone) }}"
+                            placeholder="e.g. 09171234567"
+                            required
+                        >
+                        @error('phone')
+                            <span class="text-error text-xs mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <button type="submit" class="btn btn-primary bg-blue-600 hover:bg-blue-700 border-none text-white">Send Code</button>
+                </form>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg flex items-center gap-2">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                {{ session('error') }}
+            </div>
+        @endif
+    </div>
+
+    {{-- ── Buyer OTP Modal ──────────────────────────────────────────────────── --}}
+    <dialog id="buyer-otp-modal" class="modal">
+        <div class="modal-box max-w-sm rounded-2xl shadow-2xl p-0 overflow-hidden">
+            <div class="bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-5">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold text-base">Enter Verification Code</h3>
+                        <p class="text-blue-200 text-xs">Check your phone for the 5-digit code</p>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" action="{{ route('buyer.phone.verification.verify') }}" class="px-6 py-5">
+                @csrf
+
+                @error('code')
+                    <div class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-3 py-2 mb-4">
+                        <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
+                        {{ $message }}
+                    </div>
+                @enderror
+
+                <div class="mb-5">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Verification Code</label>
+                    <input
+                        type="text"
+                        name="code"
+                        id="buyer-otp-code-input"
+                        class="input input-bordered w-full text-center text-2xl font-bold tracking-[0.5em] @error('code') input-error border-red-400 @enderror"
+                        placeholder="_ _ _ _ _"
+                        maxlength="5"
+                        inputmode="numeric"
+                        pattern="[0-9]{5}"
+                        autocomplete="one-time-code"
+                        required
+                    >
+                    <p class="text-xs text-slate-400 mt-2 text-center">
+                        Sent to <span class="font-semibold text-slate-600">{{ $user->phone }}</span>
+                    </p>
+                </div>
+
+                <div class="flex gap-3">
+                    <button
+                        type="button"
+                        onclick="document.getElementById('buyer-otp-modal').close()"
+                        class="btn flex-1 bg-slate-100 hover:bg-slate-200 border-none text-slate-600 font-semibold"
+                    >
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn flex-1 bg-blue-600 hover:bg-blue-700 border-none text-white font-semibold">
+                        Verify
+                    </button>
+                </div>
+            </form>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    @if(session('status') === 'phone-verification-sent' || $errors->has('code'))
+        <script>document.addEventListener('DOMContentLoaded', () => document.getElementById('buyer-otp-modal')?.showModal())</script>
+    @endif
+    @endif
+
     {{-- ── Phone Verification (Farmers Only) ────────────────────────────────── --}}
     @if($user->isFarmer())
     <div class="pricely-card p-6">

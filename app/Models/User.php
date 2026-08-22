@@ -27,6 +27,7 @@ class User extends Authenticatable
         'role',
         'phone',
         'pin_code',
+        'sms_notifications_enabled',
     ];
 
     /**
@@ -52,6 +53,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'phone_verified_at' => 'datetime',
             'phone_verification_expires_at' => 'datetime',
+            'sms_notifications_enabled' => 'boolean',
         ];
     }
 
@@ -61,6 +63,14 @@ class User extends Authenticatable
     public function phoneVerified(): bool
     {
         return $this->phone_verified_at !== null;
+    }
+
+    /**
+     * Check if SMS notifications are enabled for this user.
+     */
+    public function smsNotificationsEnabled(): bool
+    {
+        return (bool) $this->sms_notifications_enabled;
     }
 
     /**

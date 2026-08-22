@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\PriceImportController;
 use App\Http\Controllers\Admin\SmsLogController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\Buyer\SmsNotificationController;
 use App\Http\Controllers\CeilingPriceController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\DashboardController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SubscriptionController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,13 +25,14 @@ Route::get('/', function () {
 });
 
 // Web-based cron job endpoint for shared hosting
-Route::get('/run-queue', function (\Illuminate\Http\Request $request) {
+Route::get('/run-queue', function (Request $request) {
     // Basic security token to prevent random visitors from triggering it
     if ($request->query('token') !== 'pricely123') {
         abort(403, 'Unauthorized');
     }
-    
-    \Illuminate\Support\Facades\Artisan::call('queue:work', ['--stop-when-empty' => true]);
+
+    Artisan::call('queue:work', ['--stop-when-empty' => true]);
+
     return response()->json(['status' => 'Queue processed successfully']);
 });
 
@@ -81,6 +85,10 @@ Route::middleware('auth')->group(function () {
 
     // --- BUYER ROUTES ---
     Route::middleware('role:buyer')->group(function () {
+        Route::post('/profile/phone/send', [PhoneVerificationController::class, 'store'])->name('buyer.phone.verification.send');
+        Route::post('/profile/phone/verify', [PhoneVerificationController::class, 'verify'])->name('buyer.phone.verification.verify');
+        Route::patch('/profile/sms-notifications', [SmsNotificationController::class, 'toggle'])->name('buyer.sms-notifications.toggle');
+
         Route::get('/shop', [ShopController::class, 'show'])->name('shops.show');
         Route::get('/shop/edit', [ShopController::class, 'edit'])->name('shops.edit');
         Route::put('/shop', [ShopController::class, 'update'])->name('shops.update');
