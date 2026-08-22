@@ -39,9 +39,17 @@ class SendCeilingPriceAlertSms implements ShouldQueue
 
         $message = $this->buildMessage($updates);
 
-        foreach ($buyers as $buyer) {
-            Log::info("Sending ceiling price SMS to buyer ID {$buyer->id} ({$buyer->phone}).");
-            $this->smsService->sendSms($buyer->phone, $message);
+        // Extract valid phone numbers
+        $phoneNumbers = $buyers->pluck('phone')->filter()->unique()->values()->all();
+
+        // Semaphore allows bulk sending by separating numbers with a comma.
+        // Chunk by 500 to be safe and avoid excessively large payloads.
+        $chunks = array_chunk($phoneNumbers, 500);
+
+        foreach ($chunks as $chunk) {
+            $bulkNumbers = implode(',', $chunk);
+            Log::info("Sending bulk ceiling price SMS to " . count($chunk) . " buyers.");
+            $this->smsService->sendSms($bulkNumbers, $message);
         }
     }
 
@@ -53,7 +61,7 @@ class SendCeilingPriceAlertSms implements ShouldQueue
     protected function buildMessage(array $updates): string
     {
         $lines = [];
-        $lines[] = 'Pricely Alerto: Bag-ong price ceiling ang itinakda ng gobyerno:';
+        $lines[] = 'Pricely Alert: Bagong price ceiling ang itinakda ng Department of Agriculture:';
 
         foreach ($updates as $update) {
             $specStr = $update['specification'] ? " ({$update['specification']})" : '';
