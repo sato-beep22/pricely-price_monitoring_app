@@ -22,6 +22,7 @@ class DashboardController extends Controller
             $latestCeilingIds = \App\Models\CeilingPrice::where('effective_date', '<=', now())
                 ->selectRaw('MAX(id) as id')
                 ->groupBy('crop_id', 'specification')
+                ->get()
                 ->pluck('id');
 
             $ceilings = \App\Models\CeilingPrice::whereIn('id', $latestCeilingIds)->get();

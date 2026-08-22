@@ -28,6 +28,7 @@ class PriceController extends Controller
         $latestPriceIds = Price::where('shop_id', $shop->id)
             ->selectRaw('MAX(id) as id')
             ->groupBy('crop_id', 'specification')
+            ->get()
             ->pluck('id');
 
         // Fetch those latest prices in one go
@@ -41,6 +42,7 @@ class PriceController extends Controller
         $latestCeilingIds = \App\Models\CeilingPrice::where('effective_date', '<=', now())
             ->selectRaw('MAX(id) as id')
             ->groupBy('crop_id', 'specification')
+            ->get()
             ->pluck('id');
 
         $ceilings = \App\Models\CeilingPrice::whereIn('id', $latestCeilingIds)->get();
@@ -75,6 +77,7 @@ class PriceController extends Controller
         $latestCeilingIds = \App\Models\CeilingPrice::where('effective_date', '<=', now())
             ->selectRaw('MAX(id) as id')
             ->groupBy('crop_id', 'specification')
+            ->get()
             ->pluck('id');
 
         $ceilings = \App\Models\CeilingPrice::whereIn('id', $latestCeilingIds)->get();
