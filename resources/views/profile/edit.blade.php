@@ -15,7 +15,7 @@
 @endsection
 
 @section('content')
-<div class="max-w-2xl mx-auto space-y-6">
+<div class="max-w-2xl mx-auto space-y-6 pb-24">
 
     {{-- ── Profile Avatar Card ────────────────────────────────────────────── --}}
     <div class="pricely-card p-6 flex items-center gap-5">
