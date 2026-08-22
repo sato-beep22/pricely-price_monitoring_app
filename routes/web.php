@@ -47,6 +47,21 @@ Route::get('/clear-cache', function (Request $request) {
     return response()->json(['status' => 'All caches cleared successfully']);
 });
 
+// Helper to view logs securely
+Route::get('/debug-log', function (Request $request) {
+    if ($request->query('token') !== 'pricely123') {
+        abort(403, 'Unauthorized');
+    }
+    $logPath = storage_path('logs/laravel.log');
+    if (!file_exists($logPath)) {
+        return response('No log file found.', 404);
+    }
+    // Get last 100 lines
+    $lines = file($logPath);
+    $lastLines = array_slice($lines, -100);
+    return response('<pre>' . implode('', $lastLines) . '</pre>')->header('Content-Type', 'text/html');
+});
+
 // Public map access
 Route::get('/map', [MapController::class, 'index'])->name('map.index');
 
@@ -96,8 +111,8 @@ Route::middleware('auth')->group(function () {
 
     // --- BUYER ROUTES ---
     Route::middleware('role:buyer')->group(function () {
-        Route::post('/profile/phone/send', [PhoneVerificationController::class, 'store'])->name('buyer.phone.verification.send');
-        Route::post('/profile/phone/verify', [PhoneVerificationController::class, 'verify'])->name('buyer.phone.verification.verify');
+        Route::post('/profile/buyer/phone/send', [PhoneVerificationController::class, 'store'])->name('buyer.phone.verification.send');
+        Route::post('/profile/buyer/phone/verify', [PhoneVerificationController::class, 'verify'])->name('buyer.phone.verification.verify');
         Route::patch('/profile/sms-notifications', [SmsNotificationController::class, 'toggle'])->name('buyer.sms-notifications.toggle');
 
         Route::get('/shop', [ShopController::class, 'show'])->name('shops.show');
