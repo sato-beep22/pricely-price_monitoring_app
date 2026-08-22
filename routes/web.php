@@ -36,6 +36,17 @@ Route::get('/run-queue', function (Request $request) {
     return response()->json(['status' => 'Queue processed successfully']);
 });
 
+// Helper to clear caches on shared hosting
+Route::get('/clear-cache', function (Request $request) {
+    if ($request->query('token') !== 'pricely123') {
+        abort(403, 'Unauthorized');
+    }
+
+    Artisan::call('optimize:clear');
+    
+    return response()->json(['status' => 'All caches cleared successfully']);
+});
+
 // Public map access
 Route::get('/map', [MapController::class, 'index'])->name('map.index');
 
