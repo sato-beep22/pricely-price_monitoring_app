@@ -19,22 +19,29 @@ class DashboardController extends Controller
         if ($user->isAdmin()) {
             return view('dashboard.admin');
         } elseif ($user->isBuyer()) {
-            $ceilings = \App\Models\CeilingPrice::where('effective_date', '<=', now())
-                ->orderByDesc('effective_date')
-                ->get();
+            $latestCeilingIds = \App\Models\CeilingPrice::where('effective_date', '<=', now())
+                ->selectRaw('MAX(id) as id')
+                ->groupBy('crop_id', 'specification')
+                ->pluck('id');
+
+            $ceilings = \App\Models\CeilingPrice::whereIn('id', $latestCeilingIds)->get();
                 
             $latestCeilings = [];
             foreach ($ceilings as $ceiling) {
                 $key = $ceiling->crop_id . '_' . $ceiling->specification;
-                if (!isset($latestCeilings[$key])) {
-                    $latestCeilings[$key] = $ceiling;
-                }
+                $latestCeilings[$key] = $ceiling;
             }
 
             return view('dashboard.buyer', compact('latestCeilings'));
         } else {
             $crops = Crop::orderBy('name')->get();
-            $ceilingPrices = CeilingPrice::with('crop')->get();
+
+            $latestCeilingIds = \App\Models\CeilingPrice::where('effective_date', '<=', now())
+                ->selectRaw('MAX(id) as id')
+                ->groupBy('crop_id', 'specification')
+                ->pluck('id');
+
+            $ceilingPrices = \App\Models\CeilingPrice::with('crop')->whereIn('id', $latestCeilingIds)->get();
 
             $sourceLinks = Setting::where('key', 'like', 'da_price_source_link_%')
                 ->pluck('value', 'key')

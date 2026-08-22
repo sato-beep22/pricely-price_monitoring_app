@@ -22,7 +22,7 @@ class ReportController extends Controller
 
         $startDate = Carbon::now()->subDays($period)->startOfDay();
 
-        $shops = Shop::all();
+        $shops = Shop::orderBy('name')->select('id', 'name')->get();
         $varieties = Price::whereNotNull('specification')->where('specification', '!=', '')->select('specification')->distinct()->pluck('specification');
         $selectedShop = $request->input('shop_id');
         $selectedVariety = $request->input('variety');

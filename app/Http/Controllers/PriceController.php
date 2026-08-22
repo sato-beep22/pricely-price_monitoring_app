@@ -38,16 +38,17 @@ class PriceController extends Controller
             $latestPrices[$price->crop_id][$price->specification] = $price;
         }
 
-        $ceilings = \App\Models\CeilingPrice::where('effective_date', '<=', now())
-            ->orderByDesc('effective_date')
-            ->get();
+        $latestCeilingIds = \App\Models\CeilingPrice::where('effective_date', '<=', now())
+            ->selectRaw('MAX(id) as id')
+            ->groupBy('crop_id', 'specification')
+            ->pluck('id');
+
+        $ceilings = \App\Models\CeilingPrice::whereIn('id', $latestCeilingIds)->get();
             
         $latestCeilings = [];
         foreach ($ceilings as $ceiling) {
             $key = $ceiling->crop_id . '_' . $ceiling->specification;
-            if (!isset($latestCeilings[$key])) {
-                $latestCeilings[$key] = $ceiling;
-            }
+            $latestCeilings[$key] = $ceiling;
         }
 
         return view('prices.create', compact('crops', 'latestPrices', 'latestCeilings'));
@@ -71,16 +72,17 @@ class PriceController extends Controller
             'entries.*.price_per_kg' => 'required|numeric|min:0',
         ]);
 
-        $ceilings = \App\Models\CeilingPrice::where('effective_date', '<=', now())
-            ->orderByDesc('effective_date')
-            ->get();
+        $latestCeilingIds = \App\Models\CeilingPrice::where('effective_date', '<=', now())
+            ->selectRaw('MAX(id) as id')
+            ->groupBy('crop_id', 'specification')
+            ->pluck('id');
+
+        $ceilings = \App\Models\CeilingPrice::whereIn('id', $latestCeilingIds)->get();
             
         $latestCeilings = [];
         foreach ($ceilings as $ceiling) {
             $key = $ceiling->crop_id . '_' . $ceiling->specification;
-            if (!isset($latestCeilings[$key])) {
-                $latestCeilings[$key] = $ceiling;
-            }
+            $latestCeilings[$key] = $ceiling;
         }
 
         $errors = [];
