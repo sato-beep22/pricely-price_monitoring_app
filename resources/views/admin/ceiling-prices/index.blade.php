@@ -85,7 +85,7 @@
                             <textarea name="notes" class="textarea textarea-bordered h-20"></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-full mt-2">Save Guideline</button>
+                        <button type="submit" class="btn btn-primary w-full mt-2" onclick="if(this.dataset.submitted) return false; this.dataset.submitted = true; this.innerHTML = 'Saving...'; this.classList.add('opacity-50', 'cursor-not-allowed'); this.form.submit();">Save Guideline</button>
                     </form>
                 </div>
             </div>
