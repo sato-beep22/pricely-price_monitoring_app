@@ -47,6 +47,17 @@ Route::get('/clear-cache', function (Request $request) {
     return response()->json(['status' => 'All caches cleared successfully']);
 });
 
+// Helper to create the storage symlink on shared hosting (needed for file uploads)
+Route::get('/storage-link', function (Request $request) {
+    if ($request->query('token') !== 'pricely123') {
+        abort(403, 'Unauthorized');
+    }
+
+    Artisan::call('storage:link');
+
+    return response()->json(['status' => 'Storage linked successfully']);
+});
+
 // Helper to view logs securely
 Route::get('/debug-log', function (Request $request) {
     if ($request->query('token') !== 'pricely123') {
