@@ -18,7 +18,7 @@
 <div class="max-w-2xl mx-auto space-y-6 pb-24">
 
     {{-- ── Profile Avatar Card ────────────────────────────────────────────── --}}
-    <div class="pricely-card p-6 flex items-center gap-5">
+    <div class="pricely-card p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5 text-center sm:text-left">
         @php
             $initials = collect(explode(' ', $user->name))
                 ->map(fn($n) => substr($n, 0, 1))
@@ -153,7 +153,7 @@
                 <span class="text-sm font-semibold">Your phone number ({{ $user->phone }}) is verified.</span>
             </div>
 
-            <form method="post" action="{{ route('buyer.sms-notifications.toggle') }}" class="flex items-center justify-between">
+            <form method="post" action="{{ route('buyer.sms-notifications.toggle') }}" class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
                 @csrf
                 @method('patch')
                 <div>
@@ -189,7 +189,7 @@
 
         @elseif($user->phone_verification_code && $user->phone_verification_expires_at && now()->lessThanOrEqualTo($user->phone_verification_expires_at))
             {{-- Code sent — show pending banner + enter button --}}
-            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-4 flex items-center justify-between gap-4">
+            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <p class="text-sm text-blue-800">
                         A 5-digit code was sent to <strong>{{ $user->phone }}</strong>.
@@ -214,7 +214,7 @@
                 <p class="text-sm text-slate-600 mb-3">
                     Verify your mobile number to receive ceiling price alert SMS messages.
                 </p>
-                <form method="post" action="{{ route('buyer.phone.verification.send') }}" class="flex gap-2 items-start">
+                <form method="post" action="{{ route('buyer.phone.verification.send') }}" class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-start">
                     @csrf
                     <div class="form-control flex-1">
                         <input
@@ -331,7 +331,7 @@
             </div>
         @elseif($user->phone_verification_code && $user->phone_verification_expires_at && now()->lessThanOrEqualTo($user->phone_verification_expires_at))
             {{-- Code sent — show status + button to open modal --}}
-            <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 mb-4 flex items-center justify-between gap-4">
+            <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-4 mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <p class="text-sm text-indigo-800">
                         A 5-digit code was sent to <strong>{{ $user->phone }}</strong>.
@@ -355,7 +355,7 @@
                 <p class="text-sm text-slate-600 mb-3">
                     Please enter your mobile number to receive a verification code.
                 </p>
-                <form method="post" action="{{ route('phone.verification.send') }}" class="flex gap-2 items-start">
+                <form method="post" action="{{ route('phone.verification.send') }}" class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-start">
                     @csrf
                     <div class="form-control flex-1">
                         <input

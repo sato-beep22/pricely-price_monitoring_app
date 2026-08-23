@@ -1,36 +1,40 @@
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-slate-900">
-            {{ __('Set Login PIN') }}
-        </h2>
+<form method="post" action="{{ route('profile.pin.update') }}" class="space-y-4">
+    @csrf
+    @method('put')
 
-        <p class="mt-1 text-sm text-slate-600">
-            {{ __('Set a 4-digit PIN code to log in quickly using your phone number.') }}
-        </p>
-    </header>
+    <div class="form-control w-full">
+        <label class="label pb-1"><span class="label-text font-semibold text-slate-700">4-Digit PIN</span></label>
+        <input
+            id="pin_code"
+            name="pin_code"
+            type="password"
+            class="input input-bordered w-full @error('pin_code', 'updatePin') input-error @enderror"
+            maxlength="4"
+            inputmode="numeric"
+            pattern="[0-9]{4}"
+            placeholder="••••"
+            autocomplete="off"
+        />
+        @error('pin_code', 'updatePin')
+            <span class="text-error text-xs mt-1">{{ $message }}</span>
+        @enderror
+    </div>
 
-    <form method="post" action="{{ route('profile.pin.update') }}" class="mt-6 space-y-6">
-        @csrf
-        @method('put')
+    <div class="flex items-center justify-between pt-2">
+        <button type="submit" class="btn btn-primary btn-sm px-6">
+            Save PIN
+        </button>
 
-        <div>
-            <x-input-label for="pin_code" :value="__('4-Digit PIN')" />
-            <x-text-input id="pin_code" name="pin_code" type="password" class="mt-1 block w-full max-w-xl" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" placeholder="••••" />
-            <x-input-error :messages="$errors->updatePin->get('pin_code')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save PIN') }}</x-primary-button>
-
-            @if (session('status') === 'pin-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-slate-600"
-                >{{ __('Saved.') }}</p>
-            @endif
-        </div>
-    </form>
-</section>
+        @if (session('status') === 'pin-updated')
+            <p
+                x-data="{ show: true }"
+                x-show="show"
+                x-transition
+                x-init="setTimeout(() => show = false, 3000)"
+                class="text-sm text-emerald-600 font-semibold flex items-center gap-1"
+            >
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i> Saved!
+            </p>
+        @endif
+    </div>
+</form>
