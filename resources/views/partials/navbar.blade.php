@@ -55,14 +55,9 @@
                         </button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-950 transition-colors px-1.5 md:px-3 py-2 rounded-xl whitespace-nowrap">
-                        Log in
+                    <a href="{{ route('login') }}" class="bg-slate-900 text-white px-3 md:px-6 py-2 md:py-2.5 rounded-full text-[11px] md:text-sm font-semibold hover:bg-slate-950 transition-all cursor-pointer whitespace-nowrap">
+                        Login / Signup
                     </a>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="bg-slate-900 text-white px-3 md:px-6 py-2 md:py-2.5 rounded-full text-[11px] md:text-sm font-semibold hover:bg-slate-950 transition-all cursor-pointer whitespace-nowrap">
-                            Get Started
-                        </a>
-                    @endif
                 @endauth
             @endif
         </div>
