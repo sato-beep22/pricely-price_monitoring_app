@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ShopController extends Controller
 {
@@ -57,18 +57,33 @@ class ShopController extends Controller
 
         // Handle photo removal request
         if (! empty($validated['remove_photo']) && $user->shop && $user->shop->photo_path) {
-            Storage::disk('public')->delete($user->shop->photo_path);
+            $oldPath = public_path('shop_photos/'.$user->shop->photo_path);
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
             $validated['photo_path'] = null;
         }
 
         // Handle new photo upload (overrides removal if both are somehow sent)
         if ($request->hasFile('photo')) {
-            // Delete old photo if it exists to avoid orphaned files
+            // Delete old photo if it exists
             if ($user->shop && $user->shop->photo_path) {
-                Storage::disk('public')->delete($user->shop->photo_path);
+                $oldPath = public_path('shop_photos/'.$user->shop->photo_path);
+                if (file_exists($oldPath)) {
+                    unlink($oldPath);
+                }
             }
 
-            $validated['photo_path'] = $request->file('photo')->store('shop_photos', 'public');
+            $file = $request->file('photo');
+            $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
+            $dir = public_path('shop_photos');
+
+            if (! is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+
+            $file->move($dir, $filename);
+            $validated['photo_path'] = $filename;
         }
 
         // Remove raw keys so they don't get passed to the model
