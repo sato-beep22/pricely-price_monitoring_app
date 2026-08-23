@@ -45,6 +45,7 @@ class ShopController extends Controller
             'description' => 'nullable|string',
             'classification' => 'nullable|string|in:trader,miller,wholesaler,retailer,government,cooperative',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'remove_photo' => 'nullable|boolean',
         ]);
 
         $user = Auth::user();
@@ -54,7 +55,13 @@ class ShopController extends Controller
             $validated['is_active'] = true;
         }
 
-        // Handle photo upload
+        // Handle photo removal request
+        if (! empty($validated['remove_photo']) && $user->shop && $user->shop->photo_path) {
+            Storage::disk('public')->delete($user->shop->photo_path);
+            $validated['photo_path'] = null;
+        }
+
+        // Handle new photo upload (overrides removal if both are somehow sent)
         if ($request->hasFile('photo')) {
             // Delete old photo if it exists to avoid orphaned files
             if ($user->shop && $user->shop->photo_path) {
@@ -64,8 +71,8 @@ class ShopController extends Controller
             $validated['photo_path'] = $request->file('photo')->store('shop_photos', 'public');
         }
 
-        // Remove raw 'photo' key so it doesn't get passed to the model
-        unset($validated['photo']);
+        // Remove raw keys so they don't get passed to the model
+        unset($validated['photo'], $validated['remove_photo']);
 
         if ($user->shop) {
             $user->shop->update($validated);

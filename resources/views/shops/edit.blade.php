@@ -58,33 +58,83 @@
             <div class="form-control w-full">
                 <label class="label"><span class="label-text font-semibold">Shop Photo <span class="text-slate-400 font-normal">(Optional)</span></span></label>
 
-                @if($shop->photo_url)
-                    <div class="mb-3">
-                        <img id="photo-preview" src="{{ $shop->photo_url }}" alt="Current shop photo" class="w-full h-48 object-cover rounded-xl border border-base-300 shadow-sm">
-                        <p class="text-xs text-slate-400 mt-1">Current photo — upload a new one to replace it.</p>
-                    </div>
-                @else
-                    <div id="photo-placeholder" class="mb-3 w-full h-48 rounded-xl border-2 border-dashed border-base-300 flex items-center justify-center bg-base-50">
-                        <div class="text-center">
-                            <i data-lucide="image" class="w-8 h-8 mx-auto mb-1 text-slate-300"></i>
-                            <p class="text-xs text-slate-400">No photo uploaded yet</p>
+                {{-- Preview area --}}
+                <div
+                    id="photo-drop-zone"
+                    class="relative w-full rounded-2xl overflow-hidden border-2 border-dashed border-base-300 bg-slate-50 transition-all duration-200 cursor-pointer hover:border-primary hover:bg-primary/5 group"
+                    onclick="document.getElementById('photo-input').click()"
+                >
+                    {{-- Existing / preview image --}}
+                    @if($shop->photo_url)
+                        <img
+                            id="photo-preview"
+                            src="{{ $shop->photo_url }}"
+                            alt="Shop photo"
+                            class="w-full h-52 object-cover"
+                        >
+                    @else
+                        <img
+                            id="photo-preview"
+                            src=""
+                            alt="Photo preview"
+                            class="hidden w-full h-52 object-cover"
+                        >
+                        <div id="photo-placeholder" class="flex flex-col items-center justify-center py-10 gap-2">
+                            <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                                <i data-lucide="image-plus" class="w-7 h-7 text-slate-400 group-hover:text-primary transition-colors"></i>
+                            </div>
+                            <p class="text-sm font-semibold text-slate-500 group-hover:text-primary transition-colors">Click to upload a photo</p>
+                            <p class="text-xs text-slate-400">JPG, PNG, WEBP — max 2MB</p>
                         </div>
-                    </div>
-                    <img id="photo-preview" src="" alt="Photo preview" class="hidden w-full h-48 object-cover rounded-xl border border-base-300 shadow-sm mb-3">
-                @endif
+                    @endif
 
+                    {{-- Overlay hint on existing photo --}}
+                    @if($shop->photo_url)
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100">
+                        <span class="flex items-center gap-2 bg-white/90 text-slate-800 font-semibold text-sm px-4 py-2 rounded-full shadow">
+                            <i data-lucide="pencil" class="w-4 h-4"></i> Change Photo
+                        </span>
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Hidden real file input --}}
                 <input
                     type="file"
                     id="photo-input"
                     name="photo"
                     accept="image/jpeg,image/png,image/jpg,image/webp"
-                    class="file-input file-input-bordered w-full @error('photo') file-input-error @enderror"
+                    class="hidden"
                     onchange="previewPhoto(this)"
                 />
+                {{-- Hidden remove flag --}}
+                <input type="hidden" id="remove-photo-flag" name="remove_photo" value="0">
+
                 @error('photo')
-                    <span class="text-error text-sm mt-1">{{ $message }}</span>
+                    <span class="text-error text-sm mt-1 flex items-center gap-1">
+                        <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>{{ $message }}
+                    </span>
                 @enderror
-                <p class="text-xs text-slate-400 mt-1">Max 2MB. Accepted formats: JPG, PNG, WEBP.</p>
+
+                {{-- Action row --}}
+                <div id="photo-actions" class="flex items-center gap-2 mt-2 {{ $shop->photo_url ? '' : 'hidden' }}">
+                    <button
+                        type="button"
+                        id="change-photo-btn"
+                        onclick="document.getElementById('photo-input').click()"
+                        class="btn btn-sm btn-outline btn-primary gap-1"
+                    >
+                        <i data-lucide="upload" class="w-3.5 h-3.5"></i> Change
+                    </button>
+                    <button
+                        type="button"
+                        id="remove-photo-btn"
+                        onclick="removePhoto()"
+                        class="btn btn-sm btn-outline btn-error gap-1"
+                    >
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Remove Photo
+                    </button>
+                </div>
             </div>
 
             <div class="form-control w-full">
@@ -116,17 +166,51 @@
     @push('scripts')
     <script>
         function previewPhoto(input) {
-            const preview = document.getElementById('photo-preview');
+            const preview     = document.getElementById('photo-preview');
             const placeholder = document.getElementById('photo-placeholder');
+            const actions     = document.getElementById('photo-actions');
+            const removeFlag  = document.getElementById('remove-photo-flag');
+
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.classList.remove('hidden');
                     if (placeholder) { placeholder.classList.add('hidden'); }
+                    if (actions)     { actions.classList.remove('hidden'); }
+                    if (removeFlag)  { removeFlag.value = '0'; }
                 };
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+
+        function removePhoto() {
+            const preview     = document.getElementById('photo-preview');
+            const placeholder = document.getElementById('photo-placeholder');
+            const actions     = document.getElementById('photo-actions');
+            const fileInput   = document.getElementById('photo-input');
+            const removeFlag  = document.getElementById('remove-photo-flag');
+            const dropZone    = document.getElementById('photo-drop-zone');
+
+            // Reset the image preview
+            preview.src = '';
+            preview.classList.add('hidden');
+
+            // Show placeholder
+            if (placeholder) { placeholder.classList.remove('hidden'); }
+
+            // Hide action buttons
+            if (actions) { actions.classList.add('hidden'); }
+
+            // Clear file input
+            if (fileInput) { fileInput.value = ''; }
+
+            // Signal the server to delete the photo on save
+            if (removeFlag) { removeFlag.value = '1'; }
+
+            // Remove any overlay div that only appears when a photo exists
+            const overlay = dropZone ? dropZone.querySelector('div[class*="absolute"]') : null;
+            if (overlay) { overlay.remove(); }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
