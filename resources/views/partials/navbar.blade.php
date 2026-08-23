@@ -2,8 +2,10 @@
     <div class="max-w-7xl mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
         
         <!-- Logo segment -->
-        <a href="/" class="flex items-center gap-3 group shrink-0">
-            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-16 h-16 rounded-full border-2 border-slate-200 bg-white p-1 object-contain group-hover:scale-105 transition-all duration-300">
+        <a href="/" class="flex items-center gap-2 md:gap-3 group shrink-0">
+            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full border border-slate-200 bg-white overflow-hidden flex items-center justify-center shrink-0">
+                <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-full h-full object-cover scale-[1.15] group-hover:scale-[1.25] transition-all duration-300">
+            </div>
             <div class="flex flex-col">
                 <span class="font-display font-bold text-base md:text-xl text-slate-900 tracking-tight leading-none">
                     Pricely
