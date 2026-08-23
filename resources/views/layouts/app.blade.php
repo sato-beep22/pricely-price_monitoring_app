@@ -55,7 +55,7 @@
                 <!-- Mobile Header for Hamburger -->
                 <div class="md:hidden flex items-center justify-between bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30">
                     <div class="flex items-center gap-2">
-                        <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-10 h-10 object-contain">
+                        <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-12 h-12 object-contain">
                         <div class="flex flex-col">
                             <span class="font-bold text-slate-800 text-lg tracking-tight leading-none">Pricely</span>
                             <span class="text-[10px] font-medium text-slate-500 leading-tight">San Mateo Isabela</span>
