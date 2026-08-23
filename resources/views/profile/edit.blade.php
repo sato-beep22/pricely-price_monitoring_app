@@ -96,9 +96,9 @@
 
             {{-- Phone --}}
             <div class="form-control w-full">
-                <label class="label pb-1">
+                <label class="label pb-1 flex-col items-start sm:flex-row sm:items-center gap-1 sm:gap-0">
                     <span class="label-text font-semibold text-slate-700">Phone Number</span>
-                    <span class="label-text-alt text-slate-400">Optional — used for SMS alerts</span>
+                    <span class="label-text-alt text-slate-400 w-full sm:w-auto text-left sm:text-right">Optional — used for SMS alerts</span>
                 </label>
                 <input
                     id="phone"
