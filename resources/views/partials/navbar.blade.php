@@ -2,10 +2,10 @@
     <div class="max-w-7xl mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
         
         <!-- Logo segment -->
-        <a href="/" class="flex items-center gap-2 group shrink-0">
-            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-14 h-14 object-contain group-hover:scale-105 transition-all duration-300">
+        <a href="/" class="flex items-center gap-3 group shrink-0">
+            <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-16 h-16 rounded-full border-2 border-slate-200 bg-white p-1 object-contain group-hover:scale-105 transition-all duration-300">
             <div class="flex flex-col">
-                <span class="font-display font-bold text-base md:text-lg text-slate-900 tracking-tight leading-none">
+                <span class="font-display font-bold text-base md:text-xl text-slate-900 tracking-tight leading-none">
                     Pricely
                 </span>
                 <span class="text-[10px] md:text-xs font-medium text-slate-500 leading-tight">San Mateo Isabela</span>
