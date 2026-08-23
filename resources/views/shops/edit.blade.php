@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="max-w-3xl mx-auto bg-base-100 p-8 rounded-box shadow-sm border border-base-300 animate-fade-in-up">
-        <form method="POST" action="{{ route('shops.update') }}" class="space-y-6">
+        <form method="POST" action="{{ route('shops.update') }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
 
@@ -54,6 +54,39 @@
                 <textarea name="description" class="textarea textarea-bordered h-24">{{ old('description', $shop->description) }}</textarea>
             </div>
 
+            {{-- Shop Photo --}}
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text font-semibold">Shop Photo <span class="text-slate-400 font-normal">(Optional)</span></span></label>
+
+                @if($shop->photo_url)
+                    <div class="mb-3">
+                        <img id="photo-preview" src="{{ $shop->photo_url }}" alt="Current shop photo" class="w-full h-48 object-cover rounded-xl border border-base-300 shadow-sm">
+                        <p class="text-xs text-slate-400 mt-1">Current photo — upload a new one to replace it.</p>
+                    </div>
+                @else
+                    <div id="photo-placeholder" class="mb-3 w-full h-48 rounded-xl border-2 border-dashed border-base-300 flex items-center justify-center bg-base-50">
+                        <div class="text-center">
+                            <i data-lucide="image" class="w-8 h-8 mx-auto mb-1 text-slate-300"></i>
+                            <p class="text-xs text-slate-400">No photo uploaded yet</p>
+                        </div>
+                    </div>
+                    <img id="photo-preview" src="" alt="Photo preview" class="hidden w-full h-48 object-cover rounded-xl border border-base-300 shadow-sm mb-3">
+                @endif
+
+                <input
+                    type="file"
+                    id="photo-input"
+                    name="photo"
+                    accept="image/jpeg,image/png,image/jpg,image/webp"
+                    class="file-input file-input-bordered w-full @error('photo') file-input-error @enderror"
+                    onchange="previewPhoto(this)"
+                />
+                @error('photo')
+                    <span class="text-error text-sm mt-1">{{ $message }}</span>
+                @enderror
+                <p class="text-xs text-slate-400 mt-1">Max 2MB. Accepted formats: JPG, PNG, WEBP.</p>
+            </div>
+
             <div class="form-control w-full">
                 <label class="label"><span class="label-text font-semibold">Buyer Classification</span></label>
                 <select name="classification" class="select select-bordered w-full" required>
@@ -82,6 +115,20 @@
 
     @push('scripts')
     <script>
+        function previewPhoto(input) {
+            const preview = document.getElementById('photo-preview');
+            const placeholder = document.getElementById('photo-placeholder');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    if (placeholder) { placeholder.classList.add('hidden'); }
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 if (typeof L !== 'undefined') {

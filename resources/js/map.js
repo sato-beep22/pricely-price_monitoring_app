@@ -692,6 +692,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('panel-shop-name').textContent = shop.name;
         document.getElementById('panel-shop-body').innerHTML = `
+            ${shop.photo_url ? `
+            <div style="margin:-1.25rem -1.25rem 1rem;overflow:hidden;border-radius:0 0 0 0;">
+                <img src="${shop.photo_url}" alt="${shop.name}" style="width:100%;height:160px;object-fit:cover;display:block;">
+            </div>` : ''}
             <div class="shop-info-section">
                 <p class="shop-section-label">Shop Details</p>
                 <div style="margin-bottom:8px;">${classificationBadge}</div>

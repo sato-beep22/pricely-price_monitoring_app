@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Shop extends Model
 {
@@ -24,10 +25,23 @@ class Shop extends Model
         'latitude',
         'longitude',
         'description',
+        'photo_path',
         'is_active',
         'classification',
         'views',
     ];
+
+    /**
+     * Get the full public URL for the shop photo, or null if not set.
+     */
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if (! $this->photo_path) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->photo_path);
+    }
 
     /**
      * Get the attributes that should be cast.

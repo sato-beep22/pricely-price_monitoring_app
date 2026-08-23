@@ -44,6 +44,7 @@ Route::get('/shops', function () {
             'phone' => $shop->user->phone,
             'classification' => $shop->classification,
             'views' => $shop->views,
+            'photo_url' => $shop->photo_url,
             'subscribers_count' => $shop->user->subscribers_count ?? 0,
             'latest_price_at' => $latestPrice?->recorded_at?->toISOString(),
             'prices' => $latestPrices->map(function ($p) {

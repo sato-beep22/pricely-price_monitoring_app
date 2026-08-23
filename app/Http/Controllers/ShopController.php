@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ShopController extends Controller
 {
@@ -43,6 +44,7 @@ class ShopController extends Controller
             'longitude' => 'required|numeric',
             'description' => 'nullable|string',
             'classification' => 'nullable|string|in:trader,miller,wholesaler,retailer,government,cooperative',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $user = Auth::user();
@@ -51,6 +53,19 @@ class ShopController extends Controller
         if ((float) $validated['latitude'] !== 0.0 || (float) $validated['longitude'] !== 0.0) {
             $validated['is_active'] = true;
         }
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            // Delete old photo if it exists to avoid orphaned files
+            if ($user->shop && $user->shop->photo_path) {
+                Storage::disk('public')->delete($user->shop->photo_path);
+            }
+
+            $validated['photo_path'] = $request->file('photo')->store('shop_photos', 'public');
+        }
+
+        // Remove raw 'photo' key so it doesn't get passed to the model
+        unset($validated['photo']);
 
         if ($user->shop) {
             $user->shop->update($validated);
