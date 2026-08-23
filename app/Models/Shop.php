@@ -39,7 +39,7 @@ class Shop extends Model
             return null;
         }
 
-        return asset('shop_photos/'.$this->photo_path);
+        return '/shop_photos/'.$this->photo_path;
     }
 
     /**
