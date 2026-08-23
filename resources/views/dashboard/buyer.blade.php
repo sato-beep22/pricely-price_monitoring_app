@@ -68,8 +68,8 @@
                                     @php $specs = array_map('trim', explode(',', $crop->specification)); @endphp
                                     @foreach($specs as $spec)
                                         @php
-                                            $latestPrice = $shop->prices()->where('crop_id', $crop->id)->where('specification', $spec)->latest('recorded_at')->first();
                                             $key = $crop->id . '_' . $spec;
+                                            $latestPrice = $shopLatestPrices[$key] ?? null;
                                             $ceiling = $latestCeilings[$key] ?? null;
                                         @endphp
                                         <tr>

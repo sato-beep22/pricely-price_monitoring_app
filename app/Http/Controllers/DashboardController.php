@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CeilingPrice;
 use App\Models\Crop;
+use App\Models\Price;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 
@@ -17,32 +18,64 @@ class DashboardController extends Controller
         $user = $request->user();
 
         if ($user->isAdmin()) {
-            return view('dashboard.admin');
-        } elseif ($user->isBuyer()) {
-            $latestCeilingIds = \App\Models\CeilingPrice::where('effective_date', '<=', now())
+            $latestCeilingIds = CeilingPrice::where('effective_date', '<=', now())
                 ->selectRaw('MAX(id) as id')
                 ->groupBy('crop_id', 'specification')
                 ->get()
                 ->pluck('id');
 
-            $ceilings = \App\Models\CeilingPrice::whereIn('id', $latestCeilingIds)->get();
-                
+            $ceilings = CeilingPrice::whereIn('id', $latestCeilingIds)->get();
+
             $latestCeilings = [];
             foreach ($ceilings as $ceiling) {
-                $key = $ceiling->crop_id . '_' . $ceiling->specification;
+                $key = $ceiling->crop_id.'_'.$ceiling->specification;
                 $latestCeilings[$key] = $ceiling;
             }
 
-            return view('dashboard.buyer', compact('latestCeilings'));
+            return view('dashboard.admin', compact('latestCeilings'));
+        } elseif ($user->isBuyer()) {
+            $latestCeilingIds = CeilingPrice::where('effective_date', '<=', now())
+                ->selectRaw('MAX(id) as id')
+                ->groupBy('crop_id', 'specification')
+                ->get()
+                ->pluck('id');
+
+            $ceilings = CeilingPrice::whereIn('id', $latestCeilingIds)->get();
+
+            $latestCeilings = [];
+            foreach ($ceilings as $ceiling) {
+                $key = $ceiling->crop_id.'_'.$ceiling->specification;
+                $latestCeilings[$key] = $ceiling;
+            }
+
+            $shop = $user->shop;
+            $shopLatestPrices = [];
+
+            if ($shop) {
+                $latestPriceIds = Price::where('shop_id', $shop->id)
+                    ->selectRaw('MAX(id) as id')
+                    ->groupBy('crop_id', 'specification')
+                    ->get()
+                    ->pluck('id');
+
+                $prices = Price::whereIn('id', $latestPriceIds)->get();
+
+                foreach ($prices as $price) {
+                    $key = $price->crop_id.'_'.$price->specification;
+                    $shopLatestPrices[$key] = $price;
+                }
+            }
+
+            return view('dashboard.buyer', compact('latestCeilings', 'shopLatestPrices'));
         } else {
             $crops = Crop::orderBy('name')->get();
 
-            $latestCeilingIds = \App\Models\CeilingPrice::where('effective_date', '<=', now())
+            $latestCeilingIds = CeilingPrice::where('effective_date', '<=', now())
                 ->selectRaw('MAX(id) as id')
                 ->groupBy('crop_id', 'specification')
                 ->pluck('id');
 
-            $ceilingPrices = \App\Models\CeilingPrice::with('crop')->whereIn('id', $latestCeilingIds)->get();
+            $ceilingPrices = CeilingPrice::with('crop')->whereIn('id', $latestCeilingIds)->get();
 
             $sourceLinks = Setting::where('key', 'like', 'da_price_source_link_%')
                 ->pluck('value', 'key')

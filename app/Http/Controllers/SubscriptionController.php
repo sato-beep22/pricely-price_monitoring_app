@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendSubscriptionSuccessSms;
 use App\Models\Crop;
 use App\Models\Shop;
 use App\Models\Subscription;
@@ -58,7 +59,7 @@ class SubscriptionController extends Controller
 
         if (! empty($farmer->phone)) {
             $message = "Pricely: Matagumpay kang naka-subscribe sa mga update ng presyo mula sa {$shopName}. Makakatanggap ka ng text kapag nagbago ang kanilang presyo.";
-            $smsService->sendSms($farmer->phone, $message);
+            SendSubscriptionSuccessSms::dispatch($farmer->phone, $message);
         }
 
         return redirect()->back()->with('status', 'Successfully subscribed to price alerts.');

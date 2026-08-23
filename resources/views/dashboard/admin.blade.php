@@ -66,11 +66,8 @@
                         @php $specs = array_map('trim', explode(',', $crop->specification)); @endphp
                         @foreach($specs as $spec)
                             @php
-                                $ceiling = \App\Models\CeilingPrice::where('crop_id', $crop->id)
-                                    ->where('specification', $spec)
-                                    ->where('effective_date', '<=', now())
-                                    ->orderByDesc('effective_date')
-                                    ->first();
+                                $key = $crop->id . '_' . $spec;
+                                $ceiling = $latestCeilings[$key] ?? null;
                             @endphp
                             <li class="flex items-center justify-between p-3 bg-base-200 rounded-lg">
                                 <span class="font-medium">{{ $crop->name }} ({{ ucfirst($spec) }})</span>

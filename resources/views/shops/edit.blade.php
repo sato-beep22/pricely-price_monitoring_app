@@ -37,12 +37,12 @@
             </div>
 
             <div class="form-control w-full mt-4">
-                <div class="flex items-center justify-between mb-2">
-                    <label class="label p-0">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
+                    <label class="label p-0 flex flex-col items-start sm:flex-row sm:items-center">
                         <span class="label-text font-semibold">Location Picker</span>
-                        <span class="label-text-alt text-base-content/60 ml-2">Click on the map to set coordinates</span>
+                        <span class="label-text-alt text-base-content/60 sm:ml-2">Click on the map to set coordinates</span>
                     </label>
-                    <button type="button" id="detect-location-btn" class="btn btn-sm btn-secondary">
+                    <button type="button" id="detect-location-btn" class="btn btn-sm btn-secondary w-full sm:w-auto">
                         <i data-lucide="crosshair" class="w-4 h-4 mr-1"></i> Detect My Location
                     </button>
                 </div>
