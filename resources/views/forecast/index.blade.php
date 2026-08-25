@@ -14,7 +14,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                 <div>
                     <h2 class="text-2xl text-slate-800">Market Trends &amp; Projections</h2>
-                    <p class="text-slate-500 text-sm">Based on 30-day historical data and simple moving average (7-day forecast)</p>
+                    <p class="text-slate-500 text-sm">Based on 30-day historical data using Weighted Moving Average + Linear Regression (7-day forecast)</p>
                 </div>
             </div>
 
@@ -95,28 +95,7 @@
 
 
 
-            {{-- ========================================================
-                 BREAK-EVEN INPUT
-                 ======================================================== --}}
-            <div class="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <label for="break-even-input" class="text-sm font-semibold text-slate-600 whitespace-nowrap">
-                    💰 Your Production Cost (₱/kg):
-                </label>
-                <div class="flex items-center gap-2">
-                    <div class="join">
-                        <span class="join-item btn btn-sm btn-disabled bg-base-200 border border-base-300 font-bold text-slate-500">₱</span>
-                        <input
-                            type="number"
-                            id="break-even-input"
-                            placeholder="e.g. 35.00"
-                            min="0"
-                            step="0.01"
-                            class="join-item input input-sm input-bordered w-36 focus:outline-none focus:border-primary"
-                        />
-                    </div>
-                    <span class="text-xs text-slate-400">Enter your cost to see profit/loss overlay on the chart</span>
-                </div>
-            </div>
+
 
             {{-- Chart Container --}}
             <div class="relative">
@@ -130,7 +109,6 @@
             <div class="flex flex-wrap gap-4 mt-4 text-xs text-slate-500">
                 <span class="flex items-center gap-1.5"><span class="inline-block w-6 h-0.5 bg-emerald-500 rounded"></span>Actual Price</span>
                 <span class="flex items-center gap-1.5"><span class="inline-block w-6 border-t-2 border-dashed border-indigo-400"></span>Forecast Trend</span>
-                <span id="legend-break-even" class="hidden items-center gap-1.5"><span class="inline-block w-6 border-t-2 border-dashed border-rose-500"></span>Your Break-Even Cost</span>
             </div>
 
         </div>

@@ -57,22 +57,50 @@ class PriceForecastService
             $forecastPrices[] = null;
         }
 
-        // --- Simple Moving Average (SMA) Forecasting ---
-        $windowSize = min(5, count($actualPrices));
+        // --- Weighted Moving Average (WMA) + Linear Regression Forecasting ---
+        // Use up to 14 days of history for a reliable regression slope.
+        $windowSize = min(14, count($actualPrices));
         $recentPrices = array_slice($actualPrices, -$windowSize);
+        $n = count($recentPrices);
         $lastPrice = (float) end($actualPrices);
 
-        $totalChange = 0;
-        for ($i = 1; $i < count($recentPrices); $i++) {
-            $totalChange += ($recentPrices[$i] - $recentPrices[$i - 1]);
+        // -- WMA daily change --
+        // More-recent days receive linearly higher weights (weight = index + 1).
+        $wmaWeightSum = 0;
+        $wmaWeightedChange = 0;
+        for ($i = 1; $i < $n; $i++) {
+            $weight = $i; // weight grows linearly: 1, 2, ..., n-1
+            $wmaWeightSum += $weight;
+            $wmaWeightedChange += $weight * ($recentPrices[$i] - $recentPrices[$i - 1]);
         }
-        $avgDailyChange = count($recentPrices) > 1 ? $totalChange / (count($recentPrices) - 1) : 0;
+        $wmaAvgDailyChange = $wmaWeightSum > 0 ? $wmaWeightedChange / $wmaWeightSum : 0;
 
-        // Dampen growth so it doesn't extrapolate wildly
-        $dampeningFactor = 0.8;
+        // -- Linear Regression slope (ordinary least squares) --
+        $sumX = 0.0;
+        $sumY = 0.0;
+        $sumXY = 0.0;
+        $sumX2 = 0.0;
+        for ($i = 0; $i < $n; $i++) {
+            $x = (float) ($i + 1);
+            $y = $recentPrices[$i];
+            $sumX += $x;
+            $sumY += $y;
+            $sumXY += $x * $y;
+            $sumX2 += $x * $x;
+        }
+        $denominator = ($n * $sumX2 - $sumX * $sumX);
+        $regressionSlope = $denominator !== 0.0
+            ? ($n * $sumXY - $sumX * $sumY) / $denominator
+            : 0.0;
 
-        // Confidence band: ±5% of last price, widening slightly each day
-        $bandBase = $lastPrice * 0.05;
+        // Blend: 50 % WMA momentum + 50 % regression slope
+        $blendedChange = ($wmaAvgDailyChange * 0.5) + ($regressionSlope * 0.5);
+
+        // Hard price floor: forecast must not drop below 50 % of the last known price.
+        $priceFloor = $lastPrice * 0.50;
+
+        // Confidence band: ±4 % of last price, widening slightly each day
+        $bandBase = $lastPrice * 0.04;
 
         $currentForecast = $lastPrice;
         $lastDate = Carbon::parse(end($dates));
@@ -93,8 +121,10 @@ class PriceForecastService
             $futureDates[] = $futureDate->format('Y-m-d');
             $dates[] = $futureDate->format('Y-m-d');
 
-            $currentForecast += ($avgDailyChange * pow($dampeningFactor, $i));
-            $currentForecast = max(0, $currentForecast);
+            // Dampen only from day 4 onward so the near-term stays responsive.
+            $dampFactor = $i <= 3 ? 1.0 : pow(0.85, $i - 3);
+            $currentForecast += $blendedChange * $dampFactor;
+            $currentForecast = max($priceFloor, $currentForecast);
             $rounded = round($currentForecast, 2);
 
             $actualPrices[] = null;

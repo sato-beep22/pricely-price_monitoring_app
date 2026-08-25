@@ -272,19 +272,55 @@
                                 const successCallback = function(position) {
                                     const lat = position.coords.latitude.toFixed(7);
                                     const lng = position.coords.longitude.toFixed(7);
-                                    
+
                                     latInput.value = lat;
                                     lngInput.value = lng;
-                                    
+
                                     const latlng = [lat, lng];
-                                    map.setView(latlng, 15);
-                                    
+                                    map.setView(latlng, 17);
+
                                     if (marker) {
                                         marker.setLatLng(latlng);
                                     } else {
                                         marker = L.marker(latlng).addTo(map);
                                     }
-                                    
+
+                                    // --- Reverse geocode to fill the Complete Address field ---
+                                    const addressField = document.querySelector('textarea[name="address"]');
+                                    if (addressField) {
+                                        addressField.placeholder = 'Fetching address…';
+                                    }
+
+                                    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`, {
+                                        headers: { 'Accept-Language': 'en', 'User-Agent': 'PricelyApp/1.0' }
+                                    })
+                                    .then(res => res.json())
+                                    .then(geo => {
+                                        if (addressField && geo && geo.display_name) {
+                                            // Build a structured address: house number + road, barangay, city, province, region
+                                            const a = geo.address || {};
+                                            const parts = [
+                                                a.house_number,
+                                                a.road || a.pedestrian || a.footway,
+                                                a.neighbourhood || a.suburb || a.village || a.hamlet,
+                                                a.city_district || a.borough || a.quarter,
+                                                a.city || a.town || a.municipality,
+                                                a.state_district || a.county,
+                                                a.state || a.region,
+                                                a.postcode,
+                                                a.country,
+                                            ].filter(Boolean);
+
+                                            addressField.value = parts.length > 0
+                                                ? parts.join(', ')
+                                                : geo.display_name;
+                                            addressField.placeholder = '';
+                                        }
+                                    })
+                                    .catch(() => {
+                                        if (addressField) { addressField.placeholder = ''; }
+                                    });
+
                                     detectBtn.innerHTML = originalHtml;
                                     detectBtn.disabled = false;
                                     if(typeof lucide !== 'undefined') lucide.createIcons();

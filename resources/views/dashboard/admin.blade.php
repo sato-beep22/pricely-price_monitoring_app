@@ -48,11 +48,11 @@
 
         <a href="{{ route('admin.sms-logs.index') }}" class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stagger-4 hover:border-info transition-colors block">
             <div class="stat-figure text-info">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
             </div>
             <div class="stat-title">SMS Alerts Sent</div>
             <div class="stat-value text-info">{{ \App\Models\SmsLog::count() }}</div>
-            <div class="stat-desc text-info underline">View IPROG SMS Logs</div>
+            <div class="stat-desc text-info underline">View Semaphore SMS Logs</div>
         </a>
     </div>
 
