@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    console.log('✅ Leaflet loaded, initializing map with CARTO Voyager basemap');
+    console.log('✅ Leaflet loaded, initializing map with OpenStreetMap basemap');
 
     // ─── Shared Styles ────────────────────────────────────────────────────────────
     const style = document.createElement('style');
@@ -189,11 +189,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize Leaflet map
     const map = L.map('price-map').setView([16.916, 121.575], 12);
 
-    // Option 2: Leaflet + CARTO Voyager Basemap (Beautiful modern style)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    // OpenStreetMap Basemap (free, no API key required)
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        subdomains: 'abcd',
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
     let markers = [];
