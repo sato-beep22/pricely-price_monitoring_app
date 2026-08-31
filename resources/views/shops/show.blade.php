@@ -109,49 +109,41 @@
     </div>
 
     @push('scripts')
-    @if((float)$shop->latitude != 0 && (float)$shop->longitude != 0)
     <script>
-        window.initShopMap = function () {
-            const lat = {{ $shop->latitude ?: 14.5995 }};
-            const lng = {{ $shop->longitude ?: 120.9842 }};
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                if(typeof L !== 'undefined') {
+                    @if((float)$shop->latitude != 0 && (float)$shop->longitude != 0)
+                    // Fallback to Manila coordinates if null, 0, or empty string
+                    const lat = {{ $shop->latitude ?: 14.5995 }};
+                    const lng = {{ $shop->longitude ?: 120.9842 }};
+                    
+                    // Fix Leaflet's default icon path issue with Vite
+                    delete L.Icon.Default.prototype._getIconUrl;
+                    L.Icon.Default.mergeOptions({
+                        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+                        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+                    });
 
-            const map = new google.maps.Map(document.getElementById('shop-map'), {
-                center: { lat, lng },
-                zoom: 15,
-                mapTypeId: 'roadmap',
-                mapTypeControl: false,
-                streetViewControl: false,
-                fullscreenControl: false,
-            });
+                    const map = L.map('shop-map').setView([lat, lng], 15);
+                    
+                    // Use updated OSM URL without {s}
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }).addTo(map);
 
-            const markerDiv = document.createElement('div');
-            markerDiv.innerHTML = `
-                <svg viewBox="0 0 40 50" width="40" height="50" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0px 3px 5px rgba(0,0,0,0.35));">
-                    <path d="M20 0C11.163 0 4 7.163 4 16c0 10.917 13.393 27.915 15.13 30.018a1.2 1.2 0 0 0 1.74 0C22.607 43.915 36 26.917 36 16 36 7.163 28.837 0 20 0z" fill="#059669"/>
-                    <circle cx="20" cy="16" r="10" fill="white"/>
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" transform="translate(8,4) scale(0.6)" stroke="#059669" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>`;
-
-            const marker = new google.maps.marker.AdvancedMarkerElement({
-                map,
-                position: { lat, lng },
-                title: '{{ addslashes($shop->name) }}',
-                content: markerDiv.firstElementChild,
-            });
-
-            const infoWindow = new google.maps.InfoWindow({
-                content: `<div style="padding:8px 12px;font-family:inherit;"><b style="color:#1e293b;">{{ addslashes($shop->name) }}</b><br><span style="font-size:0.8rem;color:#64748b;">{{ addslashes($shop->address) }}</span></div>`,
-            });
-
-            marker.addListener('click', () => { infoWindow.open({ anchor: marker, map }); });
-            infoWindow.open({ anchor: marker, map });
-        };
+                    L.marker([lat, lng])
+                        .addTo(map)
+                        .bindPopup('<b>{{ addslashes($shop->name) }}</b><br>Here is your shop.')
+                        .openPopup();
+                    
+                    // Wait for GSAP animations to fully complete (1+ seconds) before recalculating size
+                    setTimeout(() => map.invalidateSize(), 1500);
+                    @endif
+                }
+            }, 500);
+        });
     </script>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=marker&callback=initShopMap&loading=async"
-        async defer
-    ></script>
-    @endif
     @endpush
-
 </x-app-layout>

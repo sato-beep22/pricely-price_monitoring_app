@@ -64,8 +64,4 @@ return [
         'api_token' => env('IPROG_API_TOKEN'),
     ],
 
-    'google' => [
-        'maps_key' => env('GOOGLE_MAPS_API_KEY'),
-    ],
-
 ];
