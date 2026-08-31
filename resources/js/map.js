@@ -189,10 +189,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize Leaflet map
     const map = L.map('price-map').setView([16.916, 121.575], 12);
 
-    // OpenStreetMap Basemap (free, no API key required)
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    // Stadia Maps – Alidade Smooth (free, no API key, CARTO Voyager-style)
+    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+        maxZoom: 20,
+        attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
     let markers = [];
