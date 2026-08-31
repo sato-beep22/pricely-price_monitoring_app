@@ -29,7 +29,7 @@
                     </h3>
                     <div class="flex flex-wrap gap-2">
                         @forelse($marketSummary['SELL_NOW'] as $item)
-                            <span class="badge bg-white border-rose-200 text-rose-700 shadow-sm font-semibold">
+                            <span class="badge bg-white border-rose-200 text-rose-700 shadow-sm font-semibold whitespace-nowrap">
                                 {{ $item['crop_name'] }} ({{ ucfirst($item['spec']) }})
                                 <span class="ml-1 opacity-70 text-xs">{{ $item['trend'] }}%</span>
                             </span>
@@ -46,7 +46,7 @@
                     </h3>
                     <div class="flex flex-wrap gap-2">
                         @forelse($marketSummary['HOLD'] as $item)
-                            <span class="badge bg-white border-amber-200 text-amber-700 shadow-sm font-semibold">
+                            <span class="badge bg-white border-amber-200 text-amber-700 shadow-sm font-semibold whitespace-nowrap">
                                 {{ $item['crop_name'] }} ({{ ucfirst($item['spec']) }})
                                 <span class="ml-1 opacity-70 text-xs">+{{ $item['trend'] }}%</span>
                             </span>
@@ -63,7 +63,7 @@
                     </h3>
                     <div class="flex flex-wrap gap-2">
                         @forelse($marketSummary['STABLE'] as $item)
-                            <span class="badge bg-white border-emerald-200 text-emerald-700 shadow-sm font-semibold">
+                            <span class="badge bg-white border-emerald-200 text-emerald-700 shadow-sm font-semibold whitespace-nowrap">
                                 {{ $item['crop_name'] }} ({{ ucfirst($item['spec']) }})
                             </span>
                         @empty

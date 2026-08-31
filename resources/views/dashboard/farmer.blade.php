@@ -96,24 +96,24 @@
                                 <th>{{ __('Crop') }}</th>
                                 <th>{{ __('Specification') }}</th>
                                 <th>{{ __('Ceiling Price') }}</th>
-                                <th>{{ __('Effective Date') }}</th>
-                                <th>{{ __('Notes') }}</th>
+                                <th class="hidden md:table-cell">{{ __('Effective Date') }}</th>
+                                <th class="hidden lg:table-cell">{{ __('Notes') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($ceilingPrices as $cp)
                                 <tr class="hover">
                                     <td class="font-semibold">{{ $cp->crop->name }}</td>
-                                    <td><span class="badge badge-primary badge-outline">{{ ucfirst($cp->specification) }}</span></td>
+                                    <td><span class="badge badge-primary badge-outline whitespace-nowrap">{{ ucfirst($cp->specification) }}</span></td>
                                     <td>
-                                        <span class="badge badge-error badge-lg font-bold gap-1">
+                                        <span class="badge badge-error badge-lg font-bold gap-1 whitespace-nowrap">
                                             ₱{{ number_format($cp->max_price, 2) }}/{{ $cp->crop->unit }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="hidden md:table-cell">
                                         {{ $cp->effective_date->format('M d, Y') }}
                                     </td>
-                                    <td class="text-sm text-base-content/70 max-w-xs">{{ $cp->notes ?? '—' }}</td>
+                                    <td class="hidden lg:table-cell text-sm text-base-content/70 max-w-xs">{{ $cp->notes ?? '—' }}</td>
                                 </tr>
                             @empty
                                 <tr>
