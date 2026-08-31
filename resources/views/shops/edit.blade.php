@@ -213,155 +213,126 @@
             if (overlay) { overlay.remove(); }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                if (typeof L !== 'undefined') {
-                    const latInput = document.getElementById('lat-input');
-                    const lngInput = document.getElementById('lng-input');
-                    
-                    const startLat = latInput.value ? parseFloat(latInput.value) : 14.5995;
-                    const startLng = lngInput.value ? parseFloat(lngInput.value) : 120.9842;
-                    
-                    // Fix Leaflet's default icon path issue with Vite
-                    delete L.Icon.Default.prototype._getIconUrl;
-                    L.Icon.Default.mergeOptions({
-                        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-                        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-                        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+        window.initLocationPickerMap = function () {
+            const latInput = document.getElementById('lat-input');
+            const lngInput = document.getElementById('lng-input');
+
+            const startLat = latInput.value ? parseFloat(latInput.value) : 16.916;
+            const startLng = lngInput.value ? parseFloat(lngInput.value) : 121.575;
+
+            const map = new google.maps.Map(document.getElementById('location-picker-map'), {
+                center: { lat: startLat, lng: startLng },
+                zoom: 10,
+                mapTypeId: 'roadmap',
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: false,
+            });
+
+            let marker = null;
+            const geocoder = new google.maps.Geocoder();
+
+            function placeMarker(latLng) {
+                if (marker) {
+                    marker.position = latLng;
+                } else {
+                    const markerDiv = document.createElement('div');
+                    markerDiv.innerHTML = `
+                        <svg viewBox="0 0 40 50" width="32" height="40" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
+                            <path d="M20 0C11.163 0 4 7.163 4 16c0 10.917 13.393 27.915 15.13 30.018a1.2 1.2 0 0 0 1.74 0C22.607 43.915 36 26.917 36 16 36 7.163 28.837 0 20 0z" fill="#059669"/>
+                            <circle cx="20" cy="16" r="8" fill="white"/>
+                        </svg>`;
+                    marker = new google.maps.marker.AdvancedMarkerElement({
+                        map,
+                        position: latLng,
+                        content: markerDiv.firstElementChild,
                     });
-
-                    const map = L.map('location-picker-map').setView([startLat, startLng], 10);
-                    
-                    // Delay map resize calculation until after any container animation
-                    setTimeout(() => map.invalidateSize(), 1500);
-                    
-                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
-
-                    let marker;
-                    if (latInput.value && lngInput.value) {
-                        marker = L.marker([startLat, startLng]).addTo(map);
-                    }
-
-                    map.on('click', function(e) {
-                        const lat = e.latlng.lat.toFixed(7);
-                        const lng = e.latlng.lng.toFixed(7);
-                        
-                        latInput.value = lat;
-                        lngInput.value = lng;
-                        
-                        if (marker) {
-                            marker.setLatLng(e.latlng);
-                        } else {
-                            marker = L.marker(e.latlng).addTo(map);
-                        }
-                    });
-
-                    // Detect Location Feature
-                    const detectBtn = document.getElementById('detect-location-btn');
-                    if (detectBtn) {
-                        detectBtn.addEventListener('click', function() {
-                            if ("geolocation" in navigator) {
-                                const originalHtml = detectBtn.innerHTML;
-                                detectBtn.innerHTML = '<span class="loading loading-spinner loading-xs"></span> Detecting...';
-                                detectBtn.disabled = true;
-                                
-                                const successCallback = function(position) {
-                                    const lat = position.coords.latitude.toFixed(7);
-                                    const lng = position.coords.longitude.toFixed(7);
-
-                                    latInput.value = lat;
-                                    lngInput.value = lng;
-
-                                    const latlng = [lat, lng];
-                                    map.setView(latlng, 17);
-
-                                    if (marker) {
-                                        marker.setLatLng(latlng);
-                                    } else {
-                                        marker = L.marker(latlng).addTo(map);
-                                    }
-
-                                    // --- Reverse geocode to fill the Complete Address field ---
-                                    const addressField = document.querySelector('textarea[name="address"]');
-                                    if (addressField) {
-                                        addressField.placeholder = 'Fetching address…';
-                                    }
-
-                                    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`, {
-                                        headers: { 'Accept-Language': 'en', 'User-Agent': 'PricelyApp/1.0' }
-                                    })
-                                    .then(res => res.json())
-                                    .then(geo => {
-                                        if (addressField && geo && geo.display_name) {
-                                            // Build a structured address: house number + road, barangay, city, province, region
-                                            const a = geo.address || {};
-                                            const parts = [
-                                                a.house_number,
-                                                a.road || a.pedestrian || a.footway,
-                                                a.neighbourhood || a.suburb || a.village || a.hamlet,
-                                                a.city_district || a.borough || a.quarter,
-                                                a.city || a.town || a.municipality,
-                                                a.state_district || a.county,
-                                                a.state || a.region,
-                                                a.postcode,
-                                                a.country,
-                                            ].filter(Boolean);
-
-                                            addressField.value = parts.length > 0
-                                                ? parts.join(', ')
-                                                : geo.display_name;
-                                            addressField.placeholder = '';
-                                        }
-                                    })
-                                    .catch(() => {
-                                        if (addressField) { addressField.placeholder = ''; }
-                                    });
-
-                                    detectBtn.innerHTML = originalHtml;
-                                    detectBtn.disabled = false;
-                                    if(typeof lucide !== 'undefined') lucide.createIcons();
-                                };
-
-                                const errorCallback = function(error) {
-                                    let errorMsg = "Unable to detect location.";
-                                    if(error.code === 1) errorMsg = "Location access denied. Please allow location permissions in your browser.";
-                                    else if(error.code === 2) errorMsg = "Location unavailable. Please ensure your GPS/location services are turned on.";
-                                    else if(error.code === 3) errorMsg = "Location detection timed out. Please try again or click the map manually.";
-                                    
-                                    alert(errorMsg);
-                                    detectBtn.innerHTML = originalHtml;
-                                    detectBtn.disabled = false;
-                                    if(typeof lucide !== 'undefined') lucide.createIcons();
-                                };
-
-                                // Try high accuracy first
-                                navigator.geolocation.getCurrentPosition(successCallback, function(error) {
-                                    // If high accuracy times out (code 3), try again with low accuracy
-                                    if (error.code === 3) {
-                                        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
-                                            enableHighAccuracy: false,
-                                            timeout: 10000,
-                                            maximumAge: 0
-                                        });
-                                    } else {
-                                        errorCallback(error);
-                                    }
-                                }, {
-                                    enableHighAccuracy: true,
-                                    timeout: 5000, // 5 seconds for high accuracy
-                                    maximumAge: 0
-                                });
-                            } else {
-                                alert("Geolocation is not supported by your browser.");
-                            }
-                        });
-                    }
                 }
-            }, 300);
-        });
+
+                latInput.value = latLng.lat.toFixed(7);
+                lngInput.value = latLng.lng.toFixed(7);
+            }
+
+            // If coordinates already exist, place a marker
+            if (latInput.value && lngInput.value) {
+                placeMarker({ lat: startLat, lng: startLng });
+            }
+
+            // Click on map to set coordinates
+            map.addListener('click', (e) => {
+                placeMarker({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+            });
+
+            // Detect Location feature
+            const detectBtn = document.getElementById('detect-location-btn');
+            if (detectBtn) {
+                detectBtn.addEventListener('click', function () {
+                    if (!('geolocation' in navigator)) {
+                        alert('Geolocation is not supported by your browser.');
+                        return;
+                    }
+
+                    const originalHtml = detectBtn.innerHTML;
+                    detectBtn.innerHTML = '<span class="loading loading-spinner loading-xs"></span> Detecting...';
+                    detectBtn.disabled = true;
+
+                    const successCallback = function (position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+
+                        latInput.value = lat.toFixed(7);
+                        lngInput.value = lng.toFixed(7);
+
+                        map.setCenter({ lat, lng });
+                        map.setZoom(17);
+                        placeMarker({ lat, lng });
+
+                        // Reverse geocode using Google Geocoder
+                        const addressField = document.querySelector('textarea[name="address"]');
+                        if (addressField) {
+                            addressField.placeholder = 'Fetching address…';
+                            geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+                                if (status === 'OK' && results[0]) {
+                                    addressField.value = results[0].formatted_address;
+                                }
+                                addressField.placeholder = '';
+                            });
+                        }
+
+                        detectBtn.innerHTML = originalHtml;
+                        detectBtn.disabled = false;
+                        if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+                    };
+
+                    const errorCallback = function (error) {
+                        let errorMsg = 'Unable to detect location.';
+                        if (error.code === 1)      { errorMsg = 'Location access denied. Please allow location permissions in your browser.'; }
+                        else if (error.code === 2) { errorMsg = 'Location unavailable. Please ensure your GPS/location services are turned on.'; }
+                        else if (error.code === 3) { errorMsg = 'Location detection timed out. Please try again or click the map manually.'; }
+
+                        alert(errorMsg);
+                        detectBtn.innerHTML = originalHtml;
+                        detectBtn.disabled = false;
+                        if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+                    };
+
+                    // Try high accuracy first, fall back to low accuracy on timeout
+                    navigator.geolocation.getCurrentPosition(successCallback, function (error) {
+                        if (error.code === 3) {
+                            navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
+                                enableHighAccuracy: false, timeout: 10000, maximumAge: 0,
+                            });
+                        } else {
+                            errorCallback(error);
+                        }
+                    }, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+                });
+            }
+        };
     </script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_key') }}&libraries=marker&callback=initLocationPickerMap&loading=async"
+        async defer
+    ></script>
     @endpush
 </x-app-layout>
