@@ -348,10 +348,10 @@
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <div class="flex flex-col md:flex-row">
-                            <img src="{{ asset('images/price_map1.jpg') }}?v=3" alt="Map View" class="w-full md:w-1/2 h-64 sm:h-80 md:h-96" style="object-fit:cover; object-position:top;">
-                            <div class="border-t md:border-t-0 md:border-l border-slate-100"></div>
-                            <img src="{{ asset('images/price_map2.jpg') }}?v=3" alt="Shop Detail" class="w-full md:w-1/2 h-64 sm:h-80 md:h-96" style="object-fit:cover; object-position:top;">
+                        <div class="flex flex-col md:flex-row bg-slate-900">
+                            <img src="{{ asset('images/price_map1.jpg') }}?v=3" alt="Map View" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
+                            <div class="border-t md:border-t-0 md:border-l border-slate-700"></div>
+                            <img src="{{ asset('images/price_map2.jpg') }}?v=3" alt="Shop Detail" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                         </div>
                         <div class="px-4 sm:px-6 py-4 space-y-2">
                             <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
@@ -405,7 +405,9 @@
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <img src="{{ asset('images/sms_feature.jpg') }}?v=3" alt="SMS Alerts Feature" class="w-full h-64 sm:h-80 md:h-[420px]" style="object-fit:cover; object-position:top;">
+                        <div class="bg-slate-900 flex justify-center">
+                            <img src="{{ asset('images/sms_feature.jpg') }}?v=3" alt="SMS Alerts Feature" class="w-full max-w-sm h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
+                        </div>
                         <div class="px-4 sm:px-6 py-4">
                             <div class="space-y-2">
                                 <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
@@ -460,10 +462,10 @@
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <div class="flex flex-col md:flex-row">
-                            <img src="{{ asset('images/price_forecast1.jpg') }}?v=3" alt="Market Trends" class="w-full md:w-1/2 h-64 sm:h-80 md:h-96" style="object-fit:cover; object-position:top;">
-                            <div class="border-t md:border-t-0 md:border-l border-slate-100"></div>
-                            <img src="{{ asset('images/price_forecast2.jpg') }}?v=3" alt="Forecast Chart" class="w-full md:w-1/2 h-64 sm:h-80 md:h-96" style="object-fit:cover; object-position:top;">
+                        <div class="flex flex-col md:flex-row bg-slate-900">
+                            <img src="{{ asset('images/price_forecast1.jpg') }}?v=3" alt="Market Trends" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
+                            <div class="border-t md:border-t-0 md:border-l border-slate-700"></div>
+                            <img src="{{ asset('images/price_forecast2.jpg') }}?v=3" alt="Forecast Chart" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                         </div>
                         <div class="px-4 sm:px-6 py-4 space-y-2">
                             <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
