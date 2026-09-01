@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ChatbotDataService;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Log;
 
 class ChatbotController extends Controller
 {
+    public function __construct(private readonly ChatbotDataService $dataService) {}
+
     private string $systemPrompt = <<<'PROMPT'
 You are Ka-Ani, the official AI assistant of the Pricely app — a Philippine agricultural crop price monitoring platform that connects farmers and crop buyers.
 
@@ -81,9 +84,12 @@ PROMPT;
             ? "\n\n=== USER CONTEXT ===\nThe user chatting with you is a BUYER. Tailor your responses to help them manage their shop, update crop prices, and understand how farmers subscribe to them."
             : "\n\n=== USER CONTEXT ===\nThe user chatting with you is a FARMER. Tailor your responses to help them find buyers, check prices, and set up SMS alerts.";
 
+        // Fetch live database snapshot and inject into the system prompt.
+        $liveSnapshot = "\n\n".$this->dataService->buildLiveSnapshot();
+
         // Build OpenAI-compatible messages array
         $messages = [
-            ['role' => 'system', 'content' => $this->systemPrompt.$roleContext],
+            ['role' => 'system', 'content' => $this->systemPrompt.$roleContext.$liveSnapshot],
         ];
 
         foreach ($history as $turn) {
