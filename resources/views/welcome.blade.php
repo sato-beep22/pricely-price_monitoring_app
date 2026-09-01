@@ -149,8 +149,7 @@
                 {{-- Phone group — click anywhere to swap --}}
                 <div class="relative cursor-pointer select-none"
                      style="width: 380px; height: 580px;"
-                     @click="swapped = !swapped"
-                     title="I-click para baguhin ang view">
+                     @click="swapped = !swapped">
 
                     {{-- Phone A: Map View --}}
                     <div class="absolute left-0 top-0"
@@ -189,7 +188,7 @@
                     </div>
 
                     {{-- Glow orb --}}
-                    <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-52 h-14 rounded-full blur-3xl opacity-40 pointer-events-none"
+                    <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-64 h-24 rounded-full blur-[40px] opacity-40 pointer-events-none"
                          style="background: radial-gradient(ellipse, rgba(16,185,129,0.7) 0%, transparent 70%);"></div>
                 </div>
 
@@ -208,19 +207,20 @@
             <div class="flex flex-col items-center gap-5 z-10" id="feat-sms">
 
                 <div class="relative" style="height: 600px;">
-                    {{-- Live badge --}}
-                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap">
-                        <span class="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg shadow-emerald-500/40">
-                            <span class="relative flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                            </span>
-                            Live Feature
-                        </span>
-                    </div>
-
-                    <div class="transition-transform duration-300 hover:-translate-y-4"
+                    <div class="relative transition-transform duration-300 hover:-translate-y-4"
                          style="filter: drop-shadow(0 40px 80px rgba(99,102,241,0.35)) drop-shadow(0 14px 28px rgba(0,0,0,0.28));">
+                        
+                        {{-- Live badge --}}
+                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap">
+                            <span class="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg shadow-emerald-500/40">
+                                <span class="relative flex h-2 w-2">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                                </span>
+                                Live Feature
+                            </span>
+                        </div>
+
                         @include('partials.phone-mockup', [
                             'image'  => asset('images/sms_feature.jpg'),
                             'alt'    => 'SMS Alerts',
@@ -230,7 +230,7 @@
                         ])
                     </div>
 
-                    <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-56 h-14 rounded-full blur-3xl opacity-50 pointer-events-none"
+                    <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-72 h-24 rounded-full blur-[40px] opacity-50 pointer-events-none"
                          style="background: radial-gradient(ellipse, rgba(99,102,241,0.7) 0%, transparent 70%);"></div>
                 </div>
 
@@ -249,8 +249,7 @@
 
                 <div class="relative cursor-pointer select-none"
                      style="width: 380px; height: 580px;"
-                     @click="swapped = !swapped"
-                     title="I-click para baguhin ang view">
+                     @click="swapped = !swapped">
 
                     {{-- Phone A: Market Trends (starts front-right) --}}
                     <div class="absolute left-0 top-0"
@@ -289,7 +288,7 @@
                     </div>
 
                     {{-- Glow orb --}}
-                    <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-52 h-14 rounded-full blur-3xl opacity-40 pointer-events-none"
+                    <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-64 h-24 rounded-full blur-[40px] opacity-40 pointer-events-none"
                          style="background: radial-gradient(ellipse, rgba(245,158,11,0.7) 0%, transparent 70%);"></div>
                 </div>
 
