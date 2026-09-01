@@ -179,25 +179,21 @@
                         ])
                     </div>
 
-                    {{-- Swap hint --}}
-                    <div class="absolute left-1/2 -translate-x-1/2 z-20 pointer-events-none" style="bottom: -15px;">
-                        <span class="inline-flex items-center gap-1 text-[9px] text-slate-400 font-semibold whitespace-nowrap">
-                            <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i>
-                            I-click para baguhin ang view
-                        </span>
-                    </div>
-
                     {{-- Glow orb --}}
-                    <div class="absolute left-1/2 -translate-x-1/2 w-64 h-24 rounded-full blur-[40px] opacity-40 pointer-events-none"
-                         style="bottom: -40px; background: radial-gradient(ellipse, rgba(16,185,129,0.7) 0%, transparent 70%);"></div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-[400px] h-32 rounded-full blur-[60px] opacity-40 pointer-events-none"
+                         style="bottom: -100px; background: radial-gradient(ellipse, rgba(16,185,129,0.7) 0%, transparent 70%);"></div>
                 </div>
 
                 {{-- Label + modal CTA --}}
                 <div class="flex flex-col items-center gap-2 mt-4">
+                    <span class="inline-flex items-center gap-1.5 text-[10px] text-slate-600 font-semibold bg-slate-100/80 px-3 py-1 rounded-full whitespace-nowrap mb-1">
+                        <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                        I-click ang phone para baguhin ang view
+                    </span>
                     <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                         <i data-lucide="compass" class="w-3.5 h-3.5"></i> Shop Map
                     </span>
-                    <button @click.stop="modal = 'map'" class="text-xs text-slate-400 hover:text-emerald-600 font-semibold transition-colors flex items-center gap-1">
+                    <button @click.stop="modal = 'map'" class="text-xs text-slate-400 hover:text-emerald-600 font-semibold transition-colors flex items-center gap-1 mt-1">
                         I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </button>
                 </div>
@@ -230,15 +226,16 @@
                         ])
                     </div>
 
-                    <div class="absolute left-1/2 -translate-x-1/2 w-72 h-24 rounded-full blur-[40px] opacity-50 pointer-events-none"
-                         style="bottom: -40px; background: radial-gradient(ellipse, rgba(99,102,241,0.7) 0%, transparent 70%);"></div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-[450px] h-32 rounded-full blur-[60px] opacity-50 pointer-events-none"
+                         style="bottom: -100px; background: radial-gradient(ellipse, rgba(99,102,241,0.7) 0%, transparent 70%);"></div>
                 </div>
 
                 <div class="flex flex-col items-center gap-2 mt-4">
+                    <div class="h-[28px] mb-1"></div> {{-- Spacer to match the height of the swap hint on adjacent features --}}
                     <span class="inline-flex items-center gap-1.5 bg-indigo-100 text-indigo-800 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                         <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> SMS Alerts
                     </span>
-                    <button @click="modal = 'sms'" class="text-xs text-slate-400 hover:text-indigo-600 font-semibold transition-colors flex items-center gap-1">
+                    <button @click="modal = 'sms'" class="text-xs text-slate-400 hover:text-indigo-600 font-semibold transition-colors flex items-center gap-1 mt-1">
                         I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </button>
                 </div>
@@ -279,24 +276,20 @@
                         ])
                     </div>
 
-                    {{-- Swap hint --}}
-                    <div class="absolute left-1/2 -translate-x-1/2 z-20 pointer-events-none" style="bottom: -15px;">
-                        <span class="inline-flex items-center gap-1 text-[9px] text-slate-400 font-semibold whitespace-nowrap">
-                            <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i>
-                            I-click para baguhin ang view
-                        </span>
-                    </div>
-
                     {{-- Glow orb --}}
-                    <div class="absolute left-1/2 -translate-x-1/2 w-64 h-24 rounded-full blur-[40px] opacity-40 pointer-events-none"
-                         style="bottom: -40px; background: radial-gradient(ellipse, rgba(245,158,11,0.7) 0%, transparent 70%);"></div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-[400px] h-32 rounded-full blur-[60px] opacity-40 pointer-events-none"
+                         style="bottom: -100px; background: radial-gradient(ellipse, rgba(245,158,11,0.7) 0%, transparent 70%);"></div>
                 </div>
 
                 <div class="flex flex-col items-center gap-2 mt-4">
+                    <span class="inline-flex items-center gap-1.5 text-[10px] text-slate-600 font-semibold bg-slate-100/80 px-3 py-1 rounded-full whitespace-nowrap mb-1">
+                        <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+                        I-click ang phone para baguhin ang view
+                    </span>
                     <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                         <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Price Forecast
                     </span>
-                    <button @click.stop="modal = 'forecast'" class="text-xs text-slate-400 hover:text-amber-600 font-semibold transition-colors flex items-center gap-1">
+                    <button @click.stop="modal = 'forecast'" class="text-xs text-slate-400 hover:text-amber-600 font-semibold transition-colors flex items-center gap-1 mt-1">
                         I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </button>
                 </div>
