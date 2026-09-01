@@ -330,7 +330,7 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col" style="max-height:90vh;"
+                    class="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col" style="max-height:90vh;"
                     @click.stop
                 >
                     <div class="bg-emerald-50 border-b border-emerald-100 px-4 sm:px-6 py-4 flex items-center justify-between">
@@ -387,7 +387,7 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col" style="max-height:90vh;"
+                    class="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col" style="max-height:90vh;"
                     @click.stop
                 >
                     <div class="bg-blue-50 border-b border-blue-100 px-4 sm:px-6 py-4 flex items-center justify-between">
@@ -444,7 +444,7 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col" style="max-height:90vh;"
+                    class="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col" style="max-height:90vh;"
                     @click.stop
                 >
                     <div class="bg-amber-50 border-b border-amber-100 px-4 sm:px-6 py-4 flex items-center justify-between">
