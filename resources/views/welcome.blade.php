@@ -180,7 +180,7 @@
                     </div>
 
                     {{-- Swap hint --}}
-                    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                    <div class="absolute left-1/2 -translate-x-1/2 z-20 pointer-events-none" style="bottom: -15px;">
                         <span class="inline-flex items-center gap-1 text-[9px] text-slate-400 font-semibold whitespace-nowrap">
                             <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i>
                             I-click para baguhin ang view
@@ -188,8 +188,8 @@
                     </div>
 
                     {{-- Glow orb --}}
-                    <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-64 h-24 rounded-full blur-[40px] opacity-40 pointer-events-none"
-                         style="background: radial-gradient(ellipse, rgba(16,185,129,0.7) 0%, transparent 70%);"></div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-64 h-24 rounded-full blur-[40px] opacity-40 pointer-events-none"
+                         style="bottom: -40px; background: radial-gradient(ellipse, rgba(16,185,129,0.7) 0%, transparent 70%);"></div>
                 </div>
 
                 {{-- Label + modal CTA --}}
@@ -211,7 +211,7 @@
                          style="filter: drop-shadow(0 40px 80px rgba(99,102,241,0.35)) drop-shadow(0 14px 28px rgba(0,0,0,0.28));">
                         
                         {{-- Live badge --}}
-                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap">
+                        <div class="absolute left-1/2 -translate-x-1/2 z-30 whitespace-nowrap" style="top: -20px;">
                             <span class="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg shadow-emerald-500/40">
                                 <span class="relative flex h-2 w-2">
                                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
@@ -230,8 +230,8 @@
                         ])
                     </div>
 
-                    <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-72 h-24 rounded-full blur-[40px] opacity-50 pointer-events-none"
-                         style="background: radial-gradient(ellipse, rgba(99,102,241,0.7) 0%, transparent 70%);"></div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-72 h-24 rounded-full blur-[40px] opacity-50 pointer-events-none"
+                         style="bottom: -40px; background: radial-gradient(ellipse, rgba(99,102,241,0.7) 0%, transparent 70%);"></div>
                 </div>
 
                 <div class="flex flex-col items-center gap-2 mt-4">
@@ -280,7 +280,7 @@
                     </div>
 
                     {{-- Swap hint --}}
-                    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                    <div class="absolute left-1/2 -translate-x-1/2 z-20 pointer-events-none" style="bottom: -15px;">
                         <span class="inline-flex items-center gap-1 text-[9px] text-slate-400 font-semibold whitespace-nowrap">
                             <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i>
                             I-click para baguhin ang view
@@ -288,8 +288,8 @@
                     </div>
 
                     {{-- Glow orb --}}
-                    <div class="absolute -bottom-12 left-1/2 -translate-x-1/2 w-64 h-24 rounded-full blur-[40px] opacity-40 pointer-events-none"
-                         style="background: radial-gradient(ellipse, rgba(245,158,11,0.7) 0%, transparent 70%);"></div>
+                    <div class="absolute left-1/2 -translate-x-1/2 w-64 h-24 rounded-full blur-[40px] opacity-40 pointer-events-none"
+                         style="bottom: -40px; background: radial-gradient(ellipse, rgba(245,158,11,0.7) 0%, transparent 70%);"></div>
                 </div>
 
                 <div class="flex flex-col items-center gap-2 mt-4">
