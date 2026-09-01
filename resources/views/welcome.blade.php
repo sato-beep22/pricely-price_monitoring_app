@@ -148,34 +148,34 @@
 
                 {{-- Phone group — click anywhere to swap --}}
                 <div class="relative cursor-pointer select-none"
-                     style="width: 295px; height: 490px;"
+                     style="width: 380px; height: 580px;"
                      @click="swapped = !swapped"
                      title="I-click para baguhin ang view">
 
                     {{-- Phone A: Map View --}}
-                    <div style="position:absolute; left:0; top:0; transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1);"
-                         :style="swapped
-                           ? 'z-index:1; transform: translateX(85px) translateY(40px) rotate(7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'
-                           : 'z-index:2; transform: none; filter: drop-shadow(0 32px 64px rgba(16,185,129,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'">
+                    <div class="absolute left-0 top-0"
+                         :style="`transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1); ` + (swapped
+                           ? 'z-index:1; transform: translateX(110px) translateY(45px) rotate(7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'
+                           : 'z-index:2; transform: none; filter: drop-shadow(0 32px 64px rgba(16,185,129,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));')">
                         @include('partials.phone-mockup', [
                             'image'  => asset('images/price_map1.jpg'),
                             'alt'    => 'Interactive Map',
-                            'width'  => 190,
-                            'height' => 390,
+                            'width'  => 260,
+                            'height' => 533,
                             'color'  => '#0f172a',
                         ])
                     </div>
 
                     {{-- Phone B: Shop Detail --}}
-                    <div style="position:absolute; left:0; top:0; transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1);"
-                         :style="swapped
+                    <div class="absolute left-0 top-0"
+                         :style="`transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1); ` + (swapped
                            ? 'z-index:2; transform: none; filter: drop-shadow(0 32px 64px rgba(16,185,129,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'
-                           : 'z-index:1; transform: translateX(85px) translateY(40px) rotate(7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'">
+                           : 'z-index:1; transform: translateX(110px) translateY(45px) rotate(7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));')">
                         @include('partials.phone-mockup', [
                             'image'  => asset('images/price_map2.jpg'),
                             'alt'    => 'Shop Detail',
-                            'width'  => 190,
-                            'height' => 390,
+                            'width'  => 260,
+                            'height' => 533,
                             'color'  => '#0f172a',
                         ])
                     </div>
@@ -207,7 +207,7 @@
             {{-- ── FEATURE 2: SMS Alerts (single center phone, larger) ── --}}
             <div class="flex flex-col items-center gap-5 z-10" id="feat-sms">
 
-                <div class="relative" style="height: 520px;">
+                <div class="relative" style="height: 600px;">
                     {{-- Live badge --}}
                     <div class="absolute -top-5 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap">
                         <span class="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg shadow-emerald-500/40">
@@ -224,8 +224,8 @@
                         @include('partials.phone-mockup', [
                             'image'  => asset('images/sms_feature.jpg'),
                             'alt'    => 'SMS Alerts',
-                            'width'  => 215,
-                            'height' => 440,
+                            'width'  => 280,
+                            'height' => 574,
                             'color'  => '#0f172a',
                         ])
                     </div>
@@ -248,34 +248,34 @@
             <div x-data="{ swapped: false }" class="flex flex-col items-center gap-5" id="feat-forecast">
 
                 <div class="relative cursor-pointer select-none"
-                     style="width: 295px; height: 490px;"
+                     style="width: 380px; height: 580px;"
                      @click="swapped = !swapped"
                      title="I-click para baguhin ang view">
 
                     {{-- Phone A: Market Trends (starts front-right) --}}
-                    <div style="position:absolute; left:0; top:0; transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1);"
-                         :style="swapped
-                           ? 'z-index:1; transform: translateX(0px) translateY(40px) rotate(-7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'
-                           : 'z-index:2; transform: translateX(85px); filter: drop-shadow(0 32px 64px rgba(245,158,11,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'">
+                    <div class="absolute left-0 top-0"
+                         :style="`transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1); ` + (swapped
+                           ? 'z-index:1; transform: translateX(0px) translateY(45px) rotate(-7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'
+                           : 'z-index:2; transform: translateX(110px); filter: drop-shadow(0 32px 64px rgba(245,158,11,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));')">
                         @include('partials.phone-mockup', [
                             'image'  => asset('images/price_forecast1.jpg'),
                             'alt'    => 'Market Trends',
-                            'width'  => 190,
-                            'height' => 390,
+                            'width'  => 260,
+                            'height' => 533,
                             'color'  => '#0f172a',
                         ])
                     </div>
 
                     {{-- Phone B: Forecast Chart (starts back-left) --}}
-                    <div style="position:absolute; left:0; top:0; transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1);"
-                         :style="swapped
-                           ? 'z-index:2; transform: translateX(85px); filter: drop-shadow(0 32px 64px rgba(245,158,11,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'
-                           : 'z-index:1; transform: translateX(0px) translateY(40px) rotate(-7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'">
+                    <div class="absolute left-0 top-0"
+                         :style="`transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1); ` + (swapped
+                           ? 'z-index:2; transform: translateX(110px); filter: drop-shadow(0 32px 64px rgba(245,158,11,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'
+                           : 'z-index:1; transform: translateX(0px) translateY(45px) rotate(-7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));')">
                         @include('partials.phone-mockup', [
                             'image'  => asset('images/price_forecast2.jpg'),
                             'alt'    => 'Forecast Chart',
-                            'width'  => 190,
-                            'height' => 390,
+                            'width'  => 260,
+                            'height' => 533,
                             'color'  => '#0f172a',
                         ])
                     </div>
