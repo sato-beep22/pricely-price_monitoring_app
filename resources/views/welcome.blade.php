@@ -54,127 +54,254 @@
             </h2>
         </div>
 
-        {{-- ===== 3-FEATURE PHONE ROW ===== --}}
-        <div class="flex items-center justify-center gap-6 sm:gap-10 md:gap-14 lg:gap-20">
+        {{-- ===== MOBILE: 3 vertical feature cards (phone left + info right) ===== --}}
+        <div class="flex flex-col gap-5 md:hidden">
 
-            {{-- ── FEATURE 1: Shop Map (2 stacked/offset phones) ── --}}
-            <button @click="modal = 'map'" id="feat-map"
-                class="group focus:outline-none flex flex-col items-center gap-4">
-                <div class="relative" style="width:200px; height:320px;">
-
-                    {{-- Back phone (price_map2 – shop detail) --}}
-                    <div class="absolute" style="left:50px; top:30px; transform: rotate(6deg) scale(0.88); transform-origin: bottom center; z-index:1; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.28));">
-                        @include('partials.phone-mockup', [
-                            'image'  => asset('images/price_map2.jpg'),
-                            'alt'    => 'Shop Detail',
-                            'width'  => 110,
-                            'height' => 230,
-                            'color'  => '#0f172a',
-                        ])
-                    </div>
-
-                    {{-- Front phone (price_map1 – map view) --}}
-                    <div class="absolute transition-transform duration-300 group-hover:-translate-y-3" style="left:0; top:0; z-index:2; filter: drop-shadow(0 28px 50px rgba(16,185,129,0.30)) drop-shadow(0 10px 20px rgba(0,0,0,0.30));">
-                        @include('partials.phone-mockup', [
-                            'image'  => asset('images/price_map1.jpg'),
-                            'alt'    => 'Interactive Map',
-                            'width'  => 120,
-                            'height' => 248,
-                            'color'  => '#0f172a',
-                        ])
-                    </div>
-
-                    {{-- Glow orb --}}
-                    <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-40 h-10 rounded-full blur-2xl opacity-0 group-hover:opacity-70 transition-opacity duration-500"
-                         style="background: radial-gradient(ellipse, rgba(16,185,129,0.7) 0%, transparent 70%);"></div>
+            {{-- Mobile Card 1: Shop Map --}}
+            <button @click="modal = 'map'" id="feat-map-mobile"
+                class="group focus:outline-none w-full bg-white/70 backdrop-blur-sm border border-emerald-100 rounded-3xl p-4 flex items-center gap-4 shadow-md hover:shadow-xl hover:border-emerald-300 transition-all duration-300 text-left active:scale-[0.98]">
+                {{-- Phone --}}
+                <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
+                     style="filter: drop-shadow(0 12px 28px rgba(16,185,129,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
+                    @include('partials.phone-mockup', [
+                        'image'  => asset('images/price_map1.jpg'),
+                        'alt'    => 'Interactive Map',
+                        'width'  => 88,
+                        'height' => 180,
+                        'color'  => '#0f172a',
+                    ])
                 </div>
-                {{-- Label --}}
-                <div class="flex flex-col items-center gap-1">
-                    <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                        <i data-lucide="compass" class="w-3 h-3"></i> Shop Map
+                {{-- Info --}}
+                <div class="flex-1 min-w-0">
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2">
+                        <i data-lucide="compass" class="w-2.5 h-2.5"></i> Shop Map
                     </span>
-                    <span class="text-[10px] text-slate-400 font-medium group-hover:text-emerald-600 transition-colors">I-tap para sa detalye →</span>
+                    <h3 class="text-sm font-bold text-slate-800 leading-tight mb-1">Interactive Price Map</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed line-clamp-3">Hanapin ang mga buyer malapit sa iyo at ikumpara ang kanilang presyo sa mapa.</p>
+                    <span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-emerald-600">
+                        Tignan <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </span>
                 </div>
             </button>
 
-            {{-- ── FEATURE 2: SMS Alerts (1 center prominent phone) ── --}}
-            <button @click="modal = 'sms'" id="feat-sms"
-                class="group focus:outline-none flex flex-col items-center gap-4 z-10">
-                <div class="relative" style="width:155px; height:340px;">
+            {{-- Mobile Card 2: SMS Alerts --}}
+            <button @click="modal = 'sms'" id="feat-sms-mobile"
+                class="group focus:outline-none w-full bg-white/70 backdrop-blur-sm border border-indigo-100 rounded-3xl p-4 flex items-center gap-4 shadow-md hover:shadow-xl hover:border-indigo-300 transition-all duration-300 text-left active:scale-[0.98]">
+                {{-- Phone --}}
+                <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
+                     style="filter: drop-shadow(0 12px 28px rgba(99,102,241,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
+                    @include('partials.phone-mockup', [
+                        'image'  => asset('images/sms_feature.jpg'),
+                        'alt'    => 'SMS Alerts',
+                        'width'  => 88,
+                        'height' => 180,
+                        'color'  => '#0f172a',
+                    ])
+                </div>
+                {{-- Info --}}
+                <div class="flex-1 min-w-0">
+                    <span class="inline-flex items-center gap-1.5 bg-indigo-100 text-indigo-800 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2">
+                        <i data-lucide="smartphone" class="w-2.5 h-2.5"></i> SMS Alerts
+                    </span>
+                    <h3 class="text-sm font-bold text-slate-800 leading-tight mb-1">Instant SMS Price Alerts</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed line-clamp-3">Makatanggap ng text kapag nagbago ang presyo ng shop na iyong pinili.</p>
+                    <span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-indigo-600">
+                        Tignan <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </span>
+                </div>
+            </button>
 
+            {{-- Mobile Card 3: Price Forecast --}}
+            <button @click="modal = 'forecast'" id="feat-forecast-mobile"
+                class="group focus:outline-none w-full bg-white/70 backdrop-blur-sm border border-amber-100 rounded-3xl p-4 flex items-center gap-4 shadow-md hover:shadow-xl hover:border-amber-300 transition-all duration-300 text-left active:scale-[0.98]">
+                {{-- Phone --}}
+                <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
+                     style="filter: drop-shadow(0 12px 28px rgba(245,158,11,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
+                    @include('partials.phone-mockup', [
+                        'image'  => asset('images/price_forecast1.jpg'),
+                        'alt'    => 'Market Trends',
+                        'width'  => 88,
+                        'height' => 180,
+                        'color'  => '#0f172a',
+                    ])
+                </div>
+                {{-- Info --}}
+                <div class="flex-1 min-w-0">
+                    <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2">
+                        <i data-lucide="trending-up" class="w-2.5 h-2.5"></i> Price Forecast
+                    </span>
+                    <h3 class="text-sm font-bold text-slate-800 leading-tight mb-1">Market Trends & Projections</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed line-clamp-3">Alamin kung tataas o bababa ang presyo para makapag-desisyon ng maayos.</p>
+                    <span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-amber-600">
+                        Tignan <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </span>
+                </div>
+            </button>
+
+        </div>
+
+        {{-- ===== DESKTOP: 2+1+2 dual-phone layout (larger + swappable) ===== --}}
+        <div class="hidden md:flex items-end justify-center gap-6 lg:gap-12 xl:gap-20 pb-6">
+
+            {{-- ── FEATURE 1: Shop Map (2 phones, click to swap) ── --}}
+            <div x-data="{ swapped: false }" class="flex flex-col items-center gap-5" id="feat-map">
+
+                {{-- Phone group — click anywhere to swap --}}
+                <div class="relative cursor-pointer select-none"
+                     style="width: 295px; height: 490px;"
+                     @click="swapped = !swapped"
+                     title="I-click para baguhin ang view">
+
+                    {{-- Phone A: Map View --}}
+                    <div style="position:absolute; left:0; top:0; transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1);"
+                         :style="swapped
+                           ? 'z-index:1; transform: translateX(85px) translateY(40px) rotate(7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'
+                           : 'z-index:2; transform: none; filter: drop-shadow(0 32px 64px rgba(16,185,129,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'">
+                        @include('partials.phone-mockup', [
+                            'image'  => asset('images/price_map1.jpg'),
+                            'alt'    => 'Interactive Map',
+                            'width'  => 190,
+                            'height' => 390,
+                            'color'  => '#0f172a',
+                        ])
+                    </div>
+
+                    {{-- Phone B: Shop Detail --}}
+                    <div style="position:absolute; left:0; top:0; transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1);"
+                         :style="swapped
+                           ? 'z-index:2; transform: none; filter: drop-shadow(0 32px 64px rgba(16,185,129,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'
+                           : 'z-index:1; transform: translateX(85px) translateY(40px) rotate(7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'">
+                        @include('partials.phone-mockup', [
+                            'image'  => asset('images/price_map2.jpg'),
+                            'alt'    => 'Shop Detail',
+                            'width'  => 190,
+                            'height' => 390,
+                            'color'  => '#0f172a',
+                        ])
+                    </div>
+
+                    {{-- Swap hint --}}
+                    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                        <span class="inline-flex items-center gap-1 text-[9px] text-slate-400 font-semibold whitespace-nowrap">
+                            <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i>
+                            I-click para baguhin ang view
+                        </span>
+                    </div>
+
+                    {{-- Glow orb --}}
+                    <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-52 h-14 rounded-full blur-3xl opacity-40 pointer-events-none"
+                         style="background: radial-gradient(ellipse, rgba(16,185,129,0.7) 0%, transparent 70%);"></div>
+                </div>
+
+                {{-- Label + modal CTA --}}
+                <div class="flex flex-col items-center gap-2 mt-4">
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
+                        <i data-lucide="compass" class="w-3.5 h-3.5"></i> Shop Map
+                    </span>
+                    <button @click.stop="modal = 'map'" class="text-xs text-slate-400 hover:text-emerald-600 font-semibold transition-colors flex items-center gap-1">
+                        I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            </div>
+
+            {{-- ── FEATURE 2: SMS Alerts (single center phone, larger) ── --}}
+            <div class="flex flex-col items-center gap-5 z-10" id="feat-sms">
+
+                <div class="relative" style="height: 520px;">
                     {{-- Live badge --}}
-                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap">
-                        <span class="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-lg shadow-emerald-500/40">
-                            <span class="relative flex h-1.5 w-1.5">
+                    <div class="absolute -top-5 left-1/2 -translate-x-1/2 z-30 whitespace-nowrap">
+                        <span class="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg shadow-emerald-500/40">
+                            <span class="relative flex h-2 w-2">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                             </span>
                             Live Feature
                         </span>
                     </div>
 
-                    <div class="absolute inset-0 transition-transform duration-300 group-hover:-translate-y-4" style="filter: drop-shadow(0 32px 60px rgba(99,102,241,0.35)) drop-shadow(0 12px 24px rgba(0,0,0,0.30));">
+                    <div class="transition-transform duration-300 hover:-translate-y-4"
+                         style="filter: drop-shadow(0 40px 80px rgba(99,102,241,0.35)) drop-shadow(0 14px 28px rgba(0,0,0,0.28));">
                         @include('partials.phone-mockup', [
                             'image'  => asset('images/sms_feature.jpg'),
                             'alt'    => 'SMS Alerts',
-                            'width'  => 140,
-                            'height' => 290,
+                            'width'  => 215,
+                            'height' => 440,
                             'color'  => '#0f172a',
                         ])
                     </div>
 
-                    {{-- Glow orb --}}
-                    <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-40 h-10 rounded-full blur-2xl opacity-40 group-hover:opacity-80 transition-opacity duration-500"
+                    <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-56 h-14 rounded-full blur-3xl opacity-50 pointer-events-none"
                          style="background: radial-gradient(ellipse, rgba(99,102,241,0.7) 0%, transparent 70%);"></div>
                 </div>
-                {{-- Label --}}
-                <div class="flex flex-col items-center gap-1">
-                    <span class="inline-flex items-center gap-1.5 bg-indigo-100 text-indigo-800 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                        <i data-lucide="smartphone" class="w-3 h-3"></i> SMS Alerts
+
+                <div class="flex flex-col items-center gap-2 mt-4">
+                    <span class="inline-flex items-center gap-1.5 bg-indigo-100 text-indigo-800 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
+                        <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> SMS Alerts
                     </span>
-                    <span class="text-[10px] text-slate-400 font-medium group-hover:text-indigo-600 transition-colors">I-tap para sa detalye →</span>
+                    <button @click="modal = 'sms'" class="text-xs text-slate-400 hover:text-indigo-600 font-semibold transition-colors flex items-center gap-1">
+                        I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </button>
                 </div>
-            </button>
+            </div>
 
-            {{-- ── FEATURE 3: Price Forecasting (2 stacked/offset phones) ── --}}
-            <button @click="modal = 'forecast'" id="feat-forecast"
-                class="group focus:outline-none flex flex-col items-center gap-4">
-                <div class="relative" style="width:200px; height:320px;">
+            {{-- ── FEATURE 3: Price Forecast (2 phones, mirrored, click to swap) ── --}}
+            <div x-data="{ swapped: false }" class="flex flex-col items-center gap-5" id="feat-forecast">
 
-                    {{-- Back phone (price_forecast2 – chart) --}}
-                    <div class="absolute" style="right:50px; top:30px; transform: rotate(-6deg) scale(0.88); transform-origin: bottom center; z-index:1; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.28));">
-                        @include('partials.phone-mockup', [
-                            'image'  => asset('images/price_forecast2.jpg'),
-                            'alt'    => 'Forecast Chart',
-                            'width'  => 110,
-                            'height' => 230,
-                            'color'  => '#0f172a',
-                        ])
-                    </div>
+                <div class="relative cursor-pointer select-none"
+                     style="width: 295px; height: 490px;"
+                     @click="swapped = !swapped"
+                     title="I-click para baguhin ang view">
 
-                    {{-- Front phone (price_forecast1 – market summary) --}}
-                    <div class="absolute transition-transform duration-300 group-hover:-translate-y-3" style="right:0; top:0; z-index:2; filter: drop-shadow(0 28px 50px rgba(245,158,11,0.30)) drop-shadow(0 10px 20px rgba(0,0,0,0.30));">
+                    {{-- Phone A: Market Trends (starts front-right) --}}
+                    <div style="position:absolute; left:0; top:0; transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1);"
+                         :style="swapped
+                           ? 'z-index:1; transform: translateX(0px) translateY(40px) rotate(-7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'
+                           : 'z-index:2; transform: translateX(85px); filter: drop-shadow(0 32px 64px rgba(245,158,11,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'">
                         @include('partials.phone-mockup', [
                             'image'  => asset('images/price_forecast1.jpg'),
                             'alt'    => 'Market Trends',
-                            'width'  => 120,
-                            'height' => 248,
+                            'width'  => 190,
+                            'height' => 390,
                             'color'  => '#0f172a',
                         ])
                     </div>
 
+                    {{-- Phone B: Forecast Chart (starts back-left) --}}
+                    <div style="position:absolute; left:0; top:0; transition: all 0.55s cubic-bezier(0.34,1.56,0.64,1);"
+                         :style="swapped
+                           ? 'z-index:2; transform: translateX(85px); filter: drop-shadow(0 32px 64px rgba(245,158,11,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'
+                           : 'z-index:1; transform: translateX(0px) translateY(40px) rotate(-7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'">
+                        @include('partials.phone-mockup', [
+                            'image'  => asset('images/price_forecast2.jpg'),
+                            'alt'    => 'Forecast Chart',
+                            'width'  => 190,
+                            'height' => 390,
+                            'color'  => '#0f172a',
+                        ])
+                    </div>
+
+                    {{-- Swap hint --}}
+                    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                        <span class="inline-flex items-center gap-1 text-[9px] text-slate-400 font-semibold whitespace-nowrap">
+                            <i data-lucide="refresh-cw" class="w-2.5 h-2.5"></i>
+                            I-click para baguhin ang view
+                        </span>
+                    </div>
+
                     {{-- Glow orb --}}
-                    <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-40 h-10 rounded-full blur-2xl opacity-0 group-hover:opacity-70 transition-opacity duration-500"
+                    <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 w-52 h-14 rounded-full blur-3xl opacity-40 pointer-events-none"
                          style="background: radial-gradient(ellipse, rgba(245,158,11,0.7) 0%, transparent 70%);"></div>
                 </div>
-                {{-- Label --}}
-                <div class="flex flex-col items-center gap-1">
-                    <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                        <i data-lucide="trending-up" class="w-3 h-3"></i> Price Forecast
+
+                <div class="flex flex-col items-center gap-2 mt-4">
+                    <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
+                        <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Price Forecast
                     </span>
-                    <span class="text-[10px] text-slate-400 font-medium group-hover:text-amber-600 transition-colors">I-tap para sa detalye →</span>
+                    <button @click.stop="modal = 'forecast'" class="text-xs text-slate-400 hover:text-amber-600 font-semibold transition-colors flex items-center gap-1">
+                        I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </button>
                 </div>
-            </button>
+            </div>
 
         </div>
 
