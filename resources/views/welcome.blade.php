@@ -42,67 +42,165 @@
 
     </section>
 
-    <!-- Bottom feature cards layout -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-12 sm:pb-16 md:pb-20 z-10 relative" x-data="{ modal: null }">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {{-- ===== PHONE MOCKUP SHOWCASE SECTION ===== --}}
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-20 sm:pb-28 z-10 relative" x-data="{ modal: null }">
 
-            <!-- Feature 1 Card: Interactive Map -->
-            <button @click="modal = 'map'" class="pricely-card reveal-card text-left p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 group cursor-pointer focus:outline-none focus:ring-0 min-h-[180px] sm:min-h-[220px] w-full">
-                <div class="icon-bg w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mb-1">
-                    <i data-lucide="compass" class="w-5 h-5 text-emerald-600"></i>
+        {{-- Section Header --}}
+        <div class="text-center mb-12 sm:mb-16">
+            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 mb-2">Mga Feature</p>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
+                Lahat ng kailangan mo,<br>
+                <span class="text-gradient">nasa isang app na.</span>
+            </h2>
+        </div>
+
+        {{-- 3-Phone Mockup Row --}}
+        <div class="flex items-end justify-center gap-2 sm:gap-6 md:gap-10 lg:gap-16 pb-8 select-none">
+
+            {{-- ── Phone 1: SMS Alerts (Left, tilted inward) ── --}}
+            <button
+                @click="modal = 'sms'"
+                class="group flex flex-col items-center gap-5 focus:outline-none"
+                style="transform: rotate(-7deg) translateY(28px);"
+                id="phone-sms"
+            >
+                <div class="relative">
+                    {{-- Ambient glow --}}
+                    <div class="absolute inset-0 -z-10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-70 transition-opacity duration-500"
+                         style="background: radial-gradient(circle, rgba(99,102,241,0.6) 0%, transparent 70%); transform: scale(1.25);"></div>
+                    {{-- Phone frame --}}
+                    <div class="relative w-[130px] sm:w-[160px] md:w-[185px] bg-slate-900 rounded-[2rem] shadow-2xl border-[5px] border-slate-800 overflow-hidden ring-1 ring-white/10 transition-all duration-300 group-hover:-translate-y-3 group-hover:shadow-indigo-400/40 group-hover:border-indigo-700/60">
+                        {{-- Dynamic Island / Notch --}}
+                        <div class="flex justify-center pt-2 pb-0.5 bg-slate-900">
+                            <div class="w-14 h-[14px] bg-slate-900 rounded-full border border-slate-700 flex items-center justify-center gap-1">
+                                <div class="w-1.5 h-1.5 rounded-full bg-slate-600"></div>
+                                <div class="w-3.5 h-1.5 rounded-full bg-slate-700"></div>
+                            </div>
+                        </div>
+                        {{-- Screen --}}
+                        <div style="height:260px; overflow:hidden;">
+                            <img
+                                src="{{ asset('images/feature_sms_alerts.png') }}?v=2"
+                                alt="SMS Alerts Feature"
+                                style="width:100%; height:100%; object-fit:cover; object-position:top;"
+                            >
+                        </div>
+                        {{-- Home bar --}}
+                        <div class="flex justify-center py-2 bg-slate-900">
+                            <div class="w-16 h-[3px] rounded-full bg-slate-600"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="space-y-2">
-                    <h3 class="group-hover:text-emerald-600 transition-colors text-lg leading-snug">
-                        Shop Map
-                    </h3>
-                    <p class="text-sm text-slate-500 leading-snug">
-                        Tignan ang lokasyon ng mga mamimili malapit sa iyong lugar at tignan ang kanilang mga presyo
-                    </p>
+                {{-- Tap label (appears on hover, counter-rotated) --}}
+                <div class="opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0" style="transform: rotate(7deg);">
+                    <span class="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-indigo-100 shadow-sm whitespace-nowrap">
+                        <i data-lucide="smartphone" class="w-3 h-3"></i> SMS Alerts
+                    </span>
                 </div>
-                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1.5 transition-all flex items-center gap-1 mt-auto">
-                    Paano ito gumagana? <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
             </button>
 
-            <!-- Feature 2 Card: Instant SMS Alerts -->
-            <button @click="modal = 'sms'" class="pricely-card reveal-card text-left p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 group cursor-pointer focus:outline-none focus:ring-0 min-h-[180px] sm:min-h-[220px] w-full">
-                <div class="icon-bg w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mb-1">
-                    <i data-lucide="smartphone" class="w-5 h-5 text-blue-600"></i>
+            {{-- ── Phone 2: Shop Map (Center, prominent) ── --}}
+            <button
+                @click="modal = 'map'"
+                class="group flex flex-col items-center gap-5 focus:outline-none z-10"
+                id="phone-map"
+            >
+                <div class="relative">
+                    {{-- "Main feature" badge above phone --}}
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 z-20 whitespace-nowrap">
+                        <span class="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[9px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-lg shadow-emerald-500/40">
+                            <span class="relative flex h-1.5 w-1.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                            </span>
+                            Shop Map
+                        </span>
+                    </div>
+                    {{-- Ambient glow --}}
+                    <div class="absolute inset-0 -z-10 rounded-[3rem] blur-3xl opacity-50 group-hover:opacity-90 transition-opacity duration-500"
+                         style="background: radial-gradient(circle, rgba(16,185,129,0.6) 0%, transparent 70%); transform: scale(1.35);"></div>
+                    {{-- Phone frame (larger = front & center) --}}
+                    <div class="relative w-[165px] sm:w-[200px] md:w-[230px] bg-slate-900 rounded-[2.8rem] shadow-[0_32px_90px_rgba(0,0,0,0.4)] border-[6px] border-slate-800 overflow-hidden ring-1 ring-white/10 transition-all duration-300 group-hover:-translate-y-4 group-hover:shadow-emerald-400/40 group-hover:border-emerald-700/60">
+                        {{-- Dynamic Island / Notch --}}
+                        <div class="flex justify-center pt-2.5 pb-1 bg-slate-900">
+                            <div class="w-[68px] h-[17px] bg-slate-900 rounded-full border border-slate-700 flex items-center justify-center gap-1.5">
+                                <div class="w-2 h-2 rounded-full bg-slate-600"></div>
+                                <div class="w-4 h-2 rounded-full bg-slate-700"></div>
+                            </div>
+                        </div>
+                        {{-- Screen --}}
+                        <div style="height:330px; overflow:hidden;">
+                            <img
+                                src="{{ asset('images/feature_interactive_map.png') }}?v=2"
+                                alt="Interactive Price Map"
+                                style="width:100%; height:100%; object-fit:cover; object-position:top;"
+                            >
+                        </div>
+                        {{-- Home bar --}}
+                        <div class="flex justify-center py-2.5 bg-slate-900">
+                            <div class="w-20 h-[3px] rounded-full bg-slate-600"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="space-y-2">
-                    <h3 class="group-hover:text-indigo-600 transition-colors text-lg leading-snug">
-                        Instant SMS Alerts
-                    </h3>
-                    <p class="text-sm text-slate-500 leading-snug">
-                        I Monitor ang presyo ng napiling shop upang makapag text sila sayo
-                    </p>
+                {{-- Tap label --}}
+                <div class="opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-emerald-100 shadow-sm whitespace-nowrap">
+                        <i data-lucide="compass" class="w-3 h-3"></i> I-tap para sa detalye
+                    </span>
                 </div>
-                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-1.5 transition-all flex items-center gap-1 mt-auto">
-                    Paano ito gumagana? <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
             </button>
 
-            <!-- Feature 3 Card: Price Forecasting -->
-            <button @click="modal = 'forecast'" class="pricely-card reveal-card text-left p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 group cursor-pointer focus:outline-none focus:ring-0 min-h-[180px] sm:min-h-[220px] w-full">
-                <div class="icon-bg w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center mb-1">
-                    <i data-lucide="trending-up" class="w-5 h-5 text-amber-600"></i>
+            {{-- ── Phone 3: Price Forecasting (Right, tilted inward) ── --}}
+            <button
+                @click="modal = 'forecast'"
+                class="group flex flex-col items-center gap-5 focus:outline-none"
+                style="transform: rotate(7deg) translateY(28px);"
+                id="phone-forecast"
+            >
+                <div class="relative">
+                    {{-- Ambient glow --}}
+                    <div class="absolute inset-0 -z-10 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-70 transition-opacity duration-500"
+                         style="background: radial-gradient(circle, rgba(245,158,11,0.6) 0%, transparent 70%); transform: scale(1.25);"></div>
+                    {{-- Phone frame --}}
+                    <div class="relative w-[130px] sm:w-[160px] md:w-[185px] bg-slate-900 rounded-[2rem] shadow-2xl border-[5px] border-slate-800 overflow-hidden ring-1 ring-white/10 transition-all duration-300 group-hover:-translate-y-3 group-hover:shadow-amber-400/40 group-hover:border-amber-700/60">
+                        {{-- Dynamic Island / Notch --}}
+                        <div class="flex justify-center pt-2 pb-0.5 bg-slate-900">
+                            <div class="w-14 h-[14px] bg-slate-900 rounded-full border border-slate-700 flex items-center justify-center gap-1">
+                                <div class="w-1.5 h-1.5 rounded-full bg-slate-600"></div>
+                                <div class="w-3.5 h-1.5 rounded-full bg-slate-700"></div>
+                            </div>
+                        </div>
+                        {{-- Screen --}}
+                        <div style="height:260px; overflow:hidden;">
+                            <img
+                                src="{{ asset('images/feature_price_forecasting.png') }}?v=2"
+                                alt="Price Forecasting Feature"
+                                style="width:100%; height:100%; object-fit:cover; object-position:top;"
+                            >
+                        </div>
+                        {{-- Home bar --}}
+                        <div class="flex justify-center py-2 bg-slate-900">
+                            <div class="w-16 h-[3px] rounded-full bg-slate-600"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="space-y-2">
-                    <h3 class="group-hover:text-amber-600 transition-colors text-lg leading-snug">
-                        Price Forecasting
-                    </h3>
-                    <p class="text-sm text-slate-500 leading-snug">
-                        Subaybayan ang pagtaas at pagbaba ng presyo
-                    </p>
+                {{-- Tap label (counter-rotated) --}}
+                <div class="opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0" style="transform: rotate(-7deg);">
+                    <span class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full border border-amber-100 shadow-sm whitespace-nowrap">
+                        <i data-lucide="trending-up" class="w-3 h-3"></i> Price Forecast
+                    </span>
                 </div>
-                <span class="text-[10px] font-mono font-bold text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1.5 transition-all flex items-center gap-1 mt-auto">
-                    Paano ito gumagana? <i data-lucide="arrow-right" class="w-3 h-3"></i>
-                </span>
             </button>
 
         </div>
 
-        <!-- ===== FEATURE DEMO MODALS ===== -->
+        {{-- Hint text --}}
+        <p class="text-center text-xs text-slate-400 mt-2 font-medium">
+            <i data-lucide="mouse-pointer-click" class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5 opacity-70"></i>
+            I-tap ang alinmang phone para makita ang higit pang detalye
+        </p>
+
+        {{-- ===== FEATURE DEMO MODALS ===== --}}
         <template x-teleport="body">
             <div x-show="modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 py-6" x-cloak>
 
