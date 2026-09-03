@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+    <!-- Animated Dots Background -->
+    <canvas id="dotsCanvas" class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none"></canvas>
+
     <!-- Hero Section -->
     <section class="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 pt-28 sm:pt-24 md:pt-28 pb-12 sm:pb-16 md:pb-20 text-center flex flex-col items-center">
         
@@ -535,6 +538,55 @@
             // Hide the app-provided install promotion
             installBtn.style.display = 'none';
             console.log('PWA was installed');
+        });
+
+        // Animated Dots Background
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('dotsCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            let width, height;
+            const SPACING = 40; // Distance between dots
+            const DOT_RADIUS = 1.5;
+            const DOT_COLOR = 'rgba(16, 185, 129, 0.2)'; // Emerald color to match the theme
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            let time = 0;
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = DOT_COLOR;
+
+                const cols = Math.floor(width / SPACING) + 2;
+                const rows = Math.floor(height / SPACING) + 2;
+                
+                const offsetX = (width - (cols - 1) * SPACING) / 2;
+                const offsetY = (height - (rows - 1) * SPACING) / 2;
+
+                for (let i = 0; i < cols; i++) {
+                    for (let j = 0; j < rows; j++) {
+                        let x = offsetX + i * SPACING;
+                        let y = offsetY + j * SPACING;
+
+                        const waveX = Math.sin((j * 0.2) + time) * 15;
+                        const waveY = Math.cos((i * 0.2) + time) * 15;
+
+                        ctx.beginPath();
+                        ctx.arc(x + waveX, y + waveY, DOT_RADIUS, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                time += 0.02; 
+                requestAnimationFrame(animate);
+            }
+            animate();
         });
     </script>
 @endsection

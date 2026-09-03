@@ -12,25 +12,30 @@
     {{-- Search & Filters --}}
     <div class="max-w-7xl mx-auto px-6 md:px-8 mb-6 relative z-[600]">
         <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-3 relative">
-            <div class="relative flex-1">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
+            <div class="relative flex-1 flex gap-2">
+                <div class="relative flex-1">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        id="shop-search"
+                        placeholder="Search shops by name or address..."
+                        class="input input-bordered w-full pl-11 rounded-xl bg-slate-50 focus:bg-white transition-colors"
+                        autocomplete="off"
+                    />
+                    
+                    {{-- Search Results Dropdown --}}
+                    <div id="shop-search-results" class="hidden absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] max-h-[350px] overflow-y-auto z-[610]">
+                        <div class="space-y-2 p-2"></div>
+                    </div>
                 </div>
-                <input
-                    type="text"
-                    id="shop-search"
-                    placeholder="Search shops by name or address..."
-                    class="input input-bordered w-full pl-11 rounded-xl bg-slate-50 focus:bg-white transition-colors"
-                    autocomplete="off"
-                />
-                
-                {{-- Search Results Dropdown --}}
-                <div id="shop-search-results" class="hidden absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] max-h-[350px] overflow-y-auto z-[610]">
-                    <div class="space-y-1 p-2"></div>
-                </div>
+                <button type="button" id="shop-search-btn" class="btn btn-primary rounded-xl px-6">
+                    Search
+                </button>
             </div>
             
             <div class="flex gap-3">

@@ -903,9 +903,21 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (shopSearch) {
-                shopSearch.addEventListener('input', (e) => {
-                    searchShops(e.target.value, data);
+                const searchBtn = document.getElementById('shop-search-btn');
+                const executeSearch = () => searchShops(shopSearch.value, data);
+
+                shopSearch.addEventListener('input', executeSearch);
+                
+                shopSearch.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        executeSearch();
+                    }
                 });
+
+                if (searchBtn) {
+                    searchBtn.addEventListener('click', executeSearch);
+                }
             }
         })
         .catch((err) => console.error('❌ Error fetching shop data:', err));
