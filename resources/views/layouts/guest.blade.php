@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Pricely connects farmers and buyers with live price monitoring, interactive maps, and market forecasts in San Mateo, Isabela.">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Pricely') }}</title>

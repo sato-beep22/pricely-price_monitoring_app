@@ -7,8 +7,8 @@
         <!-- Dynamic Badge -->
         <div class="gsap-hero-badge reveal-stagger-item inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 px-3 sm:px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-4 sm:mb-6 border border-emerald-100 shadow-xs">
             <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-700"></span>
             </span>
             <span>Connecting Farmers & Buyers</span>
         </div>
@@ -64,7 +64,7 @@
                 <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
                      style="filter: drop-shadow(0 12px 28px rgba(16,185,129,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
                     @include('partials.phone-mockup', [
-                        'image'  => asset('images/price_map1.jpg'),
+                        'image'  => asset('images/price_map1.webp'),
                         'alt'    => 'Interactive Map',
                         'width'  => 88,
                         'height' => 180,
@@ -91,7 +91,7 @@
                 <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
                      style="filter: drop-shadow(0 12px 28px rgba(99,102,241,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
                     @include('partials.phone-mockup', [
-                        'image'  => asset('images/sms_feature.jpg'),
+                        'image'  => asset('images/sms_feature.webp'),
                         'alt'    => 'SMS Alerts',
                         'width'  => 88,
                         'height' => 180,
@@ -118,7 +118,7 @@
                 <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
                      style="filter: drop-shadow(0 12px 28px rgba(245,158,11,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
                     @include('partials.phone-mockup', [
-                        'image'  => asset('images/price_forecast1.jpg'),
+                        'image'  => asset('images/price_forecast1.webp'),
                         'alt'    => 'Market Trends',
                         'width'  => 88,
                         'height' => 180,
@@ -157,7 +157,7 @@
                            ? 'z-index:1; transform: translateX(110px) translateY(45px) rotate(7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'
                            : 'z-index:2; transform: none; filter: drop-shadow(0 32px 64px rgba(16,185,129,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));')">
                         @include('partials.phone-mockup', [
-                            'image'  => asset('images/price_map1.jpg'),
+                            'image'  => asset('images/price_map1.webp'),
                             'alt'    => 'Interactive Map',
                             'width'  => 260,
                             'height' => 533,
@@ -171,7 +171,7 @@
                            ? 'z-index:2; transform: none; filter: drop-shadow(0 32px 64px rgba(16,185,129,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'
                            : 'z-index:1; transform: translateX(110px) translateY(45px) rotate(7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));')">
                         @include('partials.phone-mockup', [
-                            'image'  => asset('images/price_map2.jpg'),
+                            'image'  => asset('images/price_map2.webp'),
                             'alt'    => 'Shop Detail',
                             'width'  => 260,
                             'height' => 533,
@@ -193,7 +193,7 @@
                     <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                         <i data-lucide="compass" class="w-3.5 h-3.5"></i> Shop Map
                     </span>
-                    <button @click.stop="modal = 'map'" class="text-xs text-slate-400 hover:text-emerald-600 font-semibold transition-colors flex items-center gap-1 mt-1">
+                    <button @click.stop="modal = 'map'" class="text-xs text-slate-500 hover:text-emerald-700 font-semibold transition-colors flex items-center gap-1 mt-1">
                         I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </button>
                 </div>
@@ -208,7 +208,7 @@
                         
                         {{-- Live badge --}}
                         <div class="absolute left-1/2 -translate-x-1/2 z-30 whitespace-nowrap" style="top: -20px;">
-                            <span class="inline-flex items-center gap-1.5 bg-emerald-600 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg shadow-emerald-500/40">
+                            <span class="inline-flex items-center gap-1.5 bg-emerald-700 text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-full shadow-lg shadow-emerald-500/40">
                                 <span class="relative flex h-2 w-2">
                                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                                     <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
@@ -218,7 +218,7 @@
                         </div>
 
                         @include('partials.phone-mockup', [
-                            'image'  => asset('images/sms_feature.jpg'),
+                            'image'  => asset('images/sms_feature.webp'),
                             'alt'    => 'SMS Alerts',
                             'width'  => 280,
                             'height' => 574,
@@ -235,7 +235,7 @@
                     <span class="inline-flex items-center gap-1.5 bg-indigo-100 text-indigo-800 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                         <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> SMS Alerts
                     </span>
-                    <button @click="modal = 'sms'" class="text-xs text-slate-400 hover:text-indigo-600 font-semibold transition-colors flex items-center gap-1 mt-1">
+                    <button @click="modal = 'sms'" class="text-xs text-slate-500 hover:text-indigo-700 font-semibold transition-colors flex items-center gap-1 mt-1">
                         I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </button>
                 </div>
@@ -254,7 +254,7 @@
                            ? 'z-index:1; transform: translateX(0px) translateY(45px) rotate(-7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'
                            : 'z-index:2; transform: translateX(110px); filter: drop-shadow(0 32px 64px rgba(245,158,11,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));')">
                         @include('partials.phone-mockup', [
-                            'image'  => asset('images/price_forecast1.jpg'),
+                            'image'  => asset('images/price_forecast1.webp'),
                             'alt'    => 'Market Trends',
                             'width'  => 260,
                             'height' => 533,
@@ -268,7 +268,7 @@
                            ? 'z-index:2; transform: translateX(110px); filter: drop-shadow(0 32px 64px rgba(245,158,11,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));'
                            : 'z-index:1; transform: translateX(0px) translateY(45px) rotate(-7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));')">
                         @include('partials.phone-mockup', [
-                            'image'  => asset('images/price_forecast2.jpg'),
+                            'image'  => asset('images/price_forecast2.webp'),
                             'alt'    => 'Forecast Chart',
                             'width'  => 260,
                             'height' => 533,
@@ -289,7 +289,7 @@
                     <span class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-800 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                         <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Price Forecast
                     </span>
-                    <button @click.stop="modal = 'forecast'" class="text-xs text-slate-400 hover:text-amber-600 font-semibold transition-colors flex items-center gap-1 mt-1">
+                    <button @click.stop="modal = 'forecast'" class="text-xs text-slate-500 hover:text-amber-700 font-semibold transition-colors flex items-center gap-1 mt-1">
                         I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </button>
                 </div>
@@ -335,15 +335,15 @@
                                 <p class="text-xs text-emerald-600 font-semibold">Paano ito Gumagana</p>
                             </div>
                         </div>
-                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors shrink-0">
+                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-300 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
                         <div class="flex flex-col md:flex-row bg-slate-900">
-                            <img src="{{ asset('images/price_map1.jpg') }}?v=3" alt="Map View" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
+                            <img src="{{ asset('images/price_map1.webp') }}?v=3" alt="Map View" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                             <div class="border-t md:border-t-0 md:border-l border-slate-700"></div>
-                            <img src="{{ asset('images/price_map2.jpg') }}?v=3" alt="Shop Detail" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
+                            <img src="{{ asset('images/price_map2.webp') }}?v=3" alt="Shop Detail" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                         </div>
                         <div class="px-4 sm:px-6 py-4 space-y-2">
                             <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
@@ -392,13 +392,13 @@
                                 <p class="text-xs text-blue-600 font-semibold">Paano ito Gumagana</p>
                             </div>
                         </div>
-                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors shrink-0">
+                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-300 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
                         <div class="bg-slate-900 flex justify-center">
-                            <img src="{{ asset('images/sms_feature.jpg') }}?v=3" alt="SMS Alerts Feature" class="w-full max-w-sm h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
+                            <img src="{{ asset('images/sms_feature.webp') }}?v=3" alt="SMS Alerts Feature" class="w-full max-w-sm h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                         </div>
                         <div class="px-4 sm:px-6 py-4">
                             <div class="space-y-2">
@@ -449,15 +449,15 @@
                                 <p class="text-xs text-amber-600 font-semibold">Paano ito Gumagana</p>
                             </div>
                         </div>
-                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-colors shrink-0">
+                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white border border-slate-300 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
                         <div class="flex flex-col md:flex-row bg-slate-900">
-                            <img src="{{ asset('images/price_forecast1.jpg') }}?v=3" alt="Market Trends" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
+                            <img src="{{ asset('images/price_forecast1.webp') }}?v=3" alt="Market Trends" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                             <div class="border-t md:border-t-0 md:border-l border-slate-700"></div>
-                            <img src="{{ asset('images/price_forecast2.jpg') }}?v=3" alt="Forecast Chart" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
+                            <img src="{{ asset('images/price_forecast2.webp') }}?v=3" alt="Forecast Chart" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                         </div>
                         <div class="px-4 sm:px-6 py-4 space-y-2">
                             <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Tutorial</p>
