@@ -83,22 +83,25 @@
         </div>
 
         <!-- Interactive Price Trend -->
-        <div class="card bg-base-100 shadow-sm border border-base-200 md:col-span-3 mt-2 stat-card stagger-7" x-data="{ loading: true }">
-            <div class="card-body">
+        <div class="card bg-base-100 shadow-sm border border-base-200 md:col-span-3 mt-2 stat-card stagger-7" x-data="{ loading: true }" @chart-loaded.window="loading = false">
+            <div class="card-body relative">
                 <h2 class="card-title text-lg mb-4">{{ __('Market Price Trend (Last 30 Days)') }}</h2>
                 
-                <!-- Skeleton Loader -->
-                <div x-show="loading" class="w-full h-[350px] animate-pulse flex flex-col justify-end gap-2 border-b border-base-200 pb-2">
-                    <div class="flex items-end justify-between w-full h-full gap-4 px-4">
-                        <div class="w-1/6 bg-base-200 h-[40%] rounded-t-md"></div>
-                        <div class="w-1/6 bg-base-200 h-[60%] rounded-t-md"></div>
-                        <div class="w-1/6 bg-base-200 h-[30%] rounded-t-md"></div>
-                        <div class="w-1/6 bg-base-200 h-[80%] rounded-t-md"></div>
-                        <div class="w-1/6 bg-base-200 h-[50%] rounded-t-md"></div>
+                <div class="relative w-full h-[350px]">
+                    <!-- Skeleton Loader -->
+                    <div class="absolute inset-0 z-10 animate-pulse flex flex-col justify-end gap-2 border-b border-base-200 pb-2 bg-base-100 transition-opacity duration-500" :class="loading ? 'opacity-100' : 'opacity-0 pointer-events-none'">
+                        <div class="flex items-end justify-between w-full h-full gap-4 px-4">
+                            <div class="w-1/6 bg-base-200 h-[40%] rounded-t-md"></div>
+                            <div class="w-1/6 bg-base-200 h-[60%] rounded-t-md"></div>
+                            <div class="w-1/6 bg-base-200 h-[30%] rounded-t-md"></div>
+                            <div class="w-1/6 bg-base-200 h-[80%] rounded-t-md"></div>
+                            <div class="w-1/6 bg-base-200 h-[50%] rounded-t-md"></div>
+                        </div>
                     </div>
-                </div>
 
-                <div id="price-trend-chart" style="height: 350px;" x-show="!loading" style="display: none;" @chart-loaded.window="loading = false"></div>
+                    <!-- Chart Container -->
+                    <div id="price-trend-chart" class="absolute inset-0 w-full h-full transition-opacity duration-500" :class="loading ? 'opacity-0' : 'opacity-100'"></div>
+                </div>
             </div>
         </div>
 
