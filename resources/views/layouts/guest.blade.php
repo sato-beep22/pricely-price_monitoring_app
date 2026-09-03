@@ -9,6 +9,10 @@
         <title>{{ config('app.name', 'Pricely') }}</title>
 
         <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}?v=4">
+        <!-- PWA Manifest & Theme Color -->
+        <link rel="manifest" href="/manifest.json">
+        <meta name="theme-color" content="#047857">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,5 +86,16 @@
                 }
             }
         </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful');
+                }, function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
     </body>
 </html>

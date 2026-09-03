@@ -27,7 +27,7 @@
         </p>
 
         <!-- Action Buttons row -->
-        <div class="gsap-hero-cta reveal-stagger-item flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 z-10 relative w-full sm:w-auto px-4 sm:px-0">
+        <div class="gsap-hero-cta reveal-stagger-item flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 z-10 relative w-full px-4 sm:px-0">
             <a href="{{ route('map.index') }}" class="btn-pricely-primary flex items-center justify-center gap-2 w-full sm:w-auto">
                 Tignan ang Map
                 <i data-lucide="arrow-right" class="w-5 h-5"></i>
@@ -38,6 +38,12 @@
                 Mag Register
             </a>
             @endguest
+
+            <!-- Install PWA Button (Hidden by default until PWA is ready) -->
+            <button id="install-pwa-btn" style="display: none;" class="bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white px-6 py-3 rounded-2xl font-bold shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto">
+                <i data-lucide="download" class="w-5 h-5"></i>
+                Install APK
+            </button>
         </div>
 
     </section>
@@ -497,6 +503,38 @@
                     section._x_dataStack[0].modal = null;
                 }
             }
+        });
+
+        // PWA Installation Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-pwa-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later.
+            deferredPrompt = e;
+            // Update UI notify the user they can install the PWA
+            installBtn.style.display = 'flex';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt !== null) {
+                // Show the install prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                // We've used the prompt, and can't use it again, throw it away
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            // Hide the app-provided install promotion
+            installBtn.style.display = 'none';
+            console.log('PWA was installed');
         });
     </script>
 @endsection

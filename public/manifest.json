@@ -1,0 +1,21 @@
+{
+  "name": "Pricely Agricultural Indexing",
+  "short_name": "Pricely",
+  "description": "Monitor agricultural prices and get real-time SMS alerts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#047857",
+  "icons": [
+    {
+      "src": "/favicon.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "/favicon.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}
