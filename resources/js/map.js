@@ -927,9 +927,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const filtered = shops.filter(
-            (shop) =>
-                shop.name.toLowerCase().includes(query.toLowerCase()) ||
-                shop.address.toLowerCase().includes(query.toLowerCase())
+            (shop) => {
+                const q = query.toLowerCase();
+                const matchesName = shop.name.toLowerCase().includes(q);
+                const matchesAddress = shop.address && shop.address.toLowerCase().includes(q);
+                const matchesCrop = shop.prices && shop.prices.some(p => p.crop_name.toLowerCase().includes(q));
+                return matchesName || matchesAddress || matchesCrop;
+            }
         );
 
         if (filtered.length === 0) {
@@ -941,13 +945,13 @@ document.addEventListener('DOMContentLoaded', function () {
         filtered.forEach((shop) => {
             const cfg = getClassificationConfig(shop.classification);
             const resultDiv = document.createElement('div');
-            resultDiv.className = 'p-2 bg-base-100 hover:bg-base-200 rounded cursor-pointer transition-colors';
+            resultDiv.className = 'p-3 hover:bg-slate-50 rounded-xl cursor-pointer transition-colors flex items-center gap-3 border border-transparent hover:border-slate-100';
             resultDiv.innerHTML = `
-                <div class="flex items-center gap-2">
-                    <span style="width:8px;height:8px;border-radius:50%;background:${cfg.color};flex-shrink:0;display:inline-block;"></span>
-                    <div class="font-semibold text-sm">${shop.name}</div>
+                <div style="width:10px;height:10px;border-radius:50%;background:${cfg.color};flex-shrink:0;"></div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-bold text-sm text-slate-800 truncate">${shop.name}</div>
+                    <div class="text-[11px] text-slate-500 truncate">${shop.address}</div>
                 </div>
-                <div class="text-xs text-base-content/70 ml-4">${shop.address}</div>
             `;
             resultDiv.addEventListener('click', () => {
                 shopSearch.value = '';

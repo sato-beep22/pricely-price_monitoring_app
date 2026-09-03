@@ -73,6 +73,14 @@ class Shop extends Model
     }
 
     /**
+     * Get all subscribers for this shop's buyer.
+     */
+    public function subscribers(): HasMany
+    {
+        return $this->hasMany(Subscription::class, 'buyer_id', 'user_id');
+    }
+
+    /**
      * Scope to only active shops.
      */
     public function scopeActive(Builder $query): Builder

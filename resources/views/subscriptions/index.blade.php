@@ -8,7 +8,7 @@
 
 @section('content')
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 reveal-stagger-item max-w-7xl mx-auto px-6 md:px-8">
+    <div class="grid grid-cols-1 gap-8 reveal-stagger-item max-w-4xl mx-auto px-6 md:px-8">
 
         <!-- Current Subscriptions -->
         <div>
@@ -82,12 +82,16 @@
                     <h2 class="text-xl mb-4 text-slate-800">{{ __('Available Buyers') }}</h2>
 
                     <!-- Search Box -->
-                    <input
-                        type="text"
-                        id="shop-search-input"
-                        placeholder="{{ __('Search buyers...') }}"
-                        class="input input-bordered input-sm w-full mb-4"
-                    />
+                    <form method="GET" action="{{ route('subscriptions.index') }}" class="mb-4 flex gap-2">
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            placeholder="{{ __('Search buyers...') }}"
+                            class="input input-bordered input-sm w-full"
+                        />
+                        <button type="submit" class="btn btn-primary btn-sm">{{ __('Search') }}</button>
+                    </form>
 
                     @if($availableShops->isEmpty())
                         <div class="text-center py-8 text-base-content/60">
@@ -99,7 +103,11 @@
                                 <li class="flex items-center justify-between p-4 bg-base-100 hover:bg-base-200 rounded-box border border-base-300 transition-colors shop-item" data-shop-name="{{ $shop->name }}" data-shop-address="{{ $shop->address }}">
                                     <div>
                                         <div class="font-bold">{{ $shop->name }}</div>
-                                        <div class="text-sm text-base-content/70">{{ Str::limit($shop->address, 40) }}</div>
+                                        <div class="text-sm text-base-content/70">{{ Str::limit($shop->address, 60) }}</div>
+                                        <div class="text-xs font-semibold text-emerald-600 mt-1 flex items-center gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                            {{ $shop->subscribers_count }} {{ Str::plural('Subscriber', $shop->subscribers_count) }}
+                                        </div>
                                     </div>
 
                                     <button
@@ -113,6 +121,10 @@
                             @endforeach
                         </ul>
                     @endif
+
+                    <div class="mt-6">
+                        {{ $availableShops->links() }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,29 +136,5 @@
         <x-subscribe-modal :shop="$shop" :crops="$crops" />
     @endforeach
 
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const searchInput = document.getElementById('shop-search-input');
-                const shopItems = document.querySelectorAll('.shop-item');
 
-                if (searchInput) {
-                    searchInput.addEventListener('input', function(e) {
-                        const query = e.target.value.toLowerCase();
-
-                        shopItems.forEach(item => {
-                            const name = item.dataset.shopName.toLowerCase();
-                            const address = item.dataset.shopAddress.toLowerCase();
-
-                            if (name.includes(query) || address.includes(query)) {
-                                item.style.display = '';
-                            } else {
-                                item.style.display = 'none';
-                            }
-                        });
-                    });
-                }
-            });
-        </script>
-    @endpush
 @endsection

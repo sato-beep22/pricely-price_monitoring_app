@@ -22,11 +22,21 @@ class SubscriptionController extends Controller
         $subscriptions = $user->subscriptions()->with('buyer.shop')->get();
         $subscribedBuyerIds = $subscriptions->pluck('buyer_id')->toArray();
 
+        $search = request('search');
+
         // Get available shops to subscribe to
         $availableShops = Shop::whereNotIn('user_id', $subscribedBuyerIds)
             ->where('is_active', true)
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('address', 'like', "%{$search}%");
+                });
+            })
             ->with('user')
-            ->get();
+            ->withCount('subscribers')
+            ->paginate(5)
+            ->withQueryString();
 
         // Get all available crops
         $crops = Crop::all();

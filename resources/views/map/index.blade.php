@@ -5,36 +5,61 @@
         <h2 class="font-display font-bold text-2xl text-slate-900 leading-tight tracking-tight">
             {{ __('Interactive Price Map') }}
         </h2>
-        <div class="flex gap-2 items-center flex-wrap">
-            <input
-                type="text"
-                id="shop-search"
-                placeholder="Search shops..."
-                class="input input-bordered input-sm w-52"
-            />
-            <select class="select select-bordered select-sm" id="crop-filter">
-                <option value="all">All Crops</option>
-                @foreach($crops as $crop)
-                    <option value="{{ $crop->name }}">{{ $crop->name }}</option>
-                @endforeach
-            </select>
-            <select class="select select-bordered select-sm" id="classification-filter">
-                <option value="all">All Classifications</option>
-                <option value="trader">Trader / Dealer</option>
-                <option value="miller">Miller</option>
-                <option value="wholesaler">Wholesaler</option>
-                <option value="retailer">Retailer</option>
-                <option value="government">Gov't-Accredited</option>
-                <option value="cooperative">Cooperative</option>
-            </select>
-        </div>
     </div>
 @endsection
 
 @section('content')
+    {{-- Search & Filters --}}
+    <div class="max-w-7xl mx-auto px-6 md:px-8 mb-6 relative z-[600]">
+        <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-3 relative">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+                <input
+                    type="text"
+                    id="shop-search"
+                    placeholder="Search shops by name or address..."
+                    class="input input-bordered w-full pl-11 rounded-xl bg-slate-50 focus:bg-white transition-colors"
+                    autocomplete="off"
+                />
+                
+                {{-- Search Results Dropdown --}}
+                <div id="shop-search-results" class="hidden absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] max-h-[350px] overflow-y-auto z-[610]">
+                    <div class="space-y-1 p-2"></div>
+                </div>
+            </div>
+            
+            <div class="flex gap-3">
+                <div class="relative">
+                    <select class="select select-bordered rounded-xl bg-slate-50 focus:bg-white w-[160px]" id="crop-filter">
+                        <option value="all">All Crops</option>
+                        @foreach($crops as $crop)
+                            <option value="{{ $crop->name }}">{{ $crop->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="relative">
+                    <select class="select select-bordered rounded-xl bg-slate-50 focus:bg-white w-[200px]" id="classification-filter">
+                        <option value="all">All Classifications</option>
+                        <option value="trader">Trader / Dealer</option>
+                        <option value="miller">Miller</option>
+                        <option value="wholesaler">Wholesaler</option>
+                        <option value="retailer">Retailer</option>
+                        <option value="government">Gov't-Accredited</option>
+                        <option value="cooperative">Cooperative</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Map Container --}}
     <div class="pricely-card h-[600px] overflow-hidden reveal-stagger-item max-w-7xl mx-auto px-6 md:px-8 relative">
-        <div id="price-map" class="w-full h-full z-0"></div>
+        <div id="price-map" class="w-full h-full z-0 rounded-2xl shadow-sm border border-slate-200"></div>
 
         {{-- Shop Info Side Panel --}}
         <div
@@ -80,12 +105,7 @@
         </div>
     </div>
 
-    {{-- Search Results Dropdown --}}
-    <div class="max-w-7xl mx-auto px-6 md:px-8 mt-4">
-        <div id="shop-search-results" class="hidden bg-white border border-base-300 rounded-lg shadow-lg p-4 max-h-64 overflow-y-auto">
-            <div class="space-y-2"></div>
-        </div>
-    </div>
+
 
     {{-- Classification Legend --}}
     <div class="mt-5 max-w-7xl mx-auto px-6 md:px-8">
