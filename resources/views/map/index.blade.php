@@ -38,17 +38,17 @@
                 </button>
             </div>
             
-            <div class="flex gap-3">
-                <div class="relative">
-                    <select class="select select-bordered rounded-xl bg-slate-50 focus:bg-white w-[160px]" id="crop-filter">
+            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <div class="relative w-full sm:w-auto">
+                    <select class="select select-bordered rounded-xl bg-slate-50 focus:bg-white w-full sm:w-[160px]" id="crop-filter">
                         <option value="all">All Crops</option>
                         @foreach($crops as $crop)
                             <option value="{{ $crop->name }}">{{ $crop->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="relative">
-                    <select class="select select-bordered rounded-xl bg-slate-50 focus:bg-white w-[200px]" id="classification-filter">
+                <div class="relative w-full sm:w-auto">
+                    <select class="select select-bordered rounded-xl bg-slate-50 focus:bg-white w-full sm:w-[200px]" id="classification-filter">
                         <option value="all">All Classifications</option>
                         <option value="trader">Trader / Dealer</option>
                         <option value="miller">Miller</option>
