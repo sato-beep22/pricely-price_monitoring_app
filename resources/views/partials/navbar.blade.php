@@ -30,11 +30,6 @@
 
         <!-- Right Action buttons -->
         <div class="flex items-center gap-1.5 md:gap-4 shrink-0 whitespace-nowrap">
-            <!-- Theme Toggle -->
-            <button onclick="toggleDarkMode()" class="p-2 mr-1 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle Dark Mode">
-                <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
-                <i data-lucide="sun" class="w-4 h-4 block dark:hidden"></i>
-            </button>
 
             <!-- Language Toggle -->
             <div class="relative ml-2 mr-2" x-data="{ open: false }">
@@ -70,19 +65,3 @@
 
     </div>
 </header>
-
-<script>
-function toggleDarkMode() {
-    const html = document.documentElement;
-    const isDark = html.classList.contains('dark');
-    if (isDark) {
-        html.classList.remove('dark');
-        html.setAttribute('data-theme', 'emerald');
-        localStorage.setItem('theme', 'light');
-    } else {
-        html.classList.add('dark');
-        html.setAttribute('data-theme', 'forest');
-        localStorage.setItem('theme', 'dark');
-    }
-}
-</script>
