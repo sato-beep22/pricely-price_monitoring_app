@@ -10,7 +10,7 @@
         <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v=3">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        <script src="https://unpkg.com/lucide@latest"></script>
+        <script src="https://unpkg.com/lucide@latest" defer></script>
     </head>
     <body class="font-sans antialiased bg-[#F8FAFC] min-h-screen text-base-content relative overflow-x-hidden">
         <!-- Global Notification Modal -->
@@ -29,7 +29,7 @@
         </div>
 
         <!-- Content -->
-        <div class="relative z-10 min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 px-4">
+        <main class="relative z-10 min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 px-4">
             <!-- Logo -->
             <div class="mb-2">
                 <a href="/" class="flex items-center gap-3 group">
@@ -52,7 +52,7 @@
             <p class="mt-8 text-sm text-slate-400">
                 &copy; {{ date('Y') }} Pricely. All rights reserved.
             </p>
-        </div>
+        </main>
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {

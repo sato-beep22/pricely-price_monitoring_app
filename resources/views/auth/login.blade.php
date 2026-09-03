@@ -33,7 +33,7 @@
                                     name="password"
                                     required autocomplete="current-password"
                                     placeholder="••••••••" />
-                    <button type="button" onclick="togglePassword('password', this)" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+                    <button type="button" aria-label="Toggle password visibility" onclick="togglePassword('password', this)" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
                         <i data-lucide="eye" class="w-5 h-5 eye-open"></i>
                         <i data-lucide="eye-off" class="w-5 h-5 eye-closed hidden"></i>
                     </button>
@@ -57,7 +57,7 @@
                 <x-input-label for="pin_code" :value="__('4-Digit PIN')" />
                 <div class="relative mt-1">
                     <x-text-input id="pin_code" class="block w-full pr-12" type="password" name="pin_code" placeholder="••••" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" />
-                    <button type="button" onclick="togglePassword('pin_code', this)" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+                    <button type="button" aria-label="Toggle PIN visibility" onclick="togglePassword('pin_code', this)" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
                         <i data-lucide="eye" class="w-5 h-5 eye-open"></i>
                         <i data-lucide="eye-off" class="w-5 h-5 eye-closed hidden"></i>
                     </button>
