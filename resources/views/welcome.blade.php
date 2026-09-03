@@ -1,11 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <style>
-        body { background-color: #0b1120 !important; color: #f8fafc !important; }
-        .bg-base-100 { background-color: #0b1120 !important; }
-    </style>
-
     <!-- Animated Dots Background -->
     <canvas id="dotsCanvas" class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none"></canvas>
 
@@ -22,7 +17,7 @@
         </div>
 
         <!-- Heading Statement -->
-        <h1 class="gsap-hero-title reveal-stagger-item text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] sm:leading-[0.95] max-w-4xl z-10 relative text-white font-extrabold">
+        <h1 class="gsap-hero-title reveal-stagger-item text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] sm:leading-[0.95] max-w-4xl z-10 relative text-slate-900 dark:text-white font-extrabold">
             Patas na Presyo,<br />
             <span class="text-gradient">
                 Sapat na Kita.
@@ -30,7 +25,7 @@
         </h1>
 
         <!-- Subhead Subtitle -->
-        <p class="gsap-hero-subtitle reveal-stagger-item text-sm sm:text-base md:text-lg mt-5 sm:mt-8 max-w-2xl leading-relaxed z-10 relative px-2 sm:px-0 text-slate-300">
+        <p class="gsap-hero-subtitle reveal-stagger-item text-sm sm:text-base md:text-lg mt-5 sm:mt-8 max-w-2xl leading-relaxed z-10 relative px-2 sm:px-0 text-slate-600 dark:text-slate-300">
             I monitor ang pagtaas at pagbaba ng presyo ng ating mga ani mula sa mga kalapit na merkado sa pamamagitan ng app na ito.
         </p>
 
@@ -42,7 +37,7 @@
             </a>
 
             @guest
-            <a href="{{ route('register') }}" class="bg-slate-800 hover:bg-slate-700 active:scale-[0.98] text-white px-6 py-3 rounded-2xl font-bold border border-slate-700 shadow-sm transition-all cursor-pointer flex items-center justify-center w-full sm:w-auto">
+            <a href="{{ route('register') }}" class="bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 active:scale-[0.98] text-slate-900 dark:text-white px-6 py-3 rounded-2xl font-bold border border-slate-200 dark:border-slate-700 shadow-sm transition-all cursor-pointer flex items-center justify-center w-full sm:w-auto">
                 Mag Register
             </a>
             @endguest
@@ -57,12 +52,12 @@
     </section>
 
     {{-- ===== PHONE MOCKUP SHOWCASE SECTION ===== --}}
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-20 sm:pb-28 z-10 relative overflow-hidden" x-data="{ modal: null }">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-20 sm:pb-28 z-10 relative" x-data="{ modal: null }">
 
         {{-- Section Header --}}
         <div class="text-center mb-12 sm:mb-16">
-            <p class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-2">Mga Feature</p>
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white leading-tight">
+            <p class="text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-2">Mga Feature</p>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 dark:text-white leading-tight">
                 Lahat ng kailangan mo,<br>
                 <span class="text-gradient">nasa isang app na.</span>
             </h2>
@@ -73,7 +68,7 @@
 
             {{-- Mobile Card 1: Shop Map --}}
             <button @click="modal = 'map'" id="feat-map-mobile"
-                class="group focus:outline-none w-full bg-slate-800/70 backdrop-blur-sm border border-emerald-900/50 rounded-3xl p-4 flex items-center gap-4 shadow-md hover:shadow-xl hover:border-emerald-500/50 transition-all duration-300 text-left active:scale-[0.98]">
+                class="group focus:outline-none w-full bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border border-emerald-100 dark:border-emerald-900/50 rounded-3xl p-4 flex items-center gap-4 shadow-md hover:shadow-xl hover:border-emerald-300 dark:hover:border-emerald-500/50 transition-all duration-300 text-left active:scale-[0.98]">
                 {{-- Phone --}}
                 <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
                      style="filter: drop-shadow(0 12px 28px rgba(16,185,129,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
@@ -87,12 +82,12 @@
                 </div>
                 {{-- Info --}}
                 <div class="flex-1 min-w-0">
-                    <span class="inline-flex items-center gap-1.5 bg-emerald-900/50 text-emerald-300 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 border border-emerald-800/50">
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 border border-transparent dark:border-emerald-800/50">
                         <i data-lucide="compass" class="w-2.5 h-2.5"></i> Shop Map
                     </span>
-                    <h3 class="text-sm font-bold text-white leading-tight mb-1">Interactive Price Map</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed line-clamp-3">Hanapin ang mga buyer malapit sa iyo at ikumpara ang kanilang presyo sa mapa.</p>
-                    <span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-emerald-400">
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-white leading-tight mb-1">Interactive Price Map</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">Hanapin ang mga buyer malapit sa iyo at ikumpara ang kanilang presyo sa mapa.</p>
+                    <span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
                         Tignan <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </span>
                 </div>
@@ -100,7 +95,7 @@
 
             {{-- Mobile Card 2: SMS Alerts --}}
             <button @click="modal = 'sms'" id="feat-sms-mobile"
-                class="group focus:outline-none w-full bg-slate-800/70 backdrop-blur-sm border border-indigo-900/50 rounded-3xl p-4 flex items-center gap-4 shadow-md hover:shadow-xl hover:border-indigo-500/50 transition-all duration-300 text-left active:scale-[0.98]">
+                class="group focus:outline-none w-full bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border border-indigo-100 dark:border-indigo-900/50 rounded-3xl p-4 flex items-center gap-4 shadow-md hover:shadow-xl hover:border-indigo-300 dark:hover:border-indigo-500/50 transition-all duration-300 text-left active:scale-[0.98]">
                 {{-- Phone --}}
                 <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
                      style="filter: drop-shadow(0 12px 28px rgba(99,102,241,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
@@ -114,12 +109,12 @@
                 </div>
                 {{-- Info --}}
                 <div class="flex-1 min-w-0">
-                    <span class="inline-flex items-center gap-1.5 bg-indigo-900/50 text-indigo-300 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 border border-indigo-800/50">
+                    <span class="inline-flex items-center gap-1.5 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 border border-transparent dark:border-indigo-800/50">
                         <i data-lucide="smartphone" class="w-2.5 h-2.5"></i> SMS Alerts
                     </span>
-                    <h3 class="text-sm font-bold text-white leading-tight mb-1">Instant SMS Price Alerts</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed line-clamp-3">Makatanggap ng text kapag nagbago ang presyo ng shop na iyong pinili.</p>
-                    <span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-indigo-400">
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-white leading-tight mb-1">Instant SMS Price Alerts</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">Makatanggap ng text kapag nagbago ang presyo ng shop na iyong pinili.</p>
+                    <span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-indigo-600 dark:text-indigo-400">
                         Tignan <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </span>
                 </div>
@@ -127,7 +122,7 @@
 
             {{-- Mobile Card 3: Price Forecast --}}
             <button @click="modal = 'forecast'" id="feat-forecast-mobile"
-                class="group focus:outline-none w-full bg-slate-800/70 backdrop-blur-sm border border-amber-900/50 rounded-3xl p-4 flex items-center gap-4 shadow-md hover:shadow-xl hover:border-amber-500/50 transition-all duration-300 text-left active:scale-[0.98]">
+                class="group focus:outline-none w-full bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border border-amber-100 dark:border-amber-900/50 rounded-3xl p-4 flex items-center gap-4 shadow-md hover:shadow-xl hover:border-amber-300 dark:hover:border-amber-500/50 transition-all duration-300 text-left active:scale-[0.98]">
                 {{-- Phone --}}
                 <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
                      style="filter: drop-shadow(0 12px 28px rgba(245,158,11,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
@@ -141,12 +136,12 @@
                 </div>
                 {{-- Info --}}
                 <div class="flex-1 min-w-0">
-                    <span class="inline-flex items-center gap-1.5 bg-amber-900/50 text-amber-300 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 border border-amber-800/50">
+                    <span class="inline-flex items-center gap-1.5 bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 border border-transparent dark:border-amber-800/50">
                         <i data-lucide="trending-up" class="w-2.5 h-2.5"></i> Price Forecast
                     </span>
-                    <h3 class="text-sm font-bold text-white leading-tight mb-1">Market Trends & Projections</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed line-clamp-3">Alamin kung tataas o bababa ang presyo para makapag-desisyon ng maayos.</p>
-                    <span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-amber-400">
+                    <h3 class="text-sm font-bold text-slate-800 dark:text-white leading-tight mb-1">Market Trends & Projections</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-3">Alamin kung tataas o bababa ang presyo para makapag-desisyon ng maayos.</p>
+                    <span class="inline-flex items-center gap-1 mt-2 text-[10px] font-semibold text-amber-600 dark:text-amber-400">
                         Tignan <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </span>
                 </div>
@@ -200,14 +195,14 @@
 
                 {{-- Label + modal CTA --}}
                 <div class="flex flex-col items-center gap-2 mt-4">
-                    <span class="inline-flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold bg-slate-800 px-3 py-1 rounded-full whitespace-nowrap mb-1">
+                    <span class="inline-flex items-center gap-1.5 text-[10px] text-slate-600 dark:text-slate-400 font-semibold bg-slate-100/80 dark:bg-slate-800 px-3 py-1 rounded-full whitespace-nowrap mb-1">
                         <i data-lucide="refresh-cw" class="w-3 h-3"></i>
                         I-click ang phone para baguhin ang view
                     </span>
-                    <span class="inline-flex items-center gap-1.5 bg-emerald-900/50 text-emerald-300 border border-emerald-800/50 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-800 dark:text-emerald-300 border border-transparent dark:border-emerald-800/50 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                         <i data-lucide="compass" class="w-3.5 h-3.5"></i> Shop Map
                     </span>
-                    <button @click.stop="modal = 'map'" class="text-xs text-slate-400 hover:text-emerald-400 font-semibold transition-colors flex items-center gap-1 mt-1">
+                    <button @click.stop="modal = 'map'" class="text-xs text-slate-500 dark:text-slate-400 hover:text-emerald-700 dark:hover:text-emerald-400 font-semibold transition-colors flex items-center gap-1 mt-1">
                         I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </button>
                 </div>
@@ -246,10 +241,10 @@
 
                 <div class="flex flex-col items-center gap-2 mt-4">
                     <div class="h-[28px] mb-1"></div> {{-- Spacer to match the height of the swap hint on adjacent features --}}
-                    <span class="inline-flex items-center gap-1.5 bg-indigo-900/50 text-indigo-300 border border-indigo-800/50 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
+                    <span class="inline-flex items-center gap-1.5 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300 border border-transparent dark:border-indigo-800/50 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                         <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> SMS Alerts
                     </span>
-                    <button @click="modal = 'sms'" class="text-xs text-slate-400 hover:text-indigo-400 font-semibold transition-colors flex items-center gap-1 mt-1">
+                    <button @click="modal = 'sms'" class="text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-700 dark:hover:text-indigo-400 font-semibold transition-colors flex items-center gap-1 mt-1">
                         I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </button>
                 </div>
@@ -296,14 +291,14 @@
                 </div>
 
                 <div class="flex flex-col items-center gap-2 mt-4">
-                    <span class="inline-flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold bg-slate-800 px-3 py-1 rounded-full whitespace-nowrap mb-1">
+                    <span class="inline-flex items-center gap-1.5 text-[10px] text-slate-600 dark:text-slate-400 font-semibold bg-slate-100/80 dark:bg-slate-800 px-3 py-1 rounded-full whitespace-nowrap mb-1">
                         <i data-lucide="refresh-cw" class="w-3 h-3"></i>
                         I-click ang phone para baguhin ang view
                     </span>
-                    <span class="inline-flex items-center gap-1.5 bg-amber-900/50 text-amber-300 border border-amber-800/50 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
+                    <span class="inline-flex items-center gap-1.5 bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300 border border-transparent dark:border-amber-800/50 text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full shadow-sm">
                         <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Price Forecast
                     </span>
-                    <button @click.stop="modal = 'forecast'" class="text-xs text-slate-400 hover:text-amber-400 font-semibold transition-colors flex items-center gap-1 mt-1">
+                    <button @click.stop="modal = 'forecast'" class="text-xs text-slate-500 dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-400 font-semibold transition-colors flex items-center gap-1 mt-1">
                         I-tap para sa detalye <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </button>
                 </div>
@@ -336,43 +331,43 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="relative bg-slate-800 rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col border border-slate-700" style="max-height:90vh;"
+                    class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col border border-slate-200 dark:border-slate-700" style="max-height:90vh;"
                     @click.stop
                 >
-                    <div class="bg-slate-900 border-b border-slate-700 px-4 sm:px-6 py-4 flex items-center justify-between">
+                    <div class="bg-emerald-50 dark:bg-slate-900 border-b border-emerald-100 dark:border-slate-700 px-4 sm:px-6 py-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-emerald-900/50 rounded-xl flex items-center justify-center shrink-0 border border-emerald-800/50">
-                                <i data-lucide="compass" class="w-4 h-4 text-emerald-400"></i>
+                            <div class="w-9 h-9 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center shrink-0 border border-transparent dark:border-emerald-800/50">
+                                <i data-lucide="compass" class="w-4 h-4 text-emerald-600 dark:text-emerald-400"></i>
                             </div>
                             <div>
-                                <p class="text-base font-bold text-white">Shop Map</p>
-                                <p class="text-xs text-emerald-400 font-semibold">Paano ito Gumagana</p>
+                                <p class="text-base font-bold text-slate-800 dark:text-white">Shop Map</p>
+                                <p class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Paano ito Gumagana</p>
                             </div>
                         </div>
-                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-slate-800 border border-slate-600 flex items-center justify-center text-slate-400 hover:text-white transition-colors shrink-0">
+                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <div class="flex flex-col md:flex-row bg-slate-950">
+                        <div class="flex flex-col md:flex-row bg-slate-100 dark:bg-slate-950">
                             <img src="{{ asset('images/price_map1.webp') }}?v=3" alt="Map View" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
-                            <div class="border-t md:border-t-0 md:border-l border-slate-800"></div>
+                            <div class="border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-800"></div>
                             <img src="{{ asset('images/price_map2.webp') }}?v=3" alt="Shop Detail" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                         </div>
                         <div class="px-4 sm:px-6 py-4 space-y-2">
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tutorial</p>
+                            <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tutorial</p>
                             <div class="space-y-2">
                                 <div class="flex items-start gap-3">
-                                    <span class="flex-shrink-0 w-5 h-5 bg-emerald-900/50 text-emerald-400 border border-emerald-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
-                                    <p class="text-sm text-slate-300">I-open ang mapa para makita ang mga registered buyer sa inyong lugar.</p>
+                                    <span class="flex-shrink-0 w-5 h-5 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border border-transparent dark:border-emerald-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">I-open ang mapa para makita ang mga registered buyer sa inyong lugar.</p>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <span class="flex-shrink-0 w-5 h-5 bg-emerald-900/50 text-emerald-400 border border-emerald-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
-                                    <p class="text-sm text-slate-300">I-click ang marker ng mapa para makita ang presyo na ino-offer ng shop na napili.</p>
+                                    <span class="flex-shrink-0 w-5 h-5 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border border-transparent dark:border-emerald-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">I-click ang marker ng mapa para makita ang presyo na ino-offer ng shop na napili.</p>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <span class="flex-shrink-0 w-5 h-5 bg-emerald-900/50 text-emerald-400 border border-emerald-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">3</span>
-                                    <p class="text-sm text-slate-300">I-kumpara ang presyo ng ani at piliin ang pinakamagandang pagbentahan.</p>
+                                    <span class="flex-shrink-0 w-5 h-5 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border border-transparent dark:border-emerald-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">3</span>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">I-kumpara ang presyo ng ani at piliin ang pinakamagandang pagbentahan.</p>
                                 </div>
                             </div>
                         </div>
@@ -393,42 +388,42 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="relative bg-slate-800 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col border border-slate-700" style="max-height:90vh;"
+                    class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col border border-slate-200 dark:border-slate-700" style="max-height:90vh;"
                     @click.stop
                 >
-                    <div class="bg-slate-900 border-b border-slate-700 px-4 sm:px-6 py-4 flex items-center justify-between">
+                    <div class="bg-blue-50 dark:bg-slate-900 border-b border-blue-100 dark:border-slate-700 px-4 sm:px-6 py-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-indigo-900/50 rounded-xl flex items-center justify-center shrink-0 border border-indigo-800/50">
-                                <i data-lucide="smartphone" class="w-4 h-4 text-indigo-400"></i>
+                            <div class="w-9 h-9 bg-blue-100 dark:bg-indigo-900/50 rounded-xl flex items-center justify-center shrink-0 border border-transparent dark:border-indigo-800/50">
+                                <i data-lucide="smartphone" class="w-4 h-4 text-blue-600 dark:text-indigo-400"></i>
                             </div>
                             <div>
-                                <p class="text-base font-bold text-white">Instant SMS Alerts</p>
-                                <p class="text-xs text-indigo-400 font-semibold">Paano ito Gumagana</p>
+                                <p class="text-base font-bold text-slate-800 dark:text-white">Instant SMS Alerts</p>
+                                <p class="text-xs text-blue-600 dark:text-indigo-400 font-semibold">Paano ito Gumagana</p>
                             </div>
                         </div>
-                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-slate-800 border border-slate-600 flex items-center justify-center text-slate-400 hover:text-white transition-colors shrink-0">
+                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <div class="bg-slate-950 flex justify-center">
+                        <div class="bg-slate-100 dark:bg-slate-950 flex justify-center">
                             <img src="{{ asset('images/sms_feature.webp') }}?v=3" alt="SMS Alerts Feature" class="w-full max-w-sm h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                         </div>
                         <div class="px-4 sm:px-6 py-4">
                             <div class="space-y-2">
-                                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tutorial</p>
+                                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tutorial</p>
                                 <div class="space-y-2">
                                     <div class="flex items-start gap-3">
-                                        <span class="flex-shrink-0 w-5 h-5 bg-indigo-900/50 text-indigo-400 border border-indigo-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
-                                        <p class="text-sm text-slate-300">I-register ang iyong phone number sa profile settings.</p>
+                                        <span class="flex-shrink-0 w-5 h-5 bg-blue-100 dark:bg-indigo-900/50 text-blue-700 dark:text-indigo-400 border border-transparent dark:border-indigo-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
+                                        <p class="text-sm text-slate-600 dark:text-slate-300">I-register ang iyong phone number sa profile settings.</p>
                                     </div>
                                     <div class="flex items-start gap-3">
-                                        <span class="flex-shrink-0 w-5 h-5 bg-indigo-900/50 text-indigo-400 border border-indigo-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
-                                        <p class="text-sm text-slate-300">Makakatanggap ka ng SMS alert kapag may bagong presyo ang shop na iyong na-subscribe.</p>
+                                        <span class="flex-shrink-0 w-5 h-5 bg-blue-100 dark:bg-indigo-900/50 text-blue-700 dark:text-indigo-400 border border-transparent dark:border-indigo-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
+                                        <p class="text-sm text-slate-600 dark:text-slate-300">Makakatanggap ka ng SMS alert kapag may bagong presyo ang shop na iyong na-subscribe.</p>
                                     </div>
                                     <div class="flex items-start gap-3">
-                                        <span class="flex-shrink-0 w-5 h-5 bg-indigo-900/50 text-indigo-400 border border-indigo-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">3</span>
-                                        <p class="text-sm text-slate-300">Hindi kailangan ng internet — sapat na ang basic na signal para makatanggap ng text.</p>
+                                        <span class="flex-shrink-0 w-5 h-5 bg-blue-100 dark:bg-indigo-900/50 text-blue-700 dark:text-indigo-400 border border-transparent dark:border-indigo-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">3</span>
+                                        <p class="text-sm text-slate-600 dark:text-slate-300">Hindi kailangan ng internet — sapat na ang basic na signal para makatanggap ng text.</p>
                                     </div>
                                 </div>
                             </div>
@@ -450,43 +445,43 @@
                     x-transition:leave="transition ease-in duration-150"
                     x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                     x-transition:leave-end="opacity-0 scale-95 translate-y-4"
-                    class="relative bg-slate-800 rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col border border-slate-700" style="max-height:90vh;"
+                    class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden flex flex-col border border-slate-200 dark:border-slate-700" style="max-height:90vh;"
                     @click.stop
                 >
-                    <div class="bg-slate-900 border-b border-slate-700 px-4 sm:px-6 py-4 flex items-center justify-between">
+                    <div class="bg-amber-50 dark:bg-slate-900 border-b border-amber-100 dark:border-slate-700 px-4 sm:px-6 py-4 flex items-center justify-between">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 bg-amber-900/50 rounded-xl flex items-center justify-center shrink-0 border border-amber-800/50">
-                                <i data-lucide="trending-up" class="w-4 h-4 text-amber-400"></i>
+                            <div class="w-9 h-9 bg-amber-100 dark:bg-amber-900/50 rounded-xl flex items-center justify-center shrink-0 border border-transparent dark:border-amber-800/50">
+                                <i data-lucide="trending-up" class="w-4 h-4 text-amber-600 dark:text-amber-400"></i>
                             </div>
                             <div>
-                                <p class="text-base font-bold text-white">Price Forecasting</p>
-                                <p class="text-xs text-amber-400 font-semibold">Paano ito Gumagana</p>
+                                <p class="text-base font-bold text-slate-800 dark:text-white">Price Forecasting</p>
+                                <p class="text-xs text-amber-600 dark:text-amber-400 font-semibold">Paano ito Gumagana</p>
                             </div>
                         </div>
-                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-slate-800 border border-slate-600 flex items-center justify-center text-slate-400 hover:text-white transition-colors shrink-0">
+                        <button @click="modal = null" class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors shrink-0">
                             <i data-lucide="x" class="w-4 h-4"></i>
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <div class="flex flex-col md:flex-row bg-slate-950">
+                        <div class="flex flex-col md:flex-row bg-slate-100 dark:bg-slate-950">
                             <img src="{{ asset('images/price_forecast1.webp') }}?v=3" alt="Market Trends" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
-                            <div class="border-t md:border-t-0 md:border-l border-slate-800"></div>
+                            <div class="border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-800"></div>
                             <img src="{{ asset('images/price_forecast2.webp') }}?v=3" alt="Forecast Chart" class="w-full md:w-1/2 h-80 md:h-[500px]" style="object-fit:contain; padding: 1rem;">
                         </div>
                         <div class="px-4 sm:px-6 py-4 space-y-2">
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tutorial</p>
+                            <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tutorial</p>
                             <div class="space-y-2">
                                 <div class="flex items-start gap-3">
-                                    <span class="flex-shrink-0 w-5 h-5 bg-amber-900/50 text-amber-400 border border-amber-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
-                                    <p class="text-sm text-slate-300">Kinokolekta ng system ang mga nakaraang presyo mula sa mga registered buyers.</p>
+                                    <span class="flex-shrink-0 w-5 h-5 bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 border border-transparent dark:border-amber-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">1</span>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">Kinokolekta ng system ang mga nakaraang presyo mula sa mga registered buyers.</p>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <span class="flex-shrink-0 w-5 h-5 bg-amber-900/50 text-amber-400 border border-amber-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
-                                    <p class="text-sm text-slate-300">Ipinapakita ng trend line kung saan maaaring pumunta ang presyo sa mga susunod na linggo.</p>
+                                    <span class="flex-shrink-0 w-5 h-5 bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 border border-transparent dark:border-amber-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">2</span>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">Ipinapakita ng trend line kung saan maaaring pumunta ang presyo sa mga susunod na linggo.</p>
                                 </div>
                                 <div class="flex items-start gap-3">
-                                    <span class="flex-shrink-0 w-5 h-5 bg-amber-900/50 text-amber-400 border border-amber-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">3</span>
-                                    <p class="text-sm text-slate-300">Gamitin ang impormasyong ito para piliin ang pinakamagandang oras ng pagbenta ng iyong ani.</p>
+                                    <span class="flex-shrink-0 w-5 h-5 bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 border border-transparent dark:border-amber-800/50 rounded-full text-[10px] font-bold flex items-center justify-center">3</span>
+                                    <p class="text-sm text-slate-600 dark:text-slate-300">Gamitin ang impormasyong ito para piliin ang pinakamagandang oras ng pagbenta ng iyong ani.</p>
                                 </div>
                             </div>
                         </div>
@@ -551,10 +546,14 @@
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
 
-            let width, height;
-            const SPACING = 40; // Distance between dots
+            const DOT_COLOR_LIGHT = 'rgba(16, 185, 129, 0.2)'; // Emerald
+            const DOT_COLOR_DARK = 'rgba(56, 189, 248, 0.4)';  // Light blue
+            const SPACING = 30; // Distance between dots
             const DOT_RADIUS = 1.5;
-            const DOT_COLOR = 'rgba(56, 189, 248, 0.4)'; // Light blue color to match PixelCrew style
+
+            function getDotColor() {
+                return document.documentElement.classList.contains('dark') ? DOT_COLOR_DARK : DOT_COLOR_LIGHT;
+            }
 
             function resize() {
                 width = canvas.width = window.innerWidth;
@@ -575,8 +574,9 @@
 
             function animate() {
                 ctx.clearRect(0, 0, width, height);
-                ctx.fillStyle = DOT_COLOR;
-
+                ctx.fillStyle = getDotColor();
+                
+                const time = Date.now() * 0.0015; // Time for the consistent wave
                 const cols = Math.floor(width / SPACING) + 2;
                 const rows = Math.floor(height / SPACING) + 2;
                 
@@ -588,25 +588,30 @@
                         let baseX = offsetX + i * SPACING;
                         let baseY = offsetY + j * SPACING;
 
-                        let dx = mouse.x - baseX;
-                        let dy = mouse.y - baseY;
-                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        // Consistent wavy movement
+                        let waveX = Math.sin(time + (i * 0.3) + (j * 0.2)) * 3;
+                        let waveY = Math.cos(time + (j * 0.3) + (i * 0.2)) * 3;
 
-                        let waveX = 0;
-                        let waveY = 0;
+                        let currentX = baseX + waveX;
+                        let currentY = baseY + waveY;
+
+                        // Mouse hover displacement
+                        let dx = mouse.x - currentX;
+                        let dy = mouse.y - currentY;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
                         
-                        // Only move dots if the mouse is within a certain radius (e.g., 150px)
+                        let hoverDispX = 0;
+                        let hoverDispY = 0;
+
                         let maxDist = 150;
                         if (distance < maxDist) {
-                            // Calculate displacement (closer to mouse = more displacement)
-                            // We use a slight wave effect based on distance to push them away
                             let force = (maxDist - distance) / maxDist;
-                            waveX = -dx * force * 0.15;
-                            waveY = -dy * force * 0.15;
+                            hoverDispX = -dx * force * 0.2;
+                            hoverDispY = -dy * force * 0.2;
                         }
 
                         ctx.beginPath();
-                        ctx.arc(baseX + waveX, baseY + waveY, DOT_RADIUS, 0, Math.PI * 2);
+                        ctx.arc(currentX + hoverDispX, currentY + hoverDispY, DOT_RADIUS, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 }

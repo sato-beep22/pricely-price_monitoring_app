@@ -1,6 +1,16 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="cupcake">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <script>
+        // Check local storage for theme preference or system preference
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'forest');
+        } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.setAttribute('data-theme', 'emerald');
+        }
+    </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Pricely connects farmers and buyers with live price monitoring, interactive maps, and market forecasts in San Mateo, Isabela.">
@@ -29,16 +39,7 @@
 <body class="bg-base-100 relative">
     <!-- Global Notification Modal -->
     <x-notification-modal />
-    <!-- Decorative Gradient Orbs Container (Prevents horizontal scroll) -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div class="bg-ambient absolute inset-0 opacity-40"></div>
-        <div class="absolute w-[500px] h-[500px] rounded-full -top-28 -left-28 opacity-60 animate-blob blur-3xl" style="background: radial-gradient(circle, rgba(16,185,129,0.35) 0%, rgba(13,148,136,0.15) 50%, transparent 70%);"></div>
-        <div class="absolute w-80 h-80 rounded-full top-[15%] -right-[5%] opacity-40 animate-blob blur-2xl" style="background: radial-gradient(circle, rgba(56,189,248,0.25) 0%, rgba(99,102,241,0.10) 50%, transparent 70%); animation-delay: 2s;"></div>
-        <div class="absolute w-72 h-72 rounded-full top-[50%] -left-16 opacity-35 animate-blob blur-2xl" style="background: radial-gradient(circle, rgba(52,211,153,0.30) 0%, rgba(16,185,129,0.10) 50%, transparent 70%); animation-delay: 5s;"></div>
-        <div class="absolute w-[450px] h-[450px] rounded-full -bottom-24 -right-24 opacity-50 animate-blob blur-3xl" style="background: radial-gradient(circle, rgba(13,148,136,0.30) 0%, rgba(16,185,129,0.12) 50%, transparent 70%); animation-delay: 3s;"></div>
-        <div class="absolute w-64 h-64 rounded-full bottom-[30%] left-[40%] opacity-25 animate-blob blur-2xl" style="background: radial-gradient(circle, rgba(251,191,36,0.20) 0%, rgba(245,158,11,0.08) 50%, transparent 70%); animation-delay: 7s;"></div>
-        <div class="absolute w-56 h-56 rounded-full top-[35%] right-[30%] opacity-30 animate-blob blur-xl" style="background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, rgba(139,92,246,0.06) 50%, transparent 70%); animation-delay: 10s;"></div>
-    </div>
+    <!-- Main Application Wrapper -->
 
     @php
         $showSidebar = auth()->check() && !request()->is('/');
