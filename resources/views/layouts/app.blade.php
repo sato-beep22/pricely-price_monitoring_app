@@ -7,7 +7,7 @@
 
     <title>{{ config('app.name', 'Pricely') }}</title>
     
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v=3">
+    <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}?v=4">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,7 +60,7 @@
                 <!-- Mobile Header for Hamburger -->
                 <div class="md:hidden flex items-center justify-between bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30">
                     <div class="flex items-center gap-2">
-                        <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-12 h-12 object-contain">
+                        <img src="{{ asset('san-mateo-logo.webp') }}" alt="San Mateo Logo" class="w-12 h-12 object-contain">
                         <div class="flex flex-col">
                             <span class="font-bold text-slate-800 text-lg tracking-tight leading-none">Pricely</span>
                             <span class="text-[10px] font-medium text-slate-500 leading-tight">San Mateo Isabela</span>

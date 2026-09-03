@@ -7,7 +7,7 @@
 
         <title>{{ config('app.name', 'Pricely') }}</title>
 
-        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}?v=3">
+        <link rel="icon" type="image/webp" href="{{ asset('favicon.webp') }}?v=4">
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,7 +38,7 @@
             <!-- Logo -->
             <div class="mb-2">
                 <a href="/" class="flex items-center gap-3 group">
-                    <img src="{{ asset('san-mateo-logo.png') }}" alt="San Mateo Logo" class="w-16 h-16 object-contain group-hover:scale-105 transition-all duration-300">
+                    <img src="{{ asset('san-mateo-logo.webp') }}" alt="San Mateo Logo" class="w-16 h-16 object-contain group-hover:scale-105 transition-all duration-300">
                     <div class="flex flex-col">
                         <span class="font-display font-bold text-2xl text-gradient leading-none">
                             Pricely
