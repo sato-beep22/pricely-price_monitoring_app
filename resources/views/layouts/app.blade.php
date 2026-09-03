@@ -57,7 +57,7 @@
     <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-transparent font-sans antialiased selection:bg-success selection:text-success-content flex {{ $showSidebar ? 'flex-row' : 'flex-col' }} relative z-10">
         @if($showSidebar)
             <!-- Mobile Overlay -->
-            <div x-show="sidebarOpen" x-transition.opacity style="display: none;" class="fixed inset-0 z-40 bg-slate-900/50 md:hidden" @click="sidebarOpen = false"></div>
+            <div x-show="sidebarOpen" x-transition.opacity style="display: none;" class="fixed inset-0 z-[9998] bg-slate-900/50 md:hidden" @click="sidebarOpen = false"></div>
             @include('partials.sidebar')
         @endif
         

@@ -1,4 +1,4 @@
-<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 w-72 flex-shrink-0 bg-white border-r border-slate-200 h-screen flex flex-col z-50 transition-transform duration-300 ease-in-out md:sticky md:top-0 md:translate-x-0">
+<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 w-72 flex-shrink-0 bg-white border-r border-slate-200 h-screen flex flex-col z-[9999] transition-transform duration-300 ease-in-out md:sticky md:top-0 md:translate-x-0">
     <button @click="sidebarOpen = false" class="md:hidden absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600">
         <i data-lucide="x" class="w-5 h-5"></i>
     </button>
