@@ -1,22 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <style>
-        body, html {
-            background-color: #0b1120 !important;
-            color: white !important;
-        }
-        .text-slate-900 {
-            color: white !important;
-        }
-        .bg-white {
-            background-color: #1e293b !important;
-            border-color: #334155 !important;
-        }
-        .text-slate-500, .text-slate-600 {
-            color: #94a3b8 !important;
-        }
-    </style>
     <!-- Animated Dots Background -->
     <canvas id="dotsCanvas" class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none"></canvas>
 
@@ -562,14 +546,14 @@
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
 
-            const DOT_COLOR_LIGHT = 'rgba(16, 185, 129, 0.6)'; // Emerald (Higher opacity)
+            const DOT_COLOR_LIGHT = 'rgba(16, 185, 129, 0.4)'; // Emerald (Increased opacity for light theme)
             const DOT_COLOR_DARK = 'rgba(56, 189, 248, 0.8)';  // Light blue (Higher opacity)
             const SPACING = 30; // Distance between dots
             const DOT_RADIUS = 1.5;
 
             function getDotColor() {
-                // Since we forced dark mode in the style block, we'll just use the dark color
-                return DOT_COLOR_DARK;
+                // Use light color since we are reverting to the original white/green theme
+                return DOT_COLOR_LIGHT;
             }
 
             function resize() {
