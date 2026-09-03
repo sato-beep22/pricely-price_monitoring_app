@@ -39,11 +39,11 @@
             </a>
             @endguest
 
-            <!-- Download APK Button -->
-            <a href="{{ asset('Pricely.apk') }}" download class="bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white px-6 py-3 rounded-2xl font-bold shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto">
+            <!-- Install PWA Button (Hidden by default until PWA is ready) -->
+            <button id="install-pwa-btn" style="display: none;" class="bg-slate-800 hover:bg-slate-900 active:scale-[0.98] text-white px-6 py-3 rounded-2xl font-bold shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto">
                 <i data-lucide="download" class="w-5 h-5"></i>
-                Download APK
-            </a>
+                Install App
+            </button>
         </div>
 
     </section>
