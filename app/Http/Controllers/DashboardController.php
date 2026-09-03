@@ -21,52 +21,32 @@ class DashboardController extends Controller
             $latestCeilingIds = CeilingPrice::where('effective_date', '<=', now())
                 ->selectRaw('MAX(id) as id')
                 ->groupBy('crop_id', 'specification')
-                ->get()
                 ->pluck('id');
 
-            $ceilings = CeilingPrice::whereIn('id', $latestCeilingIds)->get();
+            $ceilingPrices = CeilingPrice::with('crop')->whereIn('id', $latestCeilingIds)->get();
 
-            $latestCeilings = [];
-            foreach ($ceilings as $ceiling) {
-                $key = $ceiling->crop_id.'_'.$ceiling->specification;
-                $latestCeilings[$key] = $ceiling;
-            }
-
-            return view('dashboard.admin', compact('latestCeilings'));
+            return view('dashboard.admin', compact('ceilingPrices'));
         } elseif ($user->isBuyer()) {
             $latestCeilingIds = CeilingPrice::where('effective_date', '<=', now())
                 ->selectRaw('MAX(id) as id')
                 ->groupBy('crop_id', 'specification')
-                ->get()
                 ->pluck('id');
 
-            $ceilings = CeilingPrice::whereIn('id', $latestCeilingIds)->get();
-
-            $latestCeilings = [];
-            foreach ($ceilings as $ceiling) {
-                $key = $ceiling->crop_id.'_'.$ceiling->specification;
-                $latestCeilings[$key] = $ceiling;
-            }
+            $ceilingPrices = CeilingPrice::with('crop')->whereIn('id', $latestCeilingIds)->get();
 
             $shop = $user->shop;
-            $shopLatestPrices = [];
+            $shopLatestPrices = collect();
 
             if ($shop) {
                 $latestPriceIds = Price::where('shop_id', $shop->id)
                     ->selectRaw('MAX(id) as id')
                     ->groupBy('crop_id', 'specification')
-                    ->get()
                     ->pluck('id');
 
-                $prices = Price::whereIn('id', $latestPriceIds)->get();
-
-                foreach ($prices as $price) {
-                    $key = $price->crop_id.'_'.$price->specification;
-                    $shopLatestPrices[$key] = $price;
-                }
+                $shopLatestPrices = Price::with('crop')->whereIn('id', $latestPriceIds)->get();
             }
 
-            return view('dashboard.buyer', compact('latestCeilings', 'shopLatestPrices'));
+            return view('dashboard.buyer', compact('ceilingPrices', 'shopLatestPrices'));
         } else {
             $crops = Crop::orderBy('name')->get();
 

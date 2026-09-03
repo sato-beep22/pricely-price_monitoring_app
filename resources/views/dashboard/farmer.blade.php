@@ -19,30 +19,34 @@
         </div>
 
         <!-- Stats -->
-        <div class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stat-card stagger-2">
-            <div class="stat-figure text-primary">
+        <x-dashboard.stat-card 
+            title="Active Alerts" 
+            value="{{ Auth::user()->subscriptions()->active()->count() }}" 
+            desc="Shops you're tracking"
+            color="primary" 
+            stagger="2">
+            <x-slot name="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-            </div>
-            <div class="stat-title">{{ __('Active Alerts') }}</div>
-            <div class="stat-value text-primary">{{ Auth::user()->subscriptions()->active()->count() }}</div>
-            <div class="stat-desc">{{ __('Shops you\'re tracking') }}</div>
-        </div>
+            </x-slot>
+        </x-dashboard.stat-card>
 
-        <div class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stat-card stagger-3">
-            <div class="stat-figure text-secondary">
+        <x-dashboard.stat-card 
+            title="Market Trend" 
+            value="Stable" 
+            desc="Based on last 7 days"
+            color="primary" 
+            stagger="3">
+            <x-slot name="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-            </div>
-            <div class="stat-title">{{ __('Market Trend') }}</div>
-            <div class="stat-value text-secondary">{{ __('Stable') }}</div>
-            <div class="stat-desc">{{ __('Based on last 7 days') }}</div>
-        </div>
+            </x-slot>
+        </x-dashboard.stat-card>
 
-        <div class="stat bg-base-100 rounded-box shadow-sm border border-base-300 stat-card stagger-4">
-            <div class="stat-figure text-accent">
+        <div class="stat bg-base-100 rounded-box shadow-sm border border-base-200 stat-card stagger-4">
+            <div class="stat-figure text-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
             </div>
             <div class="stat-title">{{ __('SMS Settings') }}</div>
-            <div class="stat-value text-md whitespace-normal break-all">{{ Auth::user()->phone ?? __('Not set') }}</div>
+            <div class="stat-value text-primary text-md whitespace-normal break-all">{{ Auth::user()->phone ?? __('Not set') }}</div>
             <div class="stat-desc flex flex-col gap-1 mt-1">
                 @if(Auth::user()->phone)
                     @if(Auth::user()->phoneVerified())
@@ -74,63 +78,27 @@
         </div>
 
         <!-- DA Ceiling Prices -->
-        <div class="card bg-base-100 shadow-sm border border-base-300 md:col-span-3 mt-2 stat-card stagger-6">
-            <div class="card-body">
-                <div class="flex items-center justify-between mb-2">
-                    <div class="flex items-center gap-3">
-                        <img src="https://img.bomboradyo.com/cauayan/2019/05/DA-LOGO.png" alt="Department of Agriculture Logo" class="w-10 h-10 object-contain drop-shadow-sm rounded-full bg-white">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h2 class="card-title text-lg">{{ __('Department of Agriculture Ceiling Prices') }}</h2>
-                                <span class="badge badge-warning badge-sm">{{ __('Guidelines') }}</span>
-                            </div>
-                            <p class="text-base-content/60 text-sm mt-0.5">{{ __('Maximum recommended selling prices set by the Department of Agriculture.') }}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="table" id="ceiling-prices-table">
-                        <thead class="bg-base-200">
-                            <tr>
-                                <th>{{ __('Crop') }}</th>
-                                <th>{{ __('Specification') }}</th>
-                                <th>{{ __('Ceiling Price') }}</th>
-                                <th class="hidden md:table-cell">{{ __('Effective Date') }}</th>
-                                <th class="hidden lg:table-cell">{{ __('Notes') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($ceilingPrices as $cp)
-                                <tr class="hover">
-                                    <td class="font-semibold">{{ $cp->crop->name }}</td>
-                                    <td><span class="badge badge-primary badge-outline whitespace-nowrap">{{ ucfirst($cp->specification) }}</span></td>
-                                    <td>
-                                        <span class="badge badge-error badge-lg font-bold gap-1 whitespace-nowrap">
-                                            ₱{{ number_format($cp->max_price, 2) }}/{{ $cp->crop->unit }}
-                                        </span>
-                                    </td>
-                                    <td class="hidden md:table-cell">
-                                        {{ $cp->effective_date->format('M d, Y') }}
-                                    </td>
-                                    <td class="hidden lg:table-cell text-sm text-base-content/70 max-w-xs">{{ $cp->notes ?? '—' }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-6 text-base-content/50 italic">{{ __('No ceiling prices have been set yet.') }}</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="md:col-span-3 mt-2 stagger-6">
+            <x-dashboard.da-prices-table :prices="$ceilingPrices" />
         </div>
 
         <!-- Interactive Price Trend -->
-        <div class="card bg-base-100 shadow-sm border border-base-300 md:col-span-3 mt-2 stat-card stagger-7">
+        <div class="card bg-base-100 shadow-sm border border-base-200 md:col-span-3 mt-2 stat-card stagger-7" x-data="{ loading: true }">
             <div class="card-body">
                 <h2 class="card-title text-lg mb-4">{{ __('Market Price Trend (Last 30 Days)') }}</h2>
-                <div id="price-trend-chart" style="height: 350px;"></div>
+                
+                <!-- Skeleton Loader -->
+                <div x-show="loading" class="w-full h-[350px] animate-pulse flex flex-col justify-end gap-2 border-b border-base-200 pb-2">
+                    <div class="flex items-end justify-between w-full h-full gap-4 px-4">
+                        <div class="w-1/6 bg-base-200 h-[40%] rounded-t-md"></div>
+                        <div class="w-1/6 bg-base-200 h-[60%] rounded-t-md"></div>
+                        <div class="w-1/6 bg-base-200 h-[30%] rounded-t-md"></div>
+                        <div class="w-1/6 bg-base-200 h-[80%] rounded-t-md"></div>
+                        <div class="w-1/6 bg-base-200 h-[50%] rounded-t-md"></div>
+                    </div>
+                </div>
+
+                <div id="price-trend-chart" style="height: 350px;" x-show="!loading" style="display: none;" @chart-loaded.window="loading = false"></div>
             </div>
         </div>
 
@@ -193,7 +161,9 @@
                                 xaxis: { categories: data.categories }
                             };
                             var chart = new ApexCharts(document.querySelector("#price-trend-chart"), options);
-                            chart.render();
+                            chart.render().then(() => {
+                                window.dispatchEvent(new CustomEvent('chart-loaded'));
+                            });
                         });
                 }
             });
