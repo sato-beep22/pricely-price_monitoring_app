@@ -4,7 +4,7 @@
             <i data-lucide="sprout" class="w-4 h-4 text-emerald-500"></i>
             <span>Pricely Agricultural Indexing Systems</span>
         </div>
-        <p class="max-w-md mx-auto text-slate-400 text-2xs leading-relaxed text-[10px]">
+        <p class="max-w-md mx-auto text-slate-500 text-2xs leading-relaxed text-[10px]">
             Market index forecasts represent predictive trends derived from agricultural models and regional transport variables. Actionable indicators should be verified against active municipal commodity registries.
         </p>
         <div class="text-[10px] font-mono text-slate-450 mt-4">
