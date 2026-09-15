@@ -70,7 +70,7 @@
                                         />
                                         <div class="min-w-0">
                                             <h3 class="font-bold text-base-content leading-tight">{{ $crop->name }}</h3>
-                                            <span class="badge badge-outline badge-sm mt-1">{{ ucfirst($spec) }}</span>
+                                            <span class="badge badge-outline badge-sm mt-1 whitespace-nowrap">{{ ucfirst($spec) }}</span>
                                         </div>
                                     </div>
                                     @if($latest)

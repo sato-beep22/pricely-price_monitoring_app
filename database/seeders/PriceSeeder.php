@@ -37,11 +37,11 @@ class PriceSeeder extends Seeder
         $trends = [
             'rice' => [
                 'dry' => ['start' => 43.00, 'end' => 50.50, 'noise' => 0.60], // Upward trend -> HOLD recommendation
-                'basa' => ['start' => 38.00, 'end' => 32.50, 'noise' => 0.50], // Downward trend -> SELL_NOW recommendation
+                'sariwa' => ['start' => 38.00, 'end' => 32.50, 'noise' => 0.50], // Downward trend -> SELL_NOW recommendation
             ],
             'corn' => [
                 'yellow (dry)' => ['start' => 23.50, 'end' => 23.80, 'noise' => 0.40], // Stable trend -> STABLE recommendation
-                'yellow (basa)' => ['start' => 18.00, 'end' => 22.00, 'noise' => 0.40], // Upward trend -> HOLD recommendation
+                'yellow (sariwa)' => ['start' => 18.00, 'end' => 22.00, 'noise' => 0.40], // Upward trend -> HOLD recommendation
                 'white' => ['start' => 27.00, 'end' => 23.00, 'noise' => 0.50], // Downward trend -> SELL_NOW recommendation
             ],
             'mung-bean' => [

@@ -91,7 +91,7 @@
                                         />
                                         <div class="min-w-0">
                                             <h3 class="font-bold text-base-content leading-tight">{{ $crop->name }}</h3>
-                                            <span class="badge badge-outline badge-sm mt-1">{{ ucfirst($spec) }}</span>
+                                            <span class="badge badge-outline badge-sm mt-1 whitespace-nowrap">{{ ucfirst($spec) }}</span>
                                         </div>
                                     </div>
                                     @if(isset($latestCeilings[$key]))
@@ -204,7 +204,7 @@
                             @forelse($ceilingPrices as $cp)
                                 <tr class="hover">
                                     <td class="font-bold">{{ $cp->crop->name }}</td>
-                                    <td><span class="badge badge-primary badge-outline">{{ ucfirst($cp->specification) }}</span></td>
+                                    <td><span class="badge badge-primary badge-outline whitespace-nowrap">{{ ucfirst($cp->specification) }}</span></td>
                                     <td class="text-error font-bold">₱{{ number_format($cp->max_price, 2) }}</td>
                                     <td>{{ $cp->effective_date->format('M d, Y') }}</td>
                                     <td class="text-sm opacity-70">{{ $cp->admin->name }}</td>

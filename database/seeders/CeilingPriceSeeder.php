@@ -23,7 +23,7 @@ class CeilingPriceSeeder extends Seeder
 
         $ceilingPrices = [
             ['slug' => 'rice', 'specification' => 'dry', 'max_price' => 55.00, 'notes' => 'DA recommended ceiling price for well-milled palay.'],
-            ['slug' => 'rice', 'specification' => 'basa', 'max_price' => 45.00, 'notes' => 'DA recommended ceiling price for fresh palay.'],
+            ['slug' => 'rice', 'specification' => 'sariwa', 'max_price' => 45.00, 'notes' => 'DA recommended ceiling price for fresh palay.'],
             ['slug' => 'corn', 'specification' => 'yellow (dry)', 'max_price' => 30.00, 'notes' => 'DA recommended ceiling price for yellow mais.'],
             ['slug' => 'corn', 'specification' => 'white', 'max_price' => 35.00, 'notes' => 'DA recommended ceiling price for white mais.'],
             ['slug' => 'mung-bean', 'specification' => 'kusapo', 'max_price' => 85.00, 'notes' => 'DA recommended ceiling price for munggo.'],

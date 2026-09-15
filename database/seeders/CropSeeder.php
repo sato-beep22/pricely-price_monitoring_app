@@ -13,8 +13,8 @@ class CropSeeder extends Seeder
     public function run(): void
     {
         $crops = [
-            ['name' => 'Palay', 'slug' => 'rice', 'unit' => 'kg', 'specification' => 'dry, basa'],
-            ['name' => 'Mais', 'slug' => 'corn', 'unit' => 'kg', 'specification' => 'yellow (dry), yellow (basa), white'],
+            ['name' => 'Palay', 'slug' => 'rice', 'unit' => 'kg', 'specification' => 'dry, sariwa'],
+            ['name' => 'Mais', 'slug' => 'corn', 'unit' => 'kg', 'specification' => 'yellow (dry), yellow (sariwa), white'],
             ['name' => 'Munggo', 'slug' => 'mung-bean', 'unit' => 'kg', 'specification' => 'kusapo, bullad'],
         ];
 

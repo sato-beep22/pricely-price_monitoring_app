@@ -38,7 +38,7 @@
                                 </td>
                                 <td>
                                     @if($user->isBuyer() && $user->shop)
-                                        <div class="badge badge-success badge-sm badge-outline">Shop Active</div>
+                                        <div class="badge badge-success badge-sm badge-outline whitespace-nowrap">Shop Active</div>
                                     @else
                                         <span class="text-base-content/40 text-sm">-</span>
                                     @endif
