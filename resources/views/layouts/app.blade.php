@@ -16,12 +16,11 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.475.0/dist/umd/lucide.min.js" defer></script>
+    @stack('head')
     <script>
         window.AppUrl = "{{ rtrim(url('/'), '/') }}";
     </script>
@@ -67,7 +66,7 @@
                 <!-- Mobile Header for Hamburger -->
                 <div class="md:hidden flex items-center justify-between bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-30">
                     <div class="flex items-center gap-2">
-                        <img src="{{ asset('san-mateo-logo.webp') }}" alt="San Mateo Logo" class="w-12 h-12 object-contain">
+                        <img src="{{ asset('san-mateo-logo.webp') }}" alt="San Mateo Logo" width="48" height="48" class="w-12 h-12 object-contain">
                         <div class="flex flex-col">
                             <span class="font-bold text-slate-800 text-lg tracking-tight leading-none">Pricely</span>
                             <span class="text-[10px] font-medium text-slate-500 leading-tight">San Mateo Isabela</span>

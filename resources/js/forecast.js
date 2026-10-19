@@ -1,3 +1,6 @@
+import ApexCharts from 'apexcharts';
+window.ApexCharts = ApexCharts;
+
 document.addEventListener('DOMContentLoaded', function () {
     const chartContainer = document.getElementById('forecast-chart');
     if (!chartContainer) { return; }

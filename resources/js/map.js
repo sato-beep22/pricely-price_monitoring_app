@@ -1,3 +1,6 @@
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+window.L = L;
 import 'leaflet-routing-machine';
 document.addEventListener('DOMContentLoaded', function () {
     console.log('📍 Map.js loaded');

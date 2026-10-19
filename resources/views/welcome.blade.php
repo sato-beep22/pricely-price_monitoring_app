@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('head')
+    <link rel="preload" as="image" href="{{ asset('images/price_map1.webp') }}" type="image/webp" fetchpriority="high">
+@endpush
+
 @section('content')
     <!-- Animated Dots Background -->
     <canvas id="dotsCanvas" class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none"></canvas>
@@ -73,11 +77,13 @@
                 <div class="shrink-0 transition-transform duration-300 group-hover:-translate-y-1"
                      style="filter: drop-shadow(0 12px 28px rgba(16,185,129,0.30)) drop-shadow(0 4px 10px rgba(0,0,0,0.20));">
                     @include('partials.phone-mockup', [
-                        'image'  => asset('images/price_map1.webp'),
-                        'alt'    => 'Interactive Map',
-                        'width'  => 88,
-                        'height' => 180,
-                        'color'  => '#0f172a',
+                        'image'    => asset('images/price_map1.webp'),
+                        'alt'      => 'Interactive Map',
+                        'width'    => 88,
+                        'height'   => 180,
+                        'color'    => '#0f172a',
+                        'loading'  => 'eager',
+                        'priority' => 'high',
                     ])
                 </div>
                 {{-- Info --}}
@@ -166,11 +172,13 @@
                            ? 'z-index:1; transform: translateX(110px) translateY(45px) rotate(7deg) scale(0.86); filter: drop-shadow(0 16px 32px rgba(0,0,0,0.26));'
                            : 'z-index:2; transform: none; filter: drop-shadow(0 32px 64px rgba(16,185,129,0.28)) drop-shadow(0 12px 24px rgba(0,0,0,0.28));')">
                         @include('partials.phone-mockup', [
-                            'image'  => asset('images/price_map1.webp'),
-                            'alt'    => 'Interactive Map',
-                            'width'  => 260,
-                            'height' => 533,
-                            'color'  => '#0f172a',
+                            'image'    => asset('images/price_map1.webp'),
+                            'alt'      => 'Interactive Map',
+                            'width'    => 260,
+                            'height'   => 533,
+                            'color'    => '#0f172a',
+                            'loading'  => 'eager',
+                            'priority' => 'high',
                         ])
                     </div>
 
@@ -227,11 +235,13 @@
                         </div>
 
                         @include('partials.phone-mockup', [
-                            'image'  => asset('images/sms_feature.webp'),
-                            'alt'    => 'SMS Alerts',
-                            'width'  => 280,
-                            'height' => 574,
-                            'color'  => '#0f172a',
+                            'image'    => asset('images/sms_feature.webp'),
+                            'alt'      => 'SMS Alerts',
+                            'width'    => 280,
+                            'height'   => 574,
+                            'color'    => '#0f172a',
+                            'loading'  => 'eager',
+                            'priority' => 'high',
                         ])
                     </div>
 
@@ -540,44 +550,57 @@
             console.log('PWA was installed');
         });
 
-        // Animated Dots Background
-        document.addEventListener('DOMContentLoaded', () => {
+        // Animated Dots Background (Optimized)
+        window.addEventListener('load', () => {
             const canvas = document.getElementById('dotsCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
 
-            const DOT_COLOR_LIGHT = 'rgba(16, 185, 129, 0.4)'; // Emerald (Increased opacity for light theme)
-            const DOT_COLOR_DARK = 'rgba(56, 189, 248, 0.8)';  // Light blue (Higher opacity)
-            const SPACING = 30; // Distance between dots
+            const DOT_COLOR_LIGHT = 'rgba(16, 185, 129, 0.4)';
+            const SPACING = 34;
             const DOT_RADIUS = 1.5;
 
-            function getDotColor() {
-                // Use light color since we are reverting to the original white/green theme
-                return DOT_COLOR_LIGHT;
-            }
+            let width = 0;
+            let height = 0;
 
             function resize() {
                 width = canvas.width = window.innerWidth;
                 height = canvas.height = window.innerHeight;
             }
-            window.addEventListener('resize', resize);
+            window.addEventListener('resize', resize, { passive: true });
             resize();
 
             let mouse = { x: -1000, y: -1000 };
+            let hasActiveMouse = false;
             window.addEventListener('mousemove', (e) => {
                 mouse.x = e.clientX;
                 mouse.y = e.clientY;
-            });
+                hasActiveMouse = true;
+            }, { passive: true });
             window.addEventListener('mouseleave', () => {
                 mouse.x = -1000;
                 mouse.y = -1000;
-            });
+                hasActiveMouse = false;
+            }, { passive: true });
 
-            function animate() {
+            let lastTime = 0;
+            function animate(now) {
+                if (document.hidden) {
+                    requestAnimationFrame(animate);
+                    return;
+                }
+
+                // Throttle to ~30-40fps for background canvas to save mobile CPU/battery
+                if (now - lastTime < 24) {
+                    requestAnimationFrame(animate);
+                    return;
+                }
+                lastTime = now;
+
                 ctx.clearRect(0, 0, width, height);
-                ctx.fillStyle = getDotColor();
+                ctx.fillStyle = DOT_COLOR_LIGHT;
                 
-                const time = Date.now() * 0.0015; // Time for the consistent wave
+                const time = now * 0.0015;
                 const cols = Math.floor(width / SPACING) + 2;
                 const rows = Math.floor(height / SPACING) + 2;
                 
@@ -585,41 +608,40 @@
                 const offsetY = (height - (rows - 1) * SPACING) / 2;
 
                 for (let i = 0; i < cols; i++) {
+                    const wavePhaseI = time + (i * 0.3);
+                    const baseX = offsetX + i * SPACING;
                     for (let j = 0; j < rows; j++) {
-                        let baseX = offsetX + i * SPACING;
-                        let baseY = offsetY + j * SPACING;
+                        const baseY = offsetY + j * SPACING;
 
-                        // Consistent wavy movement
-                        let waveX = Math.sin(time + (i * 0.3) + (j * 0.2)) * 3;
-                        let waveY = Math.cos(time + (j * 0.3) + (i * 0.2)) * 3;
+                        // Smooth ambient wave
+                        const waveX = Math.sin(wavePhaseI + (j * 0.2)) * 3;
+                        const waveY = Math.cos(time + (j * 0.3) + (i * 0.2)) * 3;
 
                         let currentX = baseX + waveX;
                         let currentY = baseY + waveY;
 
-                        // Mouse hover displacement
-                        let dx = mouse.x - currentX;
-                        let dy = mouse.y - currentY;
-                        let distance = Math.sqrt(dx * dx + dy * dy);
-                        
-                        let hoverDispX = 0;
-                        let hoverDispY = 0;
-
-                        let maxDist = 150;
-                        if (distance < maxDist) {
-                            let force = (maxDist - distance) / maxDist;
-                            hoverDispX = -dx * force * 0.2;
-                            hoverDispY = -dy * force * 0.2;
+                        // Mouse hover displacement (only calculate when mouse is on screen)
+                        if (hasActiveMouse) {
+                            const dx = mouse.x - currentX;
+                            const dy = mouse.y - currentY;
+                            const distSq = dx * dx + dy * dy;
+                            if (distSq < 22500) { // 150 * 150
+                                const distance = Math.sqrt(distSq);
+                                const force = (150 - distance) / 150;
+                                currentX -= dx * force * 0.2;
+                                currentY -= dy * force * 0.2;
+                            }
                         }
 
                         ctx.beginPath();
-                        ctx.arc(currentX + hoverDispX, currentY + hoverDispY, DOT_RADIUS, 0, Math.PI * 2);
+                        ctx.arc(currentX, currentY, DOT_RADIUS, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 }
 
                 requestAnimationFrame(animate);
             }
-            animate();
+            requestAnimationFrame(animate);
         });
     </script>
 @endsection

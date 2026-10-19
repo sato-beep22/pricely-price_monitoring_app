@@ -1,8 +1,4 @@
 {
-  "__commonjsHelpers-Cpj98o6Y.js": {
-    "file": "assets/_commonjsHelpers-Cpj98o6Y.js",
-    "name": "_commonjsHelpers"
-  },
   "node_modules/leaflet/dist/images/layers-2x.png": {
     "file": "assets/layers-2x-Bpkbi35X.png",
     "src": "node_modules/leaflet/dist/images/layers-2x.png"
@@ -16,7 +12,7 @@
     "src": "node_modules/leaflet/dist/images/marker-icon.png"
   },
   "resources/css/app.css": {
-    "file": "assets/app-C7cZiIZb.css",
+    "file": "assets/app-jay639i9.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -25,35 +21,29 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-DmhQQQdD.js",
+    "file": "assets/app-DtMY_wki.js",
     "name": "app",
     "src": "resources/js/app.js",
-    "isEntry": true,
-    "imports": [
-      "__commonjsHelpers-Cpj98o6Y.js"
-    ],
-    "css": [
-      "assets/app-CLLlcC51.css"
-    ],
-    "assets": [
-      "assets/layers-BWBAp2CZ.png",
-      "assets/layers-2x-Bpkbi35X.png",
-      "assets/marker-icon-hN30_KVU.png"
-    ]
+    "isEntry": true
   },
   "resources/js/forecast.js": {
-    "file": "assets/forecast-Cf1TrMaE.js",
+    "file": "assets/forecast-maRMzwPT.js",
     "name": "forecast",
     "src": "resources/js/forecast.js",
     "isEntry": true
   },
   "resources/js/map.js": {
-    "file": "assets/map-CJQDrAGV.js",
+    "file": "assets/map-AFF8FDks.js",
     "name": "map",
     "src": "resources/js/map.js",
     "isEntry": true,
-    "imports": [
-      "__commonjsHelpers-Cpj98o6Y.js"
+    "css": [
+      "assets/map-CLLlcC51.css"
+    ],
+    "assets": [
+      "assets/layers-BWBAp2CZ.png",
+      "assets/layers-2x-Bpkbi35X.png",
+      "assets/marker-icon-hN30_KVU.png"
     ]
   }
 }

@@ -1,15 +1,8 @@
 import './bootstrap';
 import { gsap } from 'gsap';
-
 import Alpine from 'alpinejs';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import ApexCharts from 'apexcharts';
 
 window.Alpine = Alpine;
-window.L = L;
-window.ApexCharts = ApexCharts;
-
 Alpine.start();
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -21,17 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Generic Navbar slide down
     if (document.querySelector('.gsap-navbar')) {
         tl.fromTo('.gsap-navbar', 
-            { y: -60, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out' }
+            { y: -30 },
+            { y: 0, duration: 0.6, ease: 'power3.out' }
         );
     }
 
     // 2. Page Header elements (for interior pages)
     if (document.querySelector('.page-header')) {
         tl.fromTo('.page-header',
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
-            '-=0.5'
+            { y: 15 },
+            { y: 0, duration: 0.6, ease: 'power3.out' },
+            '-=0.4'
         );
     }
 
@@ -40,9 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (staggeredElements.length > 0) {
         tl.fromTo(staggeredElements,
-            { y: 35, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1.0, stagger: 0.1, ease: 'power4.out' },
-            '-=0.5'
+            { y: 20 },
+            { y: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out' },
+            '-=0.3'
         );
     }
 

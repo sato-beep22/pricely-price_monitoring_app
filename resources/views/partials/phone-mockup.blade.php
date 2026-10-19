@@ -16,6 +16,8 @@
     $notchH = max(14, round($w * 0.11));
     $barW   = round($w * 0.42);
     $col    = $color ?? '#0f172a';
+    $imgLoading  = $loading ?? 'lazy';
+    $imgPriority = $priority ?? ($imgLoading === 'eager' ? 'high' : 'auto');
 
     // Side button positions (decorative)
     $volY1  = round($h * 0.18);
@@ -111,6 +113,11 @@
             <img
                 src="{{ $image }}"
                 alt="{{ $alt }}"
+                width="{{ $w }}"
+                height="{{ $h }}"
+                loading="{{ $imgLoading }}"
+                fetchpriority="{{ $imgPriority }}"
+                decoding="async"
                 style="
                     display: block;
                     width: 100%;
@@ -118,7 +125,6 @@
                     object-fit: cover;
                     object-position: top;
                 "
-                loading="lazy"
             >
 
             {{-- Home indicator bar --}}
