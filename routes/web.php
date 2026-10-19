@@ -24,6 +24,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Loader.io verification endpoint
+Route::get('/loaderio-8c75b2860b36a44d06e1f023dcc1d0f3{ext?}', function () {
+    return response('loaderio-8c75b2860b36a44d06e1f023dcc1d0f3', 200, [
+        'Content-Type' => 'text/plain',
+    ]);
+})->where('ext', '\.(txt|html)?|\/?');
+
 // Web-based cron job endpoint for shared hosting
 Route::get('/run-queue', function (Request $request) {
     // Basic security token to prevent random visitors from triggering it
@@ -43,7 +50,7 @@ Route::get('/clear-cache', function (Request $request) {
     }
 
     Artisan::call('optimize:clear');
-    
+
     return response()->json(['status' => 'All caches cleared successfully']);
 });
 
@@ -64,13 +71,14 @@ Route::get('/debug-log', function (Request $request) {
         abort(403, 'Unauthorized');
     }
     $logPath = storage_path('logs/laravel.log');
-    if (!file_exists($logPath)) {
+    if (! file_exists($logPath)) {
         return response('No log file found.', 404);
     }
     // Get last 100 lines
     $lines = file($logPath);
     $lastLines = array_slice($lines, -100);
-    return response('<pre>' . implode('', $lastLines) . '</pre>')->header('Content-Type', 'text/html');
+
+    return response('<pre>'.implode('', $lastLines).'</pre>')->header('Content-Type', 'text/html');
 });
 
 // Public map access
